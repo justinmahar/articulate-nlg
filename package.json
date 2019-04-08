@@ -1,0 +1,34 @@
+{
+  "name": "sentimental-nlg",
+  "version": "1.0.0",
+  "description": "A natural language generator that articulates simple thoughts as words, phrases, and sentences.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "prepublish": "npm run build",
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "nlg",
+    "nlp",
+    "natural language generation",
+    "natural language processing",
+    "natural",
+    "language",
+    "generation",
+    "processing"
+  ],
+  "author": "Justin Mahar <thejustinmahar@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^3.4.1"
+  },
+  "dependencies": {
+    "@types/lodash": "^4.14.123",
+    "@types/node": "^11.13.0",
+    "lodash": "^4.17.11",
+    "weighted-random": "^0.1.0"
+  }
+}
