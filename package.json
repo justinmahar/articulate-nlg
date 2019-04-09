@@ -1,10 +1,11 @@
 {
   "name": "conceptual-nlg",
-  "version": "1.1.10",
+  "version": "1.1.11",
   "description": "A natural language generator (NLG) that articulates concepts as words, phrases, and sentences.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "deploy": "npm publish && git push",
     "prepublish": "npm run build",
     "build": "tsc",
     "watch": "tsc --watch",

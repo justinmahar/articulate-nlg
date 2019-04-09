@@ -91,7 +91,7 @@ If you decide to create a persona, share it with others!
 
 Here's how to go about it:
 
-- Make a project on GitHub with a `package.json` containing your `conceptial-nlg` version dependency. I recommend TypeScript but plain JavaScript is welcome too!
+- Make a project on GitHub with a `package.json` containing your `conceptual-nlg` version dependency. I recommend [TypeScript](https://www.typescriptlang.org/) but plain JavaScript is welcome too!
 - Use CommonJS module format. **Your default export should be a persona instance that contains your magnificent core.**
   - This ensures your persona always works for everyone even if the conceptual-nlg project specs change over time.
   - It also allows people to import your persona and use it right away.
