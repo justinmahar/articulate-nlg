@@ -14,10 +14,21 @@ To use this project, you'll need a persona core that contains all the speech def
 
 There's a tutorial below that shows you how to create one. I will be adding some example cores soon.
 
-If you know what you're doing, this is a good starting point:
+### Quick Start
 
-```ts
-const Persona = require("conceptual-nlg");
+Create a new directory, install Conceptual NLG, and open a new JS file in your editor of choice:
+
+```bash
+$ md cnlg-starter
+$ cd cnlg-starter
+$ npm i conceptual-nlg
+$ code main.js # VS code, use any editor
+```
+
+Paste and save the following: 
+
+```js
+const Persona = require("conceptual-nlg").default;
 
 let dogCore = {
   conceptResolvers: {
@@ -41,7 +52,12 @@ console.log(max.articulate("welcome-home"));
 // Bark! Welcome home, best friend! 🐾
 ```
 
-Otherwise, read the tutorial below to get started.
+Run it!
+
+```bash
+$ node main.js
+Woof! Welcome home, my favorite human! 🐩
+```
 
 ## Tutorial
 
