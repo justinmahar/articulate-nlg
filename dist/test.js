@@ -52,3 +52,60 @@ var empty = new index_1.Persona({
     conceptResolvers: {}
 });
 console.log(empty.articulate("--help"));
+console.log("--------------");
+var dogCore = {
+    conceptResolvers: {
+        greet: ["woof", "bark", "sniff sniff", "wag tail"],
+        master: { do: { contextProp: "name", contextDefault: "bringer of food" } },
+        emoji: ["👅", "🐶", "🐾", "💩", "🐩", "🐕‍"],
+        "welcome-home": {
+            do: [
+                { articulate: "greet", capitalize: true },
+                "! Welcome home, ",
+                { articulate: "master" },
+                "! ",
+                { articulate: "emoji" }
+            ]
+        }
+    }
+};
+var dogContext = { name: "Brianna" };
+var max = new index_1.Persona(dogCore);
+console.log(max.articulate("welcome-home", dogContext));
+console.log(max.articulate("welcome-home"));
+console.log(max.articulate("welcome-home", dogContext));
+console.log(max.articulate("welcome-home", dogContext));
+console.log(max.articulate("welcome-home", dogContext));
+console.log(max.articulate("welcome-home", dogContext));
+console.log(max.articulate("welcome-home", dogContext));
+console.log(max.articulate("welcome-home", dogContext));
+console.log(max.articulate("welcome-home", dogContext));
+console.log(max.articulate("welcome-home", dogContext));
+console.log(max.articulate("welcome-home", dogContext));
+console.log(max.articulate("--help"));
+var spanishCore = {
+    conceptResolvers: { hola: ["hola", "aló", "oye"] },
+    helpText: "Puedo articular los siguientes conceptos:"
+};
+var gabriela = new index_1.Persona(spanishCore);
+console.log(gabriela.articulate("--help"));
+var core = { conceptResolvers: { greet: ["hello", "hi", "hey"] } };
+var brianna = new index_1.Persona(core);
+var seed = 123;
+console.log(brianna.articulate("greet", {}, seed));
+console.log(brianna.articulate("greet", {}, seed));
+console.log(brianna.articulate("greet", {}, seed));
+seed = 345;
+console.log(brianna.articulate("greet", {}, seed));
+console.log(brianna.articulate("greet", {}, seed));
+console.log(brianna.articulate("greet", {}, seed));
+seed = "February";
+console.log(brianna.articulate("greet", {}, seed));
+console.log(brianna.articulate("greet", {}, seed));
+console.log(brianna.articulate("greet", {}, seed));
+// To be more explicit but keep things random, 
+// you can use Math.random() as the seed, if you want.
+console.log(brianna.articulate("greet", {}, Math.random())); // hello
+console.log(brianna.articulate("greet", {}, Math.random())); // hey
+console.log(brianna.articulate("greet", {}, Math.random())); // hey
+console.log(brianna.articulate("greet", {}, Math.random())); // hi
