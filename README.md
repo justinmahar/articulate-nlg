@@ -118,11 +118,11 @@ What's going on here?
 
 Well, `greet` is being mapped to a list of objects, and each one of those is what's called a **resolver**. When articulating, the persona picks one of these resolvers to resolve the concept as speech text.
 
-Each resolver has two properties: `do`, which specifies either a single generator (which creates text, more on that in a second), a list of generators/text, or just some text. The way `do` works is it takes text from all generators and simply concatenates them together. Using `do` and lists of generators or text, you can form phrases and sentences. If that's confusing, we'll clear it up later with some examples.
+Each resolver has two properties: The first is `do`, which specifies either a single generator (which creates text, more on that in a second), a list of generators/text, or just some text. The way `do` works is it takes text from all generators and simply concatenates them together. Using `do` and lists of generators or text, you can form phrases and sentences. If that's confusing, we'll clear it up later with some examples.
 
 ### `weight`
 
-Each resolver also has a `weight` property that defaults to `1`. The weight determines how likely it is for the persona to use a particular resolver when articulating speech.
+The second resolver property is `weight`, which defaults to `1`. The weight determines how likely it is for the persona to use a particular resolver when articulating speech.
 
 In the example above, all text has an equal chance of being picked.
 
