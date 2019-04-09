@@ -49,7 +49,6 @@ let dogCore = {
 
 let max = new Persona(dogCore);
 console.log(max.articulate("welcome-home"));
-// Bark! Welcome home, best friend! 🐾
 ```
 
 Run it!
@@ -421,7 +420,7 @@ For your convenience/flexibility:
 
 ## TypeScript Support
 
-This is a TypeScript project, so type definitions are available in: `dist/index.d.ts`. These help a lot when building cores.
+This is a TypeScript project, so type definitions are available in: `dist/index.d.ts`. These help a lot when building cores, but feel free to use vanilla JS if you want.
 
 ## ISC License
 
