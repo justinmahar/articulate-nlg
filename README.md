@@ -194,7 +194,7 @@ The second resolver property is `weight`, which defaults to `1`. The weight dete
 
 In the example above, all text has an equal chance of being picked.
 
-Let's change these numbers a bit:
+Let's change the weight values a bit:
 
 ```js
 let core = {
@@ -208,10 +208,10 @@ let core = {
 };
 let brianna = new Persona(core);
 
+console.log(brianna.articulate("greet"));
 // 5% chance of "hello"
 // 94% chance of "hi"
 // 1% chance of "hey"
-console.log(brianna.articulate("greet"));
 ```
 
 If we shift the weights around a bit, we can make certain resolvers more or less likely to be chosen.
