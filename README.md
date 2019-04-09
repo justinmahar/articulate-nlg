@@ -402,7 +402,7 @@ console.log(max.articulate("--help"));
 console.log(max.articulateHelp());
 ```
 
-```
+```bash
 I can articulate the following concepts:
 - greet
 - master
@@ -421,7 +421,7 @@ let gabriela = new Persona(spanishCore);
 console.log(gabriela.articulate("--help"));
 ```
 
-```
+```bash
 Puedo articular los siguientes conceptos:
 - hola
 ```
