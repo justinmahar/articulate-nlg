@@ -5,19 +5,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var lodash_1 = __importDefault(require("lodash"));
 var seedrandom = require("seedrandom");
-function weightedRandom(weights, seed) {
-    if (seed === void 0) { seed = Math.random(); }
-    var cumulative = 0;
-    var ranges = weights.map(function (weight) { return (cumulative += weight); });
-    var seededRand = new seedrandom(seed);
-    var selectedValue = seededRand() * cumulative;
-    for (var index = 0; index < ranges.length; index++) {
-        if (selectedValue <= ranges[index]) {
-            return index;
-        }
-    }
-    return -1;
-}
 /**
  * A Persona can articulate concepts by generating speech as strings containing text. This speech logic is defined by
  * a "core" that's provided to the Persona on construction.
@@ -177,3 +164,16 @@ var Persona = /** @class */ (function () {
     return Persona;
 }());
 exports.Persona = Persona;
+function weightedRandom(weights, seed) {
+    if (seed === void 0) { seed = Math.random(); }
+    var cumulative = 0;
+    var ranges = weights.map(function (weight) { return (cumulative += weight); });
+    var seededRand = new seedrandom(seed);
+    var selectedValue = seededRand() * cumulative;
+    for (var index = 0; index < ranges.length; index++) {
+        if (selectedValue <= ranges[index]) {
+            return index;
+        }
+    }
+    return -1;
+}
