@@ -1,6 +1,6 @@
 {
   "name": "conceptual-nlg",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "A natural language generator that articulates concepts as words, phrases, and sentences.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

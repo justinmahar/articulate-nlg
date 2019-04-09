@@ -1,8 +1,12 @@
 # Conceptual NLG
 
-A natural language generator that articulates concepts as words, phrases, and sentences.
+A natural language generator (NLG) that articulates concepts as words, phrases, and sentences.
+
+This [TypeScript](https://www.typescriptlang.org/) project is available via [npm](https://www.npmjs.com/package/conceptual-nlg).
 
 ## Installation
+
+Via [npm](https://www.npmjs.com/package/conceptual-nlg) (requires [Node.js](https://nodejs.org/)):
 
 ```bash
 $ npm i conceptual-nlg
