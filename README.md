@@ -247,7 +247,9 @@ Sniff sniff! Welcome home, best friend! 💩
 Woof! Welcome home, my favorite human! 🐩
 ```
 
-Now we're talking! _Slaps knee_. Just a few concept definitions later and we have a best friend to welcome us home in many different ways.
+Now we're talking! _Slaps knee_.
+
+Just a few concept definitions later and we have a best friend to welcome us home in many different ways, sometimes with poop.
 
 ### Context Generators
 
