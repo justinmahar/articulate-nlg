@@ -1,11 +1,11 @@
 # Conceptual NLG
 
-A natural language generator that articulates simple thoughts as words, phrases, and sentences.
+A natural language generator that articulates concepts as words, phrases, and sentences.
 
 ## Installation
 
 ```bash
-> npm i conceptual-nlg
+$ npm i conceptual-nlg
 ```
 
 ## Usage
