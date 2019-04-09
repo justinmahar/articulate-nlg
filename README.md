@@ -351,7 +351,14 @@ console.log(brianna.articulate("greet", {}, Math.random())); // hi
 console.log(brianna.articulate("greet", {}, Math.random())); // hello
 ```
 
-## Generating Help Text For Concept Names
+Seed examples/ideas:
+
+- Name-based - Use someone's name as the seed to keep a consistent message for that person.
+- Time-based - Use the date as the seed to have a different message each day.
+- Variety Cap - Generate different speech until a limit is reached, then keep it the same, or vice versa.
+- Combinations - Combine names and times to create unique messages that change at your desired pace (once per hour, day, etc).
+
+## Built-in Help Text For Concept Names
 
 You can call `articulate("--help")` or `articulateHelp()` to generate some helpful text containing all concept names.
 
@@ -392,7 +399,7 @@ Of course, for your own needs, you can always write your own help text as a sepa
 For your convenience/flexibility:
 
 - You can get a list of all concept names using `persona.getConceptNames()`. They are pulled directly from the core using `Object.keys()`.
-- For some neuralyzer level voodoo, you can get/set the whole core on a persona using `persona.getCore()` and `persona.setCore(core)`. Erase memories or drop in whole new personalities if you want.
+- For some neuralyzer level voodoo, you can get/set the whole core on a persona using `persona.getCore()` and `persona.setCore(core)`. Erase memories or drop in whole new personalities if you want!
 
 ## TypeScript Support
 
