@@ -255,7 +255,7 @@ Just a few concept definitions later and we have a best friend to welcome us hom
 
 In the real world, we operate on the context of any given situation. For instance, if we know someone's name, we might use it in a sentence while articulating a thought.
 
-Context generators allow us to do just that. You can reference information about a particular situation and weave it into your generated text.
+Context generators allow us to do just that. You can reference information about a particular situation and weave it into your generated text, like a mail merge. 
 
 ```ts
 let generator = {
