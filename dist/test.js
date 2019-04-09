@@ -1,6 +1,9 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var index_1 = require("./index");
+var index_1 = __importDefault(require("./index"));
 // -- TESTS ---------------------------------------------------
 var greeterCore = {
     conceptResolvers: {
@@ -34,7 +37,7 @@ var greeterCore = {
         ]
     }
 };
-var justin = new index_1.Persona(greeterCore);
+var justin = new index_1.default(greeterCore);
 var context = { name: "Bob" };
 var concepts = Object.keys(greeterCore.conceptResolvers);
 var TEST_COUNT = 5;
@@ -48,7 +51,7 @@ console.log(justin.articulate("test-missing-concept-name", context));
 console.log(justin.articulate("greet-name", {}, "Justin"));
 console.log(justin.articulate("--help"));
 console.log(justin.getConceptNames());
-var empty = new index_1.Persona({
+var empty = new index_1.default({
     conceptResolvers: {}
 });
 console.log(empty.articulate("--help"));
@@ -70,7 +73,7 @@ var dogCore = {
     }
 };
 var dogContext = { name: "Brianna" };
-var max = new index_1.Persona(dogCore);
+var max = new index_1.default(dogCore);
 console.log(max.articulate("welcome-home", dogContext));
 console.log(max.articulate("welcome-home"));
 console.log(max.articulate("welcome-home", dogContext));
@@ -87,10 +90,10 @@ var spanishCore = {
     conceptResolvers: { hola: ["hola", "aló", "oye"] },
     helpText: "Puedo articular los siguientes conceptos:"
 };
-var gabriela = new index_1.Persona(spanishCore);
+var gabriela = new index_1.default(spanishCore);
 console.log(gabriela.articulate("--help"));
 var core = { conceptResolvers: { greet: ["hello", "hi", "hey"] } };
-var brianna = new index_1.Persona(core);
+var brianna = new index_1.default(core);
 var seed = 123;
 console.log(brianna.articulate("greet", {}, seed));
 console.log(brianna.articulate("greet", {}, seed));
@@ -103,7 +106,7 @@ seed = "February";
 console.log(brianna.articulate("greet", {}, seed));
 console.log(brianna.articulate("greet", {}, seed));
 console.log(brianna.articulate("greet", {}, seed));
-// To be more explicit but keep things random, 
+// To be more explicit but keep things random,
 // you can use Math.random() as the seed, if you want.
 console.log(brianna.articulate("greet", {}, Math.random())); // hello
 console.log(brianna.articulate("greet", {}, Math.random())); // hey

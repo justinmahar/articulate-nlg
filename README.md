@@ -17,7 +17,7 @@ There's a tutorial below that shows you how to create one. I will be adding some
 If you know what you're doing, this is a good starting point:
 
 ```ts
-import Persona from "conceptual-nlg";
+const Persona = require("conceptual-nlg");
 
 let dogCore = {
   conceptResolvers: {

@@ -1,4 +1,4 @@
-import { Persona, ICore } from "./index";
+import Persona, { ICore } from "./index";
 
 // -- TESTS ---------------------------------------------------
 
@@ -90,9 +90,7 @@ console.log(max.articulate("welcome-home", dogContext));
 console.log(max.articulate("welcome-home", dogContext));
 console.log(max.articulate("welcome-home", dogContext));
 
-
 console.log(max.articulate("--help"));
-
 
 let spanishCore = {
   conceptResolvers: { hola: ["hola", "aló", "oye"] },
@@ -104,7 +102,7 @@ console.log(gabriela.articulate("--help"));
 let core = { conceptResolvers: { greet: ["hello", "hi", "hey"] } };
 let brianna = new Persona(core);
 
-let seed:any = 123;
+let seed: any = 123;
 console.log(brianna.articulate("greet", {}, seed));
 console.log(brianna.articulate("greet", {}, seed));
 console.log(brianna.articulate("greet", {}, seed));
@@ -116,7 +114,7 @@ seed = "February";
 console.log(brianna.articulate("greet", {}, seed));
 console.log(brianna.articulate("greet", {}, seed));
 console.log(brianna.articulate("greet", {}, seed));
-// To be more explicit but keep things random, 
+// To be more explicit but keep things random,
 // you can use Math.random() as the seed, if you want.
 console.log(brianna.articulate("greet", {}, Math.random())); // hello
 console.log(brianna.articulate("greet", {}, Math.random())); // hey
