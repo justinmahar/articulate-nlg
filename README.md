@@ -70,9 +70,9 @@ $ node main.js
 Woof! Welcome home, my favorite human! 🐩
 ```
 
-## Ready-To-Use Personas
+## Ready-To-Use Personas Via npm
 
-The following are personas that you can use immediately.
+The following are personas that you can use immediately via npm.
 
 - TBD (this project is brand new and I'm still creating them!)
 
@@ -80,23 +80,24 @@ The following are personas that you can use immediately.
 
 Contributions are encouraged! We'd love to see what you create.
 
-### Developing on this project:
+### Developing On This Project:
 
 - If you catch a bug, would like to request a feature, or would like to start a discussion, [add an issue to the GitHub project](https://github.com/justinmahar/conceptual-nlg/issues).
 - If you think you can fix it or implement it, [fork the project](https://github.com/justinmahar/conceptual-nlg/fork) and then send me a pull request when you're done. :)
 
-### Sharing your personas:
+### Sharing Your Personas:
 
-If you decide to create a persona, share it with others!
+If you decide to create a persona, share it with others via npm!
 
 Here's how to go about it:
 
 - Make a project on GitHub with a `package.json` containing your `conceptual-nlg` version dependency. I recommend [TypeScript](https://www.typescriptlang.org/) but plain JavaScript is welcome too!
-- Use CommonJS module format. **Your default export should be a persona instance that contains your magnificent core.**
-  - This ensures your persona always works for everyone even if the conceptual-nlg project specs change over time.
-  - It also allows people to import your persona and use it right away.
-- If you'd like to share a persona you've made in the [Ready-To-Use Personas](#ready-to-use-personas) section of this README, [add it to this README](https://github.com/justinmahar/conceptual-nlg/fork) and send me a pull request.
-- Publish your project to [npm](https://www.npmjs.com/) as a CommonJS module, too. This lets people use npm to pull your persona into their project.
+- Create an npm module. For your npm module, use CommonJS module format.
+  - **Your default export should be a persona instance that contains your core.**
+    - This ensures your persona always works for everyone even if the conceptual-nlg project's specs change over time.
+    - This also allows people to import your persona and use it right away.
+  - Be sure to test importing and using your persona!
+- If you'd like to share a persona you've made in the [Ready-To-Use Personas](#ready-to-use-personas) section of this README, [add it to this README](https://github.com/justinmahar/conceptual-nlg/fork) and send me a pull request. That section is only for personas than can be used via npm out of the box.
 
 ---
 
