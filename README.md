@@ -122,7 +122,9 @@ The generated text for a concept is typically random and, as mentioned, can even
 
 Conceptual NLG also allows you to vary the randomness so you can bend speech patterns to your liking. You can make certain text more or less likely to generate, or you can use your own pseudorandom number generator (PRNG) seed for ultimate control.
 
-To personalize the generated text, you can also define a "context" object that your persona can reference, like a mail merge. Let's go deeper!
+To personalize the generated text, you can also define a "context" object that your persona can reference, like a mail merge. 
+
+Let's go deeper!
 
 ## Personas and Cores
 
@@ -151,8 +153,6 @@ But things can get more advanced than that! Keep reading...
 
 ## Resolvers
 
-### `do`
-
 Resolvers can be more complicated than just providing strings. In fact, providing a string (as shown above with "hello", "hi", or "hey") is actually shorthand for creating a resolver, like so:
 
 ```js
@@ -180,7 +180,13 @@ What's going on here?
 
 Well, `greet` is being mapped to a list of objects, and each one of those is what's called a **resolver**. When articulating, the persona picks one of these resolvers to resolve the concept as speech text.
 
-Each resolver has two properties: The first is `do`, which specifies either a single generator (which creates text, more on that in a second), a list of generators/text, or just some text. The way `do` works is it takes text from all generators and simply concatenates them together. Using `do` and lists of generators or text, you can form phrases and sentences. If that's confusing, we'll clear it up later with some examples.
+### `do`
+
+Each resolver has two properties: The first is `do`, which specifies either a single generator (which creates text, more on that in a second), a list of generators/text, or just some text. 
+
+The way `do` works is it collects text from all generators and simply concatenates them together in the order they appear. Using `do` and lists of generators (or text), you can form phrases and sentences. 
+
+If this seems confusing, we'll clear it up later with some examples!
 
 ### `weight`
 
