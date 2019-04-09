@@ -314,7 +314,7 @@ We've already seen an example above, for the dog's `"welcome-home"` resolver.
 
 Again, the way `do` works is it takes text from all generators and simply concatenates them together. Using `do` and lists of generators or text, you can form phrases and sentences.
 
-## Seeds
+## Seeding The Pseudorandom Number Generator
 
 If you'd like more control over the randomized resolver selection process, you can specify a seed for the pseurdorandom number generator used under the hood.
 
