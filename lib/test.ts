@@ -1,23 +1,23 @@
-import { Persona2, ICore } from "./index";
+import { Persona, ICore } from "./index";
 
 // -- TESTS ---------------------------------------------------
 
 let greeterCore: ICore = {
-  sentiments: {
+  conceptResolvers: {
     hello: [
-      { do: { say: "hi there" }, weight: 1 },
-      { do: { say: "heyo" }, weight: 1 },
+      { do: { text: "hi there" }, weight: 1 },
+      { do: { text: "heyo" }, weight: 1 },
       "yo"
     ],
     goodbye: [
-      { do: { say: "goodbye" }, weight: 1 },
-      { do: { say: "bye" }, weight: 1 },
-      { do: { say: "cya" }, weight: 1 }
+      { do: { text: "goodbye" }, weight: 5 },
+      { do: { text: "bye" }, weight: 5 },
+      { do: { text: "cya" }, weight: 5 }
     ],
     "how-are-you": [
-      { do: { say: "how are you" }, weight: 1 },
-      { do: { say: "how's it going" }, weight: 1 },
-      { do: { say: "how ya doing" }, weight: 1 }
+      { do: { text: "how are you" }, weight: 1 },
+      { do: { text: "how's it going" }, weight: 1 },
+      { do: { text: "how ya doing" }, weight: 1 }
     ],
     "greet-name": [
       {
@@ -26,7 +26,7 @@ let greeterCore: ICore = {
           "! ",
           { articulate: "how-are-you", capitalize: true },
           ", ",
-          { sayContext: "name" },
+          { contextProp: "name", contextDefault: "friend" },
           "?"
         ],
         weight: 1
@@ -35,17 +35,25 @@ let greeterCore: ICore = {
   }
 };
 
-let justin: Persona2 = new Persona2(greeterCore);
+let justin: Persona = new Persona(greeterCore);
 
 let context = { name: "Bob" };
 
-let sentiments = Object.keys(greeterCore.sentiments);
+let concepts = Object.keys(greeterCore.conceptResolvers);
 const TEST_COUNT = 5;
-sentiments.forEach(sentiment => {
-  console.log("Sentiment: ", sentiment);
+concepts.forEach(concept => {
+  console.log("Concept name: ", concept);
   for (let i = 0; i < TEST_COUNT; i++) {
-    console.log(justin.articulate(sentiment, context));
+    console.log(justin.articulate(concept, context));
   }
 });
 
-console.log(justin.articulate("test-missing-sentiment", context));
+console.log(justin.articulate("test-missing-concept-name", context));
+console.log(justin.articulate("greet-name", {}, "Justin"));
+console.log(justin.articulate("--help"));
+console.log(justin.getConceptNames());
+
+let empty: Persona = new Persona({
+  conceptResolvers: {}
+});
+console.log(empty.articulate("--help"));

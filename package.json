@@ -1,7 +1,7 @@
 {
-  "name": "sentimental-nlg",
-  "version": "1.0.0",
-  "description": "A natural language generator that articulates simple thoughts as words, phrases, and sentences.",
+  "name": "conceptual-nlg",
+  "version": "1.0.1",
+  "description": "A natural language generator that articulates concepts as words, phrases, and sentences.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/justinmahar/sentimental-nlg.git"
+    "url": "https://github.com/justinmahar/conceptual-nlg.git"
   },
   "keywords": [
     "nlg",
@@ -22,7 +22,8 @@
     "natural",
     "language",
     "generation",
-    "processing"
+    "processing",
+    "speech generation"
   ],
   "author": "Justin Mahar <thejustinmahar@gmail.com>",
   "license": "ISC",
@@ -33,6 +34,6 @@
     "@types/lodash": "^4.14.123",
     "@types/node": "^11.13.0",
     "lodash": "^4.17.11",
-    "weighted-random": "^0.1.0"
+    "seedrandom": "^3.0.1"
   }
 }
