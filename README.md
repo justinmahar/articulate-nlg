@@ -78,10 +78,11 @@ With Conceptual NLG, you can define personas that can articulate concepts (repre
 
 - For instance, a particular persona might articulate the concept `"greet"` as `"hello"`, `"hi"`, or `"hey"`.
 - Another persona might articulate that same concept as `"oy!"`, `"yo!"`, or `"sup!"`.
+- When articulating concepts, they can reference each other be strung together to create meaningful phrases and sentences!
 
-The generated text for a concept is typically random and can even reference other concepts, allowing you to define millions of permutations elegantly.
+The generated text for a concept is typically random and, as mentions, can even reference other concepts. This allows you to define hundreds or even thousands of permutations of speech elegantly.
 
-The specification also allows you to vary the randomness so you can bend speech patterns to your liking! You can also define a "context" object that your persona can reference for things like using someone's name in the generated text.
+The specification also allows you to vary the randomness so you can bend speech patterns to your liking! You can also define a "context" object that your persona can reference for things like using someone's name in the generated text (like a mail merge), and can use your own pseudorandom number generator (PRNG) seed.
 
 ## Personas and Cores
 
@@ -335,7 +336,7 @@ We've already seen an example above, for the dog's `"welcome-home"` resolver.
 
 Again, the way `do` works is it takes text from all generators and simply concatenates them together. Using `do` and lists of generators or text, you can form phrases and sentences.
 
-## Seeding The Pseudorandom Number Generator
+## Seeding The Pseudorandom Number Generator (PRNG)
 
 If you'd like more control over the randomized resolver selection process, you can specify a seed for the pseurdorandom number generator used under the hood.
 
