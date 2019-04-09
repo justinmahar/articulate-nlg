@@ -47,7 +47,7 @@ Otherwise, read the tutorial below to get started.
 
 Read this tutorial if:
 
-- You want a better understand of how Conceptual NLG works.
+- You want a better understanding of how Conceptual NLG works.
 - You want to create your own persona to generate speech text with.
 - You're curious and just want to know more.
 
@@ -118,7 +118,7 @@ What's going on here?
 
 Well, `greet` is being mapped to a list of objects, and each one of those is what's called a **resolver**. When articulating, the persona picks one of these resolvers to resolve the concept as speech text.
 
-Each resolver has two properties: `do`, which specifies either a single generator (which creates text, more on that in a second), a list of generators/text, or just some text.
+Each resolver has two properties: `do`, which specifies either a single generator (which creates text, more on that in a second), a list of generators/text, or just some text. The way `do` works is it takes text from all generators and simply concatenates them together. Using `do` and lists of generators or text, you can form phrases and sentences. If that's confusing, we'll clear it up later with some examples.
 
 ### `weight`
 
@@ -244,10 +244,10 @@ Wag tail! Welcome home, my favorite human! 🐩
 Sniff sniff! Welcome home, best friend! 🐶
 Wag tail! Welcome home, my favorite human! 🐕‍
 Sniff sniff! Welcome home, best friend! 💩
-Sniff sniff! Welcome home, my favorite human! 🐩
+Woof! Welcome home, my favorite human! 🐩
 ```
 
-Now we're talking! Just a few concept definitions later and we have a best friend to welcome us home in many different ways.
+Now we're talking! _Slaps knee_. Just a few concept definitions later and we have a best friend to welcome us home in many different ways.
 
 ### Context Generators
 
@@ -306,17 +306,17 @@ console.log(max.articulate("welcome-home"));
 
 If you don't specify a `contextDefault` and it's not found, it will generate text containing the property name in angle brackets, like so: `<name>`.
 
-### Multiple `do` Items
+### Multiple `do` Items For Resolvers
 
-When specifying `do`, you can either specify a string, a generator, or you can specify a list of generators/strings.
+When specifying a resolver's `do`, you can either specify a string, a generator, or you can specify a list of generators/strings.
 
 We've already seen an example above, for the dog's `"welcome-home"` resolver.
 
-The way `do` works is it takes text from all generators and simply concatenates them together. Using `do` and lists of generators or text, you can form phrases and sentences.
+Again, the way `do` works is it takes text from all generators and simply concatenates them together. Using `do` and lists of generators or text, you can form phrases and sentences.
 
 ## Seeds
 
-If you'd like more control over the random selection process, you can specify a seed for the pseurdorandom number generator used under the hood.
+If you'd like more control over the randomized resolver selection process, you can specify a seed for the pseurdorandom number generator used under the hood.
 
 A seed can be any value. Specifying a seed will cause the text generated to be to same every time for a given seed.
 
@@ -328,6 +328,7 @@ For instance:
 let core = { conceptResolvers: { greet: ["hello", "hi", "hey"] } };
 let brianna = new Persona(core);
 
+// Until the seed changes, the result will always be the same.
 let seed = 123;
 console.log(brianna.articulate("greet", {}, seed)); // hello
 console.log(brianna.articulate("greet", {}, seed)); // hello
@@ -350,12 +351,14 @@ console.log(brianna.articulate("greet", {}, Math.random())); // hi
 console.log(brianna.articulate("greet", {}, Math.random())); // hello
 ```
 
-## Help Text For Concept Names
+## Generating Help Text For Concept Names
 
-You can call `articulate("--help")` or `articulateHelp()` to generate a helpful text containing all concept names.
+You can call `articulate("--help")` or `articulateHelp()` to generate some helpful text containing all concept names.
 
 ```ts
 console.log(max.articulate("--help"));
+// OR
+console.log(max.articulateHelp());
 ```
 
 ```
@@ -386,8 +389,10 @@ Of course, for your own needs, you can always write your own help text as a sepa
 
 ## Miscellaneous
 
-- You can get a list of all concept names using `persona.getConceptNames()`
-- You can get/set the core on a persona using `persona.getCore()` and `persona.setCore(core)`.
+For your convenience/flexibility:
+
+- You can get a list of all concept names using `persona.getConceptNames()`. They are pulled directly from the core using `Object.keys()`.
+- For some neuralyzer level voodoo, you can get/set the whole core on a persona using `persona.getCore()` and `persona.setCore(core)`. Erase memories or drop in whole new personalities if you want.
 
 ## TypeScript Support
 
