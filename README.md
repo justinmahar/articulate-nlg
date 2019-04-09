@@ -274,8 +274,8 @@ Calling `max.articulate("welcome-home")` generates speech such as:
 Bark! Welcome home, best friend! 🐾
 Wag tail! Welcome home, my favorite human! 🐩
 Sniff sniff! Welcome home, best friend! 🐶
-Wag tail! Welcome home, my favorite human! 🐕‍
-Sniff sniff! Welcome home, best friend! 💩
+Wag tail! Welcome home, master! 🐕‍
+Sniff sniff! Welcome home, master! 💩
 Woof! Welcome home, my favorite human! 🐩
 ```
 
