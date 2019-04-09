@@ -5,7 +5,7 @@ const seedrandom = require("seedrandom");
  * A Persona can articulate concepts by generating speech as strings containing text. This speech logic is defined by
  * a "core" that's provided to the Persona on construction.
  */
-export class Persona {
+export default class Persona {
   /**
    * Construct a new Persona using the provided core.
    *

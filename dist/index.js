@@ -163,7 +163,7 @@ var Persona = /** @class */ (function () {
     }
     return Persona;
 }());
-exports.Persona = Persona;
+exports.default = Persona;
 function weightedRandom(weights, seed) {
     if (seed === void 0) { seed = Math.random(); }
     var cumulative = 0;

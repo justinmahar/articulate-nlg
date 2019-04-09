@@ -2,7 +2,7 @@
  * A Persona can articulate concepts by generating speech as strings containing text. This speech logic is defined by
  * a "core" that's provided to the Persona on construction.
  */
-export declare class Persona {
+export default class Persona {
     core: ICore;
     /**
      * Construct a new Persona using the provided core.

@@ -2,11 +2,58 @@
 
 A natural language generator that articulates simple thoughts as words, phrases, and sentences.
 
-# Persona Development
+## Installation
 
-Want to create your own persona? Here's how!
+```bash
+> npm i conceptual-nlg
+```
 
-## Development Overview
+## Usage
+
+To use this project, you'll need a persona core that contains all the speech definitions.
+
+There's a tutorial below that shows you how to create one. I will be adding some example cores soon.
+
+If you know what you're doing, this is a good starting point:
+
+```ts
+import Persona from "conceptual-nlg";
+
+let dogCore = {
+  conceptResolvers: {
+    greet: ["woof", "bark", "sniff sniff", "wag tail"],
+    master: ["master", "best friend", "my favorite human"],
+    emoji: ["👅", "🐶", "🐾", "💩", "🐩", "🐕‍"],
+    "welcome-home": {
+      do: [
+        { articulate: "greet", capitalize: true },
+        "! Welcome home, ",
+        { articulate: "master" },
+        "! ",
+        { articulate: "emoji" }
+      ]
+    }
+  }
+};
+
+let max = new Persona(dogCore);
+console.log(max.articulate("welcome-home"));
+// Bark! Welcome home, best friend! 🐾
+```
+
+Otherwise, read the tutorial below to get started.
+
+## Tutorial
+
+Read this tutorial if:
+
+- You want a better understand of how Conceptual NLG works.
+- You want to create your own persona to generate speech text with.
+- You're curious and just want to know more.
+
+Go ahead, read on. You know you want to!
+
+## Overview
 
 With Conceptual NLG, you can define personas that can articulate concepts (represented as strings) as speech text.
 
@@ -294,7 +341,7 @@ console.log(brianna.articulate("greet", {}, seed)); // hey
 console.log(brianna.articulate("greet", {}, seed)); // hey
 console.log(brianna.articulate("greet", {}, seed)); // hey
 
-// To be more explicit but still keep things random, 
+// To be more explicit but still keep things random,
 // you can use Math.random() as the seed, if you want.
 console.log(brianna.articulate("greet", {}, Math.random())); // hello
 console.log(brianna.articulate("greet", {}, Math.random())); // hey
@@ -341,3 +388,15 @@ Of course, for your own needs, you can always write your own help text as a sepa
 
 - You can get a list of all concept names using `persona.getConceptNames()`
 - You can get/set the core on a persona using `persona.getCore()` and `persona.setCore(core)`.
+
+## TypeScript Support
+
+This is a TypeScript project, so type definitions are available in: `dist/index.d.ts`. These help a lot when building cores.
+
+## ISC License
+
+Copyright 2019 Justin Mahar
+
+Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted, provided that the above copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
