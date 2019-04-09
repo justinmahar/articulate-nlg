@@ -2,11 +2,11 @@
 
 A natural language generator (NLG) that articulates concepts as words, phrases, and sentences.
 
-This [TypeScript](https://www.typescriptlang.org/) project is available in JavaScript via [npm](https://www.npmjs.com/package/conceptual-nlg) as a CommonJS import.
+This [TypeScript](https://www.typescriptlang.org/) project is [available in JavaScript via npm](https://www.npmjs.com/package/conceptual-nlg) as a CommonJS import.
 
 ## Installation
 
-Via [npm](https://www.npmjs.com/package/conceptual-nlg) (requires [Node.js](https://nodejs.org/)):
+[Via npm](https://www.npmjs.com/package/conceptual-nlg) (requires [Node.js](https://nodejs.org/)):
 
 ```bash
 $ npm i conceptual-nlg
@@ -24,7 +24,7 @@ To use this project, you'll need a persona core that contains concepts with reso
 
 In the mean time, you can use the Quick Start core below. It uses most of the features you'll likely need to get moving! If you're the kind of person who likes to get their hands dirty, this lets you dive in right away.
 
-After you run the Quick Start, I suggest you read the short tutorial below to learn how everything works.
+After you run the Quick Start, I suggest you read the short [tutorial](#tutorial) below to learn how everything works.
 
 ### Quick Start
 
@@ -70,7 +70,37 @@ $ node main.js
 Woof! Welcome home, my favorite human! 🐩
 ```
 
-## Tutorial
+## Ready-To-Use Personas
+
+The following are personas that you can use immediately.
+
+- TBD (this project is brand new and I'm still creating them!)
+
+## Contributing
+
+Contributions are encouraged! We'd love to see what you create.
+
+### Developing on this project:
+
+- If you catch a bug, would like to request a feature, or would like to start a discussion, [add an issue to the GitHub project](https://github.com/justinmahar/conceptual-nlg/issues).
+- If you think you can fix it or implement it, [fork the project](https://github.com/justinmahar/conceptual-nlg/fork) and then send me a pull request when you're done. :)
+
+### Sharing your personas:
+
+If you decide to create a persona, share it with others!
+
+Here's how to go about it:
+
+- Make a project on GitHub with a `package.json` containing your `conceptial-nlg` version dependency. I recommend TypeScript but plain JavaScript is welcome too!
+- Use CommonJS module format. **Your default export should be a persona instance that contains your magnificent core.**
+  - This ensures your persona always works for everyone even if the conceptual-nlg project specs change over time.
+  - It also allows people to import your persona and use it right away.
+- If you'd like to share a persona you've made in the [Ready-To-Use Personas](#ready-to-use-personas) section of this README, [add it to this README](https://github.com/justinmahar/conceptual-nlg/fork) and send me a pull request.
+- Publish your project to [npm](https://www.npmjs.com/) as a CommonJS module, too. This lets people use npm to pull your persona into their project.
+
+---
+
+# Tutorial
 
 Read this tutorial if:
 
