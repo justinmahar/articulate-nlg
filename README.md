@@ -1,4 +1,4 @@
-## Conceptual NLG
+# Conceptual NLG
 
 A natural language generator that articulates simple thoughts as words, phrases, and sentences.
 
