@@ -2,7 +2,7 @@
 
 A natural language generator (NLG) that articulates concepts as words, phrases, and sentences.
 
-This [TypeScript](https://www.typescriptlang.org/) project is available via [npm](https://www.npmjs.com/package/conceptual-nlg).
+This [TypeScript](https://www.typescriptlang.org/) project is available in JavaScript via [npm](https://www.npmjs.com/package/conceptual-nlg) as a CommonJS import.
 
 ## Installation
 
@@ -12,21 +12,29 @@ Via [npm](https://www.npmjs.com/package/conceptual-nlg) (requires [Node.js](http
 $ npm i conceptual-nlg
 ```
 
+CommonJS import:
+
+```js
+const Persona = require("conceptual-nlg").default;
+```
+
 ## Usage
 
-To use this project, you'll need a persona core that contains all the speech definitions.
+To use this project, you'll need a persona core that contains concepts with resolvers used to generate text. Worry not, I will be adding some example cores soon.
 
-There's a tutorial below that shows you how to create one. I will be adding some example cores soon.
+In the mean time, you can use the Quick Start core below. It uses most of the features you'll likely need to get moving! If you're the kind of person who likes to get their hands dirty, this lets you dive in right away.
+
+After you run the Quick Start, I suggest you read the short tutorial below to learn how everything works.
 
 ### Quick Start
 
-Create a new directory, install Conceptual NLG, and open a new JS file in your editor of choice:
+In a terminal, create a new directory, install Conceptual NLG, and open a new JS file in your editor of choice (I recommend [VS Code](https://code.visualstudio.com/)):
 
 ```bash
 $ md cnlg-starter
 $ cd cnlg-starter
-$ npm i conceptual-nlg
-$ code main.js # VS code, use any editor
+$ npm i conceptual-nlg  # Installs Conceptual NLG as a node module. Requires Node.js.
+$ code main.js          # Opens main.js in VS code; use any editor
 ```
 
 Paste and save the following: 
