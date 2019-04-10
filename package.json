@@ -1,6 +1,6 @@
 {
   "name": "conceptual-nlg",
-  "version": "1.1.12",
+  "version": "1.1.13",
   "description": "A natural language generator (NLG) that articulates concepts as words, phrases, and sentences.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -29,12 +29,10 @@
   "author": "Justin Mahar <thejustinmahar@gmail.com>",
   "license": "ISC",
   "devDependencies": {
-    "typescript": "^3.4.1"
+    "typescript": "^3.4.1",
+    "@types/node": "^11.13.0"
   },
   "dependencies": {
-    "@types/lodash": "^4.14.123",
-    "@types/node": "^11.13.0",
-    "lodash": "^4.17.11",
-    "seedrandom": "^3.0.1"
+    "random-seed-weighted-chooser": "^1.0.4"
   }
 }

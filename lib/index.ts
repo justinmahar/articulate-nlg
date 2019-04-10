@@ -1,5 +1,4 @@
-import _ from 'lodash';
-const seedrandom = require("seedrandom");
+const chooser = require("random-seed-weighted-chooser").default;
 
 /**
  * A Persona can articulate concepts by generating speech as strings containing text. This speech logic is defined by
@@ -37,7 +36,7 @@ export default class Persona {
     }
 
     if (generator.capitalize) {
-      text = _.capitalize(text);
+      text = text.charAt(0).toUpperCase() + text.slice(1);
     }
 
     return text;
@@ -87,7 +86,7 @@ export default class Persona {
             ? stringOrResolver.weight
             : 1;
         });
-        let selectedIndex = weightedRandom(weights, seed);
+        let selectedIndex = chooser.chooseWeightedIndex(weights, seed);
         selectedResolverOrString = arrayOrResolverOrString[selectedIndex];
       }
       // Otherwise it's a resolver or a string!
@@ -269,17 +268,4 @@ export interface IGenerator {
 
   /** Capitalizes the first letter of the generated text. Default false. */
   capitalize?: boolean;
-}
-
-function weightedRandom(weights: number[], seed: any = Math.random()): number {
-  let cumulative: number = 0;
-  let ranges: number[] = weights.map(weight => (cumulative += weight));
-  let seededRand = new seedrandom(seed);
-  let selectedValue = seededRand() * cumulative;
-  for (let index = 0; index < ranges.length; index++) {
-    if (selectedValue <= ranges[index]) {
-      return index;
-    }
-  }
-  return -1;
 }

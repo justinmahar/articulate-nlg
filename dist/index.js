@@ -1,10 +1,6 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var lodash_1 = __importDefault(require("lodash"));
-var seedrandom = require("seedrandom");
+var chooser = require("random-seed-weighted-chooser").default;
 /**
  * A Persona can articulate concepts by generating speech as strings containing text. This speech logic is defined by
  * a "core" that's provided to the Persona on construction.
@@ -40,7 +36,7 @@ var Persona = /** @class */ (function () {
                 text = value ? value : "<" + generator.contextProp + ">";
             }
             if (generator.capitalize) {
-                text = lodash_1.default.capitalize(text);
+                text = text.charAt(0).toUpperCase() + text.slice(1);
             }
             return text;
         };
@@ -80,7 +76,7 @@ var Persona = /** @class */ (function () {
                             ? stringOrResolver.weight
                             : 1;
                     });
-                    var selectedIndex = weightedRandom(weights, seed);
+                    var selectedIndex = chooser.chooseWeightedIndex(weights, seed);
                     selectedResolverOrString = arrayOrResolverOrString[selectedIndex];
                 }
                 // Otherwise it's a resolver or a string!
@@ -164,16 +160,3 @@ var Persona = /** @class */ (function () {
     return Persona;
 }());
 exports.default = Persona;
-function weightedRandom(weights, seed) {
-    if (seed === void 0) { seed = Math.random(); }
-    var cumulative = 0;
-    var ranges = weights.map(function (weight) { return (cumulative += weight); });
-    var seededRand = new seedrandom(seed);
-    var selectedValue = seededRand() * cumulative;
-    for (var index = 0; index < ranges.length; index++) {
-        if (selectedValue <= ranges[index]) {
-            return index;
-        }
-    }
-    return -1;
-}
