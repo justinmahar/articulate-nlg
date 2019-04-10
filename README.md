@@ -20,7 +20,7 @@ const Persona = require("articulate-nlg").default;
 
 ## Usage
 
-You can either use a [ready-to-use persona](#ready-to-use-personas-via-npm), or create your own.
+You can either use a [ready-to-use persona](#ready-to-use-personas-via-npm) that can articulate concepts, or create your own.
 
 To get started creating your own persona, use the Quick Start core below. It uses most of the features you'll likely need to get moving! 
 
@@ -115,7 +115,11 @@ Go ahead, read on. You know you want to!
 
 ## Overview
 
-With Articulate NLG, you can define personas that can articulate concepts (represented as strings) as speech text.
+> articulate | är-ˈti-kyə-ˌlāt
+>
+>   to give clear and effective utterance to : to put into words
+
+With Articulate NLG, you can define personas that can articulate concepts (represented as strings) as speech text. Articulation is putting those concepts into words.
 
 - For instance, a particular persona might articulate the concept `"greet"` as `"hello"`, `"hi"`, or `"hey"`.
 - Another persona might articulate that same concept as `"oy!"`, `"yo!"`, or `"sup!"`.
