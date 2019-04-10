@@ -1,21 +1,21 @@
-# Conceptual NLG
+# Articulate NLG
 
 A natural language generator (NLG) that articulates concepts as words, phrases, and sentences.
 
-This [TypeScript](https://www.typescriptlang.org/) project is [available in JavaScript via npm](https://www.npmjs.com/package/conceptual-nlg) as a CommonJS import.
+This [TypeScript](https://www.typescriptlang.org/) project is [available in JavaScript via npm](https://www.npmjs.com/package/articulate-nlg) as a CommonJS import.
 
 ## Installation
 
-[Via npm](https://www.npmjs.com/package/conceptual-nlg) (requires [Node.js](https://nodejs.org/)):
+[Via npm](https://www.npmjs.com/package/articulate-nlg) (requires [Node.js](https://nodejs.org/)):
 
 ```bash
-$ npm i conceptual-nlg
+$ npm i articulate-nlg
 ```
 
 CommonJS import:
 
 ```js
-const Persona = require("conceptual-nlg").default;
+const Persona = require("articulate-nlg").default;
 ```
 
 ## Usage
@@ -28,19 +28,19 @@ After you run the Quick Start, I suggest you read the short [tutorial](#tutorial
 
 ### Quick Start
 
-In a terminal, create a new directory, install Conceptual NLG, and open a new JS file in your editor of choice (I recommend [VS Code](https://code.visualstudio.com/)):
+In a terminal, create a new directory, install Articulate NLG, and open a new JS file in your editor of choice (I recommend [VS Code](https://code.visualstudio.com/)):
 
 ```bash
 $ md cnlg-starter
 $ cd cnlg-starter
-$ npm i conceptual-nlg  # Installs Conceptual NLG as a node module. Requires Node.js.
+$ npm i articulate-nlg  # Installs Articulate NLG as a node module. Requires Node.js.
 $ code main.js          # Opens main.js in VS code; use any editor
 ```
 
 Paste and save the following:
 
 ```js
-const Persona = require("conceptual-nlg").default;
+const Persona = require("articulate-nlg").default;
 
 let dogCore = {
   conceptResolvers: {
@@ -82,8 +82,8 @@ Contributions are encouraged! We'd love to see what you create.
 
 ### Developing On This Project:
 
-- If you catch a bug, would like to request a feature, or would like to start a discussion, [add an issue to the GitHub project](https://github.com/justinmahar/conceptual-nlg/issues).
-- If you think you can fix it or implement it, [fork the project](https://github.com/justinmahar/conceptual-nlg/fork) and then send me a pull request when you're done. :)
+- If you catch a bug, would like to request a feature, or would like to start a discussion, [add an issue to the GitHub project](https://github.com/justinmahar/articulate-nlg/issues).
+- If you think you can fix it or implement it, [fork the project](https://github.com/justinmahar/articulate-nlg/fork) and then send me a pull request when you're done. :)
 
 ### Sharing Your Personas:
 
@@ -91,13 +91,13 @@ If you decide to create a persona, share it with others via npm!
 
 Here's how to go about it:
 
-- Make a project on GitHub with a `package.json` containing your `conceptual-nlg` version dependency. I recommend [TypeScript](https://www.typescriptlang.org/) but plain JavaScript is welcome too!
+- Make a project on GitHub with a `package.json` containing your `articulate-nlg` version dependency. I recommend [TypeScript](https://www.typescriptlang.org/) but plain JavaScript is welcome too!
 - Create an npm module. For your npm module, use CommonJS module format.
   - **Your default export should be a persona instance that contains your core.**
-    - This ensures your persona always works for everyone even if the conceptual-nlg project's specs change over time.
+    - This ensures your persona always works for everyone even if the articulate-nlg project's specs change over time.
     - This also allows people to import your persona and use it right away.
   - Be sure to test importing and using your persona!
-- If you'd like to share a persona you've made in the [Ready-To-Use Personas](#ready-to-use-personas) section of this README, [add it to this README](https://github.com/justinmahar/conceptual-nlg/fork) and send me a pull request. That section is only for personas than can be used via npm out of the box.
+- If you'd like to share a persona you've made in the [Ready-To-Use Personas](#ready-to-use-personas) section of this README, [add it to this README](https://github.com/justinmahar/articulate-nlg/fork) and send me a pull request. That section is only for personas than can be used via npm out of the box.
 
 ---
 
@@ -105,7 +105,7 @@ Here's how to go about it:
 
 Read this tutorial if:
 
-- You want a better understanding of how Conceptual NLG works.
+- You want a better understanding of how Articulate NLG works.
 - You want to create your own persona to generate speech text with.
 - You're curious and just want to know more.
 
@@ -113,7 +113,7 @@ Go ahead, read on. You know you want to!
 
 ## Overview
 
-With Conceptual NLG, you can define personas that can articulate concepts (represented as strings) as speech text.
+With Articulate NLG, you can define personas that can articulate concepts (represented as strings) as speech text.
 
 - For instance, a particular persona might articulate the concept `"greet"` as `"hello"`, `"hi"`, or `"hey"`.
 - Another persona might articulate that same concept as `"oy!"`, `"yo!"`, or `"sup!"`.
@@ -121,7 +121,7 @@ With Conceptual NLG, you can define personas that can articulate concepts (repre
 
 The generated text for a concept is typically random and, as mentioned, can even reference other concepts. This allows you to define hundreds or even thousands of permutations of speech elegantly.
 
-Conceptual NLG also allows you to vary the randomness so you can bend speech patterns to your liking. You can make certain text more or less likely to generate, or you can use your own pseudorandom number generator (PRNG) seed for ultimate control.
+Articulate NLG also allows you to vary the randomness so you can bend speech patterns to your liking. You can make certain text more or less likely to generate, or you can use your own pseudorandom number generator (PRNG) seed for ultimate control.
 
 To personalize the generated text, you can also define a "context" object that your persona can reference, like a mail merge. 
 
