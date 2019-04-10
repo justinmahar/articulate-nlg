@@ -4,6 +4,34 @@ A natural language generator (NLG) that articulates concepts as words, phrases, 
 
 This [TypeScript](https://www.typescriptlang.org/) project is [available in JavaScript via npm](https://www.npmjs.com/package/articulate-nlg) as a CommonJS import.
 
+## Table Of Contents
+
+- [Articulate NLG](#articulate-nlg)
+  - [Table Of Contents](#table-of-contents)
+  - [Installation](#installation)
+  - [Usage](#usage)
+    - [Quick Start](#quick-start)
+  - [Ready-To-Use Personas Via npm](#ready-to-use-personas-via-npm)
+  - [Contributing](#contributing)
+    - [Developing On This Project:](#developing-on-this-project)
+    - [Sharing Your Personas:](#sharing-your-personas)
+  - [Tutorial](#tutorial)
+    - [Overview](#overview)
+    - [Personas and Cores](#personas-and-cores)
+    - [Resolvers](#resolvers)
+      - [`do`](#do)
+      - [`weight`](#weight)
+    - [Generators](#generators)
+      - [Text Generators](#text-generators)
+      - [Articulate Generators](#articulate-generators)
+      - [Context Generators](#context-generators)
+      - [Multiple `do` Items For Resolvers](#multiple-do-items-for-resolvers)
+    - [Seeding The Pseudorandom Number Generator (PRNG)](#seeding-the-pseudorandom-number-generator-prng)
+    - [Built-in Help Text For Concept Names](#built-in-help-text-for-concept-names)
+    - [Miscellaneous](#miscellaneous)
+  - [TypeScript Support](#typescript-support)
+  - [ISC License](#isc-license)
+
 ## Installation
 
 [Via npm](https://www.npmjs.com/package/articulate-nlg) (requires [Node.js](https://nodejs.org/)):
@@ -103,7 +131,7 @@ Here's how to go about it:
 
 ---
 
-# Tutorial
+## Tutorial
 
 Read this tutorial if:
 
@@ -113,7 +141,7 @@ Read this tutorial if:
 
 Go ahead, read on. You know you want to!
 
-## Overview
+### Overview
 
 > articulate | är-ˈti-kyə-ˌlāt
 >
@@ -133,7 +161,7 @@ To personalize the generated text, you can also define a "context" object that y
 
 Let's go deeper!
 
-## Personas and Cores
+### Personas and Cores
 
 A persona is powered by a core, which contains all the concept definitions and text that will be generated.
 
@@ -158,7 +186,7 @@ And finally, if there's no such concept called `"greet"`, then it will just crea
 
 But things can get more advanced than that! Keep reading...
 
-## Resolvers
+### Resolvers
 
 Resolvers can be more complicated than just providing strings. In fact, providing a string (as shown above with "hello", "hi", or "hey") is actually shorthand for creating a resolver, like so:
 
@@ -187,7 +215,7 @@ What's going on here?
 
 Well, `greet` is being mapped to a list of objects, and each one of those is what's called a **resolver**. When articulating, the persona picks one of these resolvers to resolve the concept as speech text.
 
-### `do`
+#### `do`
 
 Each resolver has two properties: The first is `do`, which specifies either a single generator (which creates text, more on that in a second), a list of generators/text, or just some text. 
 
@@ -195,7 +223,7 @@ The way `do` works is it collects text from all generators and simply concatenat
 
 If this seems confusing, we'll clear it up later with some examples!
 
-### `weight`
+#### `weight`
 
 The second resolver property is `weight`, which defaults to `1`. The weight determines how likely it is for the persona to use a particular resolver when articulating speech.
 
@@ -232,13 +260,13 @@ So to summarize so far:
 
 With me so far? :) Great, let's continue.
 
-## Generators
+### Generators
 
 Once chosen, a resolver's job is to generate text. To do this, it uses generators.
 
 There are a few kinds of generators, one of which we've already seen. Let's go through each one below!
 
-### Text Generators
+#### Text Generators
 
 We've already seen a text generator, so nothing new here.
 
@@ -250,7 +278,7 @@ let generator = {
 };
 ```
 
-### Articulate Generators
+#### Articulate Generators
 
 This is where things get fun! Instead of specifying text, you can reference another concept that exists in the core.
 
@@ -326,7 +354,7 @@ Now we're talking! _Slaps knee_.
 
 Just a few concept definitions later and we have a best friend to welcome us home in many different ways, sometimes with poop.
 
-### Context Generators
+#### Context Generators
 
 In the real world, we operate on the context of any given situation. For instance, if we know someone's name, we might use it in a sentence while articulating a thought.
 
@@ -383,7 +411,7 @@ console.log(max.articulate("welcome-home"));
 
 If you don't specify a `contextDefault` and it's not found, it will generate text containing the property name in angle brackets, like so: `<name>`.
 
-### Multiple `do` Items For Resolvers
+#### Multiple `do` Items For Resolvers
 
 When specifying a resolver's `do`, you can either specify a string, a generator, or you can specify a list of generators/strings.
 
@@ -391,7 +419,7 @@ We've already seen an example above, for the dog's `"welcome-home"` resolver.
 
 Again, the way `do` works is it takes text from all generators and simply concatenates them together. Using `do` and lists of generators or text, you can form phrases and sentences.
 
-## Seeding The Pseudorandom Number Generator (PRNG)
+### Seeding The Pseudorandom Number Generator (PRNG)
 
 If you'd like more control over the randomized resolver selection process, you can specify a seed for the pseurdorandom number generator used under the hood.
 
@@ -435,7 +463,7 @@ Seed examples/ideas:
 - Variety Cap - Generate different speech until a limit is reached, then keep it the same, or vice versa.
 - Combinations - Combine names and times to create unique messages that change at your desired pace (once per hour, day, etc).
 
-## Built-in Help Text For Concept Names
+### Built-in Help Text For Concept Names
 
 You can call `articulate("--help")` or `articulateHelp()` to generate some helpful text containing all concept names.
 
@@ -471,7 +499,7 @@ Puedo articular los siguientes conceptos:
 
 Of course, for your own needs, you can always write your own help text as a separate concept.
 
-## Miscellaneous
+### Miscellaneous
 
 For your convenience/flexibility:
 
