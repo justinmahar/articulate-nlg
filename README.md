@@ -20,9 +20,11 @@ const Persona = require("articulate-nlg").default;
 
 ## Usage
 
-To use this project, you'll need a persona core that contains concepts with resolvers used to generate text. Worry not, I will be adding some example cores soon.
+You can either use a [ready-to-use persona](#ready-to-use-personas-via-npm), or create your own.
 
-In the mean time, you can use the Quick Start core below. It uses most of the features you'll likely need to get moving! If you're the kind of person who likes to get their hands dirty, this lets you dive in right away.
+To get started creating your own persona, use the Quick Start core below. It uses most of the features you'll likely need to get moving! 
+
+If you're the kind of person who likes to get their hands dirty, this lets you dive in right away.
 
 After you run the Quick Start, I suggest you read the short [tutorial](#tutorial) below to learn how everything works.
 
@@ -97,7 +99,7 @@ Here's how to go about it:
     - This ensures your persona always works for everyone even if the articulate-nlg project's specs change over time.
     - This also allows people to import your persona and use it right away.
   - Be sure to test importing and using your persona!
-- If you'd like to share a persona you've made in the [Ready-To-Use Personas](#ready-to-use-personas) section of this README, [add it to this README](https://github.com/justinmahar/articulate-nlg/fork) and send me a pull request. That section is only for personas than can be used via npm out of the box.
+- If you'd like to share a persona you've made in the [Ready-To-Use Personas](#ready-to-use-personas-via-npm) section of this README, [add it to this README](https://github.com/justinmahar/articulate-nlg/fork) and send me a pull request. That section is only for personas than can be used via npm out of the box.
 
 ---
 
