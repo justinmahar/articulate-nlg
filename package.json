@@ -9,7 +9,7 @@
     "build": "rm -rf ./dist && tsc",
     "watch": "tsc --watch",
     "test": "jest",
-    "report-coverage": "cat coverage/coverage.lcov > codecov"
+    "report-coverage": "codecov"
   },
   "repository": {
     "type": "git",
