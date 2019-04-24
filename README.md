@@ -94,7 +94,7 @@ As shown in the example above, there are a few function wrappers available for y
 
 ## TypeScript Support
 
-This is a TypeScript project, so type definitions are available in: `dist/index.d.ts`. These help a lot when building cores, but feel free to use vanilla JS if you want.
+This is a TypeScript project, so type definitions are available in: `dist/index.d.ts`.
 
 ## ISC License
 
