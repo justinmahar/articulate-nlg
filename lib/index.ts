@@ -39,7 +39,6 @@ export default class Persona {
     let vocabToUse: any = this.vocab;
 
     let result = Mustache.render(template, coreToUse, vocabToUse);
-    console.log(template, "->", result);
 
     // See if they just provided the name of a partial with no curly braces.
     // If so, wrap it in curly braces and attempt to render the partial.

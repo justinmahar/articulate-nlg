@@ -41,6 +41,7 @@
     "@types/node": "^11.13.7",
     "codecov": "^3.3.0",
     "jest": "^24.7.1",
+    "ts-jest": "^24.0.2",
     "typescript": "^3.4.1"
   },
   "dependencies": {

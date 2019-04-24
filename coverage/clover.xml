@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1556144334591" clover="3.2.0">
+  <project timestamp="1556144334591" name="All files">
+    <metrics statements="28" coveredstatements="27" conditionals="13" coveredconditionals="10" methods="8" coveredmethods="8" elements="49" coveredelements="45" complexity="0" loc="28" ncloc="28" packages="1" files="1" classes="1"/>
+    <file name="index.ts" path="/mnt/c/Users/jmmrte/Projects/articulate-nlg/lib/index.ts">
+      <metrics statements="28" coveredstatements="27" conditionals="13" coveredconditionals="10" methods="8" coveredmethods="8"/>
+      <line num="1" count="1" type="stmt"/>
+      <line num="2" count="1" type="stmt"/>
+      <line num="6" count="3" type="stmt"/>
+      <line num="7" count="3" type="stmt"/>
+      <line num="8" count="3" type="stmt"/>
+      <line num="12" count="2" type="stmt"/>
+      <line num="13" count="2" type="stmt"/>
+      <line num="14" count="2" type="stmt"/>
+      <line num="15" count="2" type="stmt"/>
+      <line num="16" count="2" type="stmt"/>
+      <line num="17" count="8" type="stmt"/>
+      <line num="19" count="0" type="stmt"/>
+      <line num="24" count="8" type="stmt"/>
+      <line num="27" count="2" type="stmt"/>
+      <line num="28" count="2" type="stmt"/>
+      <line num="29" count="2" type="stmt"/>
+      <line num="34" count="1" type="stmt"/>
+      <line num="35" count="12" type="cond" truecount="2" falsecount="2"/>
+      <line num="37" count="16" type="cond" truecount="2" falsecount="0"/>
+      <line num="38" count="9" type="stmt"/>
+      <line num="39" count="9" type="stmt"/>
+      <line num="41" count="9" type="stmt"/>
+      <line num="42" count="9" type="stmt"/>
+      <line num="51" count="4" type="stmt"/>
+      <line num="52" count="4" type="stmt"/>
+      <line num="58" count="3" type="stmt"/>
+      <line num="62" count="9" type="stmt"/>
+      <line num="64" count="1" type="stmt"/>
+    </file>
+  </project>
+</coverage>

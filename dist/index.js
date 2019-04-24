@@ -58,7 +58,6 @@ var Persona = /** @class */ (function () {
             var coreToUse = __assign({}, _this.core, { params: __assign({}, params) });
             var vocabToUse = _this.vocab;
             var result = mustache_1.default.render(template, coreToUse, vocabToUse);
-            console.log(template, "->", result);
             // See if they just provided the name of a partial with no curly braces.
             // If so, wrap it in curly braces and attempt to render the partial.
             if (result === template &&
