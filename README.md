@@ -22,25 +22,16 @@ const Persona = require("articulate-nlg").default;
 
 ## Usage
 
-Vocabularies for a persona are defined as key value pairs. The underlying templating engine is [mustache.js](https://github.com/janl/mustache.js/), and uses partials.
+A persona requires a vocabulary, which defines the text that can be generated.
 
-There are a few function wrappers defined:
+Vocabularies for a persona are defined as key value string pairs in a JS object. The underlying templating engine is [mustache.js](https://github.com/janl/mustache.js/), and all keys are Mustache partials. They can be cross-referenced, just make sure you avoid circular references, which will cause an infinite loop.
 
-- `capitalize`: Capitalizes the contents after rendering it.
-- `choose`: Chooses one of the items at random.
-  - Items are separated by `|` pipes.
-  - Each item is rendered, meaning you can next additional partials (`{{> partialName }}`).
-  - You can specify weights using `=weight` where weight is the value.
-    - For example, `greet: "{{#choose}}woof=5|bark=95{{/choose}}"` would mean a 5% chance of `"woof"` and a 95% chance of `"bark"`.
+One you construct a `Persona`, call `articulate(template, params)` on the persona to generate text!
 
-Call `articulate(template, params)` on the persona to generate text!
-
-See the example below.
+See the example below:
 
 ```js
 const Persona = require("articulate-nlg").default;
-
-let max:any = null;
 
 let dogVocab = {
   greet: "{{#choose}}woof|bark|sniff sniff|wag tail{{/choose}}",
@@ -51,32 +42,55 @@ let dogVocab = {
   "{{#capitalize}}{{>greet}}{{/capitalize}}! Welcome home, {{>master}}! {{>emoji}}"
 };
 
-max = new Persona(dogVocab);
+let max = new Persona(dogVocab);
 
-max.articulate("welcome-home");
+console.log(max.articulate("welcome-home"));
+// Will generate text like following:
 // Sniff sniff! Welcome home, bringer of food! 🐾
 // Woof! Welcome home, bringer of food! 👅
 // Wag tail! Welcome home, bringer of food! 🐕‍
 // Etc.
 
-max.articulate("greet");
+// This will find the "greet" partial and render it.
+console.log(max.articulate("greet"));
 // "woof", "bark", "sniff sniff", "wag tail"
 
-max.articulate("{{>greet}}");
+// The above is equivalent to using a partial, like so:
+console.log(max.articulate("{{>greet}}"));
 // "woof", "bark", "sniff sniff", "wag tail"
 
-max.articulate("master", { "name": "justin" });
-// "Justin"
-
-max.articulate("{{>master}}", { "name": "justin" });
-// "Justin"
-
-max.articulate("{{#capitalize}}{{>master}}{{/capitalize}}");
-// "Bringer of food"
-
-max.articulate("missing");
+// However, if you don't explicitly use a partial and it's not found, you'll see the text you provided:
+console.log(max.articulate("missing"));
 // "missing"
+
+// Whereas if you use a partial that's not found, you'll just get an empty string back:
+console.log(max.articulate("{{>missing}}"));
+// ""
+
+// You can pass parameters, too. These are referenced using: {{params.keyName}}
+console.log(max.articulate("master", { "name": "justin" }));
+// "Justin"
+console.log(max.articulate("{{>master}}", { "name": "justin" }));
+// "Justin"
+
+// You can use your own mustache, too. Note no name was found here, so it used the default defined in the vocabulary.
+console.log(max.articulate("{{#capitalize}}{{>master}}{{/capitalize}}"));
+// "Bringer of food"
 ```
+
+## Function Wrappers
+
+As shown in the example above, there are a few function wrappers available for your vocabulary:
+
+- `capitalize`: Capitalizes the first letter of the contents after rendering it.
+  - `{{#capitalize}}hello{{/capitalize}}` -> `Hello`
+- `choose`: Chooses one of the items at random.
+  - `{{#choose}}apple|orange|starfruit{{/choose}}` -> Randomly selects `apple`, `orange`, `starfruit`.
+  - Items are separated by `|` pipes.
+  - Each item is rendered, meaning you can nest additional partials `{{> partialName }}`.
+    - `{{#choose}}apple|orange|{{>meat}}{{/choose}}` -> Randomly selects `apple`, `orange`, or whatever `meat` renders as.
+  - You can specify weights using `=weight` where `weight` is the value.
+    - For example, `greet: "{{#choose}}woof=5|bark=95{{/choose}}"` would mean a 5% chance of `woof` and a 95% chance of `bark`.
 
 ## TypeScript Support
 
