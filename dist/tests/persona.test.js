@@ -8,6 +8,7 @@ var max = null;
 beforeEach(function () {
     var dogVocab = {
         greet: "{{#choose}}woof|bark|sniff sniff|wag tail{{/choose}}",
+        annoy: "{{#choose}}whine=80|howl=12|beg=8{{/choose}}",
         inspect: "snifffff",
         master: "{{#params.name}}{{#capitalize}}{{params.name}}{{/capitalize}}{{/params.name}}{{^params.name}}bringer of food{{/params.name}}",
         emoji: "{{#choose}}👅|🐶|🐾|💩|🐩|🐕‍{{/choose}}",
@@ -21,12 +22,17 @@ test('can articulate a concept', function () {
     value = max.articulate("{{>inspect}}");
     expect(value).toEqual("snifffff");
 });
-test('will choose from possible options when articulating', function () {
-    // let value = max.articulate("welcome-home", { name: "justin" });
+test('will choose from possible options equally when articulating', function () {
     var value = max.articulate("greet");
     expect(["woof", "bark", "sniff sniff", "wag tail"]).toContain(value);
     value = max.articulate("{{>greet}}");
     expect(["woof", "bark", "sniff sniff", "wag tail"]).toContain(value);
+});
+test('will choose from possible options using weights when articulating', function () {
+    var value = max.articulate("annoy");
+    expect(["whine", "howl", "beg"]).toContain(value);
+    value = max.articulate("{{>annoy}}");
+    expect(["whine", "howl", "beg"]).toContain(value);
 });
 test('will use param when provided', function () {
     var value = max.articulate("master", { "name": "justin" });
