@@ -22,6 +22,11 @@ const Persona = require("articulate-nlg").default;
 
 ## Usage
 
+In short:
+- Define "personas" that have vocabularies which can randomly generate coherent text.
+- Vocabularies use keys that represent concepts, and values that represent the text to be generated.
+- Concepts can be cross-referenced, making for interesting and sometimes unexpected results.
+
 A persona requires a vocabulary, which defines the text that can be generated.
 
 Vocabularies for a persona are defined as key value string pairs in a JS object. The underlying templating engine is [mustache.js](https://github.com/janl/mustache.js/), and all keys are Mustache partials. They can be cross-referenced, just make sure you avoid circular references, which will cause an infinite loop.
@@ -33,6 +38,9 @@ See the example below:
 ```js
 const Persona = require("articulate-nlg").default;
 
+// Here we have the greet, master, emoji, and welcome-home concepts.
+// Each concept maps to the text that's to be generated.
+// The syntax used for the values is just mustache.js.
 let dogVocab = {
   greet: "{{#choose}}woof|bark|sniff sniff|wag tail{{/choose}}",
   master:
@@ -45,7 +53,7 @@ let dogVocab = {
 let max = new Persona(dogVocab);
 
 console.log(max.articulate("welcome-home"));
-// Will generate text like following:
+// This will generate text like following:
 // Sniff sniff! Welcome home, bringer of food! 🐾
 // Woof! Welcome home, bringer of food! 👅
 // Wag tail! Welcome home, bringer of food! 🐕‍
