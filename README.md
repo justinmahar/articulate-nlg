@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/justinmahar/articulate-nlg.svg?branch=master)](https://travis-ci.org/justinmahar/articulate-nlg) [![codecov](https://codecov.io/gh/justinmahar/articulate-nlg/branch/master/graph/badge.svg)](https://codecov.io/gh/justinmahar/articulate-nlg)
+
 # Articulate NLG
 
 A natural language generator (NLG) that articulates concepts as words, phrases, and sentences.
