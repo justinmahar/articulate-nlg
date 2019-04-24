@@ -6,9 +6,9 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "deploy": "npm run build && npm publish && git push",
-    "build": "tsc",
+    "build": "rm -rf ./dist && tsc",
     "watch": "tsc --watch",
-    "test": "node ./dist/test.js"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -36,10 +36,15 @@
   },
   "homepage": "https://github.com/justinmahar/articulate-nlg#readme",
   "devDependencies": {
-    "typescript": "^3.4.1",
-    "@types/node": "^11.13.0"
+    "@types/jest": "^24.0.11",
+    "@types/mustache": "^0.8.32",
+    "@types/node": "^11.13.7",
+    "codecov": "^3.3.0",
+    "jest": "^24.7.1",
+    "typescript": "^3.4.1"
   },
   "dependencies": {
-    "random-seed-weighted-chooser": "^1.0.9"
+    "mustache": "^3.0.1",
+    "random-seed-weighted-chooser": "^1.0.12"
   }
 }

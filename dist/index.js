@@ -1,160 +1,76 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+var mustache_1 = __importDefault(require("mustache"));
 var chooser = require("random-seed-weighted-chooser").default;
-/**
- * A Persona can articulate concepts by generating speech as strings containing text. This speech logic is defined by
- * a "core" that's provided to the Persona on construction.
- */
-var Persona = /** @class */ (function () {
-    /**
-     * Construct a new Persona using the provided core.
-     *
-     * @param core The core for this persona. A core contains all concepts and the resolvers that generate text for them.
-     */
-    function Persona(core) {
-        var _this = this;
-        this.core = core;
-        /**
-         * Generates text using the generator provided. Don't call this directly on a persona.
-         *
-         * @param generator The generator to create text from.
-         * @param context Optional context object used by the generator to pull text from.
-         */
-        this.generateTextForGenerator = function (generator, context, seed) {
-            if (context === void 0) { context = {}; }
-            if (seed === void 0) { seed = Math.random(); }
-            var text = "<unknown generator>";
-            if (generator.text) {
-                text = generator.text;
-            }
-            else if (generator.articulate) {
-                text = _this.articulate(generator.articulate, context, seed);
-            }
-            else if (generator.contextProp) {
-                var value = context[generator.contextProp];
-                value = value ? value : generator.contextDefault;
-                text = value ? value : "<" + generator.contextProp + ">";
-            }
-            if (generator.capitalize) {
-                text = text.charAt(0).toUpperCase() + text.slice(1);
-            }
-            return text;
+var defaultCore = {
+    capitalize: function () {
+        return function (text, render) {
+            var renderedText = render(text);
+            return renderedText.charAt(0).toUpperCase() + renderedText.slice(1);
         };
-        /**
-         * Articulates the provided concept, returning the generated speech as a string containing text. Providing `--help` articulates
-         * all concept names this persona can articulate. You can call `articulateHelp()` directly as well.
-         *
-         * The concept string represents a "thought" that is being
-         * articulated by the persona, and the resulting string returned is the generated text that represents the concept.
-         *
-         * A concept may be articulated in a variety of ways, so the returned string
-         * is expected to vary, but will still convey the concept in one way or another.
-         *
-         * A context object can be provided for personas that expect one. These can contain properties
-         * to be expressed during articulation. For instance, a particular persona may expect
-         * a firstName property, a zodiacSign property, birthDate property, etc. In cases where
-         * such an expectation exists, check the core's documentation.
-         *
-         * @param conceptName The name of the concept to articulate as a string.
-         * @param context An optional context Object containing properties expected by a persona, such as firstName.
-         *
-         * @returns The speech text articulated by this persona for the concept provided. This can (and most
-         *          likely will) be different every time for a particular concept.
-         */
-        this.articulate = function (conceptName, context, seed) {
-            if (context === void 0) { context = {}; }
-            if (seed === void 0) { seed = Math.random(); }
-            var text = "<" + conceptName + ">";
-            if (_this.core.conceptResolvers[conceptName]) {
-                var arrayOrResolverOrString = _this.core.conceptResolvers[conceptName];
-                var selectedResolverOrString = undefined;
-                // If the concept maps to an array of possibilities...
-                if (Array.isArray(arrayOrResolverOrString)) {
-                    // We want to select a random item based on the weights.
-                    var weights = arrayOrResolverOrString.map(function (stringOrResolver) {
-                        return typeof stringOrResolver !== "string" && stringOrResolver.weight
-                            ? stringOrResolver.weight
-                            : 1;
+    },
+    choose: function () {
+        return function (text, render) {
+            var segments = text.split("|");
+            var segmentsWithWeights = [];
+            var regex = /(.*)[=](\d+)/;
+            segments.forEach(function (segment) {
+                var match = segment.match(regex);
+                if (match !== null && match.length >= 2) {
+                    segmentsWithWeights.push({
+                        value: match[1],
+                        weight: parseInt(match[2])
                     });
-                    var selectedIndex = chooser.chooseWeightedIndex(weights, seed);
-                    selectedResolverOrString = arrayOrResolverOrString[selectedIndex];
                 }
-                // Otherwise it's a resolver or a string!
                 else {
-                    selectedResolverOrString = arrayOrResolverOrString;
+                    segmentsWithWeights.push({ value: segment, weight: 1 });
                 }
-                if (selectedResolverOrString) {
-                    // If it's a string, that's a shortcut for text generation
-                    // using that string.
-                    if (typeof selectedResolverOrString === "string") {
-                        text = selectedResolverOrString;
-                    }
-                    // Otherwise, it's a resolver! This has a `do` property that contains generators
-                    // or text to be concatenated together. We're almost there...
-                    else {
-                        var textOrArrayOfGenerators = selectedResolverOrString.do;
-                        // If it's an array, concatenate all the generated text together.
-                        if (Array.isArray(textOrArrayOfGenerators)) {
-                            text = textOrArrayOfGenerators.reduce(function (cumulative, currentItem) {
-                                if (typeof currentItem === "string") {
-                                    return cumulative + currentItem;
-                                }
-                                else {
-                                    return (cumulative +
-                                        _this.generateTextForGenerator(currentItem, context, seed));
-                                }
-                            }, "");
-                        }
-                        // If it's a string, use this as the generated text.
-                        else if (typeof textOrArrayOfGenerators === "string") {
-                            text = textOrArrayOfGenerators;
-                        }
-                        // Otherwise, use the generator to generate the text.
-                        else {
-                            text = _this.generateTextForGenerator(textOrArrayOfGenerators, context, seed);
-                        }
-                    }
+            });
+            var chosen = chooser.chooseWeightedObject(segmentsWithWeights);
+            var renderedText = render(chosen.value);
+            return renderedText;
+        };
+    }
+};
+var Persona = /** @class */ (function () {
+    function Persona(vocab, core) {
+        var _this = this;
+        if (vocab === void 0) { vocab = {}; }
+        if (core === void 0) { core = defaultCore; }
+        this.vocab = vocab;
+        this.core = core;
+        this.articulate = function (template, params) {
+            if (params === void 0) { params = {}; }
+            var coreToUse = __assign({}, _this.core, { params: __assign({}, params) });
+            var vocabToUse = _this.vocab;
+            var result = mustache_1.default.render(template, coreToUse, vocabToUse);
+            console.log(template, "->", result);
+            // See if they just provided the name of a partial with no curly braces.
+            // If so, wrap it in curly braces and attempt to render the partial.
+            if (result === template &&
+                result.indexOf("{{") < 0 &&
+                result.indexOf("}}") < 0) {
+                var partial = "{{>" + template + "}}";
+                var resultUsingPartial = mustache_1.default.render("{{>" + template + "}}", coreToUse, vocabToUse);
+                if (resultUsingPartial !== "" && resultUsingPartial !== partial) {
+                    result = resultUsingPartial;
                 }
             }
-            else if (conceptName === "--help") {
-                text = _this.articulateHelp();
-            }
-            return text;
-        };
-        /**
-         * Articulates the names of the concepts this persona can articulate.
-         */
-        this.articulateHelp = function () {
-            var keys = Object.keys(_this.core.conceptResolvers);
-            var text = _this.core.helpText
-                ? "🤷"
-                : "My core is empty! I can't articulate any concepts. 🤷";
-            if (keys.length > 0) {
-                text =
-                    (_this.core.helpText
-                        ? _this.core.helpText
-                        : "I can articulate the following concepts:") +
-                        "\n" +
-                        keys.map(function (key) { return "- " + key; }).join("\n");
-            }
-            return text;
-        };
-        /**
-         * Returns the names of all concepts this persona can articulate.
-         *
-         * @return A string array containing the names of all concepts this persona can articulate.
-         */
-        this.getConceptNames = function () { return Object.keys(_this.core.conceptResolvers); };
-        /**
-         * Returns the persona's core. Handle with care :)
-         */
-        this.getCore = function () { return _this.core; };
-        /**
-         * Sets the persona's core.
-         * @param core The new core.
-         */
-        this.setCore = function (core) {
-            _this.core = core;
+            return result;
         };
     }
     return Persona;
