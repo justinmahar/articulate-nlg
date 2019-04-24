@@ -43,9 +43,12 @@ const Persona = require("articulate-nlg").default;
 // The syntax used for the values is just mustache.js.
 let dogVocab = {
   greet: "{{#choose}}woof|bark|sniff sniff|wag tail{{/choose}}",
+
   master:
   "{{#params.name}}{{#capitalize}}{{params.name}}{{/capitalize}}{{/params.name}}{{^params.name}}bringer of food{{/params.name}}",
+
   emoji: "{{#choose}}👅|🐶|🐾|💩|🐩|🐕‍{{/choose}}",
+  
   "welcome-home":
   "{{#capitalize}}{{>greet}}{{/capitalize}}! Welcome home, {{>master}}! {{>emoji}}"
 };
@@ -61,11 +64,11 @@ console.log(max.articulate("welcome-home"));
 
 // This will find the "greet" partial and render it.
 console.log(max.articulate("greet"));
-// "woof", "bark", "sniff sniff", "wag tail"
+// "woof", "bark", "sniff sniff", or "wag tail"
 
 // The above is equivalent to using a partial, like so:
 console.log(max.articulate("{{>greet}}"));
-// "woof", "bark", "sniff sniff", "wag tail"
+// "woof", "bark", "sniff sniff", or "wag tail"
 
 // However, if you don't explicitly use a partial and it's not found, you'll see the text you provided:
 console.log(max.articulate("missing"));
