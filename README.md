@@ -48,7 +48,7 @@ let dogVocab = {
   "{{#params.name}}{{#capitalize}}{{params.name}}{{/capitalize}}{{/params.name}}{{^params.name}}bringer of food{{/params.name}}",
 
   emoji: "{{#choose}}👅|🐶|🐾|💩|🐩|🐕‍{{/choose}}",
-  
+
   "welcome-home":
   "{{#capitalize}}{{>greet}}{{/capitalize}}! Welcome home, {{>master}}! {{>emoji}}"
 };
@@ -79,15 +79,23 @@ console.log(max.articulate("{{>missing}}"));
 // ""
 
 // You can pass parameters, too. These are referenced using: {{params.keyName}}
+console.log(max.articulate("{{params.keyName}}", { "blah": "heyyyooo" }));
+// "heyyyooo"
+
+// Params can be used in the vocab, too. Here, the master concept uses a name if provided.
 console.log(max.articulate("master", { "name": "justin" }));
 // "Justin"
-console.log(max.articulate("{{>master}}", { "name": "justin" }));
-// "Justin"
 
-// You can use your own mustache, too. Note no name was found here, so it used the default defined in the vocabulary.
-console.log(max.articulate("{{#capitalize}}{{>master}}{{/capitalize}}"));
+// And if not present, can fall back on a default using mustache.js syntax.
+console.log(max.articulate("master"));
 // "Bringer of food"
+
+// You can use your own mustache, too. Here we're using the capitalize wrapper on greet.
+console.log(max.articulate("{{#capitalize}}{{>greet}}{{/capitalize}}"));
+// "Woof", "Bark", "Sniff sniff", or "Wag tail"
 ```
+
+See the [mustache.js](https://github.com/janl/mustache.js/) documentation for reference on the syntax.
 
 ## Function Wrappers
 
