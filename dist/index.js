@@ -15,7 +15,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var mustache_1 = __importDefault(require("mustache"));
-var chooser = require("random-seed-weighted-chooser").default;
+var random_seed_weighted_chooser_1 = __importDefault(require("random-seed-weighted-chooser"));
 var defaultCore = {
     capitalize: function () {
         return function (text, render) {
@@ -40,7 +40,7 @@ var defaultCore = {
                     segmentsWithWeights.push({ value: segment, weight: 1 });
                 }
             });
-            var chosen = chooser.chooseWeightedObject(segmentsWithWeights);
+            var chosen = random_seed_weighted_chooser_1.default.chooseWeightedObject(segmentsWithWeights);
             var renderedText = render(chosen.value);
             return renderedText;
         };
@@ -75,3 +75,23 @@ var Persona = /** @class */ (function () {
     return Persona;
 }());
 exports.default = Persona;
+var VocabHelpers = /** @class */ (function () {
+    function VocabHelpers() {
+    }
+    VocabHelpers.capitalize = function (text) {
+        return "{{#capitalize}}" + text + "{{/capitalize}}";
+    };
+    VocabHelpers.choose = function (texts) {
+        var parts = texts.map(function (val) {
+            if (typeof val === "string") {
+                return val;
+            }
+            else {
+                return val.v + "=" + val.w;
+            }
+        });
+        return "{{#choose}}" + parts.join("|") + "{{/choose}}";
+    };
+    return VocabHelpers;
+}());
+exports.VocabHelpers = VocabHelpers;
