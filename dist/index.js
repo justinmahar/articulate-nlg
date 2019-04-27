@@ -75,22 +75,66 @@ var Persona = /** @class */ (function () {
     return Persona;
 }());
 exports.default = Persona;
+var preventNesting = function (stringToCheck, tag, returnIfValid, returnIfInvalid) {
+    if (stringToCheck.indexOf(tag) >= 0) {
+        console.warn("Can't nest " + tag + ". Make into another partial and reference it instead.", "Defaulting to " + returnIfInvalid, "For:", stringToCheck);
+        return returnIfInvalid;
+    }
+    return returnIfValid;
+};
 var VocabHelpers = /** @class */ (function () {
     function VocabHelpers() {
     }
     VocabHelpers.capitalize = function (text) {
-        return "{{#capitalize}}" + text + "{{/capitalize}}";
+        return preventNesting(text, "{{#capitalize}}", "{{#capitalize}}" + text + "{{/capitalize}}", text);
     };
     VocabHelpers.choose = function (texts) {
+        var firstValue = "";
         var parts = texts.map(function (val) {
             if (typeof val === "string") {
+                firstValue = !!firstValue ? firstValue : val;
                 return val;
             }
             else {
+                firstValue = !!firstValue ? firstValue : val.v;
                 return val.v + "=" + val.w;
             }
         });
-        return "{{#choose}}" + parts.join("|") + "{{/choose}}";
+        var joinedParts = parts.join("|");
+        return preventNesting(joinedParts, "{{#choose}}", "{{#choose}}" + joinedParts + "{{/choose}}", firstValue);
+    };
+    VocabHelpers.maybe = function (text) {
+        return VocabHelpers.choose([text, ""]);
+    };
+    VocabHelpers.say = function (vocabKey) {
+        return "{{>" + vocabKey + "}}";
+    };
+    VocabHelpers.param = function (paramKey) {
+        return "{{params." + paramKey + "}}";
+    };
+    VocabHelpers.ifThen = function (paramKey, thenText) {
+        return preventNesting(thenText, "{{#params." + paramKey + "}}", "{{#params." + paramKey + "}}" + thenText + "{{/params." + paramKey + "}}", thenText);
+    };
+    VocabHelpers.ifNot = function (paramKey, thenText) {
+        return preventNesting(thenText, "{{^params." + paramKey + "}}", "{{^params." + paramKey + "}}" + thenText + "{{/params." + paramKey + "}}", thenText);
+    };
+    VocabHelpers.ifElse = function (paramKey, thenText, elseText) {
+        return "" + VocabHelpers.ifThen(paramKey, thenText) + VocabHelpers.ifNot(paramKey, elseText);
+    };
+    VocabHelpers.doFirst = function (paramTextPairs, defaultText) {
+        if (defaultText === void 0) { defaultText = ""; }
+        // Each if/else goes inside the previous.
+        // So I put my thang down, slice it and reverse it.
+        // The slice creates a new array since reverse() affects the original.
+        var template = paramTextPairs
+            .slice()
+            .reverse()
+            .reduce(function (acc, curr) {
+            var paramKey = curr.p;
+            var value = curr.t;
+            return VocabHelpers.ifElse(paramKey, value, acc);
+        }, defaultText);
+        return template;
     };
     return VocabHelpers;
 }());
