@@ -67,19 +67,115 @@ interface WeightedVocab {
   w: number;
 }
 
+interface ParamTextPair {
+  p: string;
+  t: string;
+}
+
+let preventNesting = (
+  stringToCheck: string,
+  tag: string,
+  returnIfValid: string,
+  returnIfInvalid: string
+): string => {
+  if (stringToCheck.indexOf(tag) >= 0) {
+    console.warn(
+      `Can't nest ${tag}. Make into another partial and reference it instead.`,
+      `Defaulting to ${returnIfInvalid}`,
+      "For:",
+      stringToCheck
+    );
+    return returnIfInvalid;
+  }
+  return returnIfValid;
+};
+
 export class VocabHelpers {
   static capitalize = (text: string): string => {
-    return "{{#capitalize}}" + text + "{{/capitalize}}";
+    return preventNesting(
+      text,
+      "{{#capitalize}}",
+      `{{#capitalize}}${text}{{/capitalize}}`,
+      text
+    );
   };
 
   static choose = (texts: (string | WeightedVocab)[]): string => {
+    let firstValue: string = "";
     let parts = texts.map(val => {
       if (typeof val === "string") {
+        firstValue = !!firstValue ? firstValue : val;
         return val;
       } else {
+        firstValue = !!firstValue ? firstValue : val.v;
         return val.v + "=" + val.w;
       }
     });
-    return "{{#choose}}" + parts.join("|") + "{{/choose}}";
+    let joinedParts = parts.join("|");
+    return preventNesting(
+      joinedParts,
+      "{{#choose}}",
+      "{{#choose}}" + joinedParts + "{{/choose}}",
+      firstValue
+    );
+  };
+
+  static maybe = (text: string): string => {
+    return VocabHelpers.choose([text, ""]);
+  };
+
+  static say = (vocabKey: string): string => {
+    return `{{>${vocabKey}}}`;
+  };
+
+  static param = (paramKey: string) => {
+    return `{{params.${paramKey}}}`;
+  };
+
+  static ifThen = (paramKey: string, thenText: string) => {
+    return preventNesting(
+      thenText,
+      `{{#params.${paramKey}}}`,
+      `{{#params.${paramKey}}}${thenText}{{/params.${paramKey}}}`,
+      thenText
+    );
+  };
+
+  static ifNot = (paramKey: string, thenText: string) => {
+    return preventNesting(
+      thenText,
+      `{{^params.${paramKey}}}`,
+      `{{^params.${paramKey}}}${thenText}{{/params.${paramKey}}}`,
+      thenText
+    );
+  };
+
+  static ifElse = (
+    paramKey: string,
+    thenText: string,
+    elseText: string
+  ): string => {
+    return `${VocabHelpers.ifThen(paramKey, thenText)}${VocabHelpers.ifNot(
+      paramKey,
+      elseText
+    )}`;
+  };
+
+  static doFirst = (
+    paramTextPairs: ParamTextPair[],
+    defaultText: string = ""
+  ) => {
+    // Each if/else goes inside the previous.
+    // So I put my thang down, slice it and reverse it.
+    // The slice creates a new array since reverse() affects the original.
+    let template = paramTextPairs
+      .slice()
+      .reverse()
+      .reduce((acc, curr) => {
+        let paramKey = curr.p;
+        let value = curr.t;
+        return VocabHelpers.ifElse(paramKey, value, acc);
+      }, defaultText);
+    return template;
   };
 }
