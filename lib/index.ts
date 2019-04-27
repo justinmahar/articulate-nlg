@@ -1,5 +1,5 @@
 import Mustache from "mustache";
-const chooser = require("random-seed-weighted-chooser").default;
+import Chooser from "random-seed-weighted-chooser";
 
 let defaultCore: Object = {
   capitalize: (): Function => {
@@ -24,7 +24,7 @@ let defaultCore: Object = {
           segmentsWithWeights.push({ value: segment, weight: 1 });
         }
       });
-      let chosen: any = chooser.chooseWeightedObject(segmentsWithWeights);
+      let chosen: any = Chooser.chooseWeightedObject(segmentsWithWeights);
       let renderedText: string = render(chosen.value);
       return renderedText;
     };
@@ -59,5 +59,27 @@ export default class Persona {
     }
 
     return result;
+  };
+}
+
+interface WeightedVocab {
+  v: string;
+  w: number;
+}
+
+export class VocabHelpers {
+  static capitalize = (text: string): string => {
+    return "{{#capitalize}}" + text + "{{/capitalize}}";
+  };
+
+  static choose = (texts: (string | WeightedVocab)[]): string => {
+    let parts = texts.map(val => {
+      if (typeof val === "string") {
+        return val;
+      } else {
+        return val.v + "=" + val.w;
+      }
+    });
+    return "{{#choose}}" + parts.join("|") + "{{/choose}}";
   };
 }
