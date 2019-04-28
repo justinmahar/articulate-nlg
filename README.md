@@ -162,7 +162,7 @@ let greeterVocab = {
 
 let greeter = new Persona(greeterVocab);
 greeter.articulate("greet");
-// Outputs "hi" (1/12 chance), "hello" (1/12 chance), or "heyooo" (10/12 chance).
+// Outputs "Hi" (1/12 chance), "Hello" (1/12 chance), or "Heyooo" (10/12 chance).
 ```
 
 Again, you cannot nest the same function wrapper in itself. If, say, you need to nest `choose()` within `choose()`, you should create a separate vocab key with the function and reference it in the original one like so: `say("nameOfVocabKey")`. A safety check is built into these functions to prevent nesting and a warning will be printed to the console if you do nest them. 
