@@ -103,7 +103,9 @@ console.log(max.articulate("{{#capitalize}}{{>greet}}{{/capitalize}}"));
 // "Woof", "Bark", "Sniff sniff", or "Wag tail"
 ```
 
-See the [mustache.js](https://github.com/janl/mustache.js/) documentation for reference on the syntax.
+There are [Vocab Helper Functions](#vocab-helper-functions) which abstract away the mustache.js syntax shown above. These can (and should!) be used instead of mustache.js syntax whenever possible.
+
+If you must, see the [mustache.js](https://github.com/janl/mustache.js/) documentation for reference on the syntax.
 
 ## Function Wrappers
 
@@ -121,12 +123,23 @@ As shown in the example above, there are a few function wrappers available for y
 
 You cannot nest the same function wrapper within itself. This is a limitation of the underlying template engine, Mustache.js. If you need to nest them, create a separate vocab key/value and where you'd like to nest it, reference it like so: `{{>nameOfVocabKey}}`.
 
-### Vocab Helpers
+## Vocab Helper Functions
 
-The class `VocabHelpers` contains helper functions that create the function wrapper templates shown above. You can use these to make vocabs easier to define.
+The class `VocabHelpers` contains static helper functions that create the function wrapper templates shown above and create common templates using mustache.js syntax.
 
-- `capitalize(text:string)` - Creates a template for capitalization.
-- `choose(texts:(string|{v:value,w:weight})[])` - Creates a template for random choice. Takes an array of strings or weighted objects in the format `{v: value, w: weight}`.
+You can use these to make vocabs easier to define, and can abstract away most, if not all, mustache.js templating syntax from a persona definition. This results in clean and easy to read persona vocabs. **Where possible, it is recommended that you use helper functions over mustache.js syntax to define your persona.**
+
+The following functions are available in `VocabHelpers`:
+
+- `capitalize(text: string)` - Creates a template for capitalization. See the function wrappers section above for details.
+- `choose(texts: (string|{v:value,w:weight})[])` - Creates a template for random choice. See the function wrappers section above for details. Takes a mixed array of strings or weighted objects in the format `{v: value, w: weight}`. You cannot use a `|` character in any of the texts. If you need this character, use `say("pipe")` and have the `"pipe"` key map to `"|"`.
+- `maybe(text: string)` - Creates a template that results in a 50/50 choice between an empty string or the provided text. You cannot use a `|` character in the text.
+- `say(vocabKey: string)` - Creates a template that references another vocab key (as a mustache.js partial).
+- `param(paramKey: string)` - Creates a template that references the value of a parameter.
+- `ifThen(paramKey: string, thenText: string)` - Creates a template that uses the provided `thenText` if the param key exists and is not falsy.
+- `ifNot(paramKey: string, thenText: string)` - Creates a template that uses the provided `thenText` if the param key doesn't exist or is falsy.
+- `ifElse(paramKey: string, thenText: string, elseText: string)` - Creates a template with both `ifThen()` and `ifNot()` templates for the given param key.
+- `doFirst(paramTextPairs: {p: paramKey, t: text}[], defaultText: string = "")` - Creates a template that uses `ifElse()` templates for each pair provided until true. If no param keys are truthy, the `defaultText` is used (defaults to empty string).
 
 Example:
 
@@ -134,6 +147,13 @@ Example:
 import Persona, { VocabHelpers } from "articulate-nlg";
 const choose = VocabHelpers.choose;
 const capitalize = VocabHelpers.capitalize;
+// const maybe = VocabHelpers.maybe;
+// const say = VocabHelpers.say;
+// const param = VocabHelpers.param;
+// const ifThen = VocabHelpers.ifThen;
+// const ifNot = VocabHelpers.ifNot;
+// const ifElse = VocabHelpers.ifElse;
+// const doFirst = VocabHelpers.doFirst;
 
 let greeterVocab = {
   // This creates the string: "{{#capitalize}}{{#choose}}hi|hello|heyooo=10{{/choose}}{{/capitalize}}"
@@ -145,7 +165,7 @@ greeter.articulate("greet");
 // Outputs "hi" (1/12 chance), "hello" (1/12 chance), or "heyooo" (10/12 chance).
 ```
 
-Again, you cannot nest the same function wrapper in itself. If, say, you need to nest `choose()` within `choose()`, you should create a separate vocab key with the function and reference it in the original one like so: `{{>nameOfVocabKey}}`.
+Again, you cannot nest the same function wrapper in itself. If, say, you need to nest `choose()` within `choose()`, you should create a separate vocab key with the function and reference it in the original one like so: `say("nameOfVocabKey")`. A safety check is built into these functions to prevent nesting and a warning will be printed to the console if you do nest them. 
 
 ## TypeScript Support
 
