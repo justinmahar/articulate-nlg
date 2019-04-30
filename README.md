@@ -112,7 +112,7 @@ The following helper functions are available in `VocabHelpers`:
 
 ### • `capitalize(text: string)`
 
-Creates a template for capitalization. Capitalizes the first letter of the contents after articulating it.
+Creates a template for capitalization. Capitalizes the first letter of the text after passing it though the templating engine.
 
 ### • `choose(texts: (string|{v:value,w:weight})[])`
 
@@ -120,7 +120,7 @@ Creates a template for random choice. This chooses one of the items at random. T
 
 You cannot use a `|` character in any of the texts. If you need this character, use `say("pipe")` and have the `"pipe"` key map to `"|"`.
 
-Each item is passed through the templating engine, meaning you can `say()` vocab keys.
+Each text item is passed through the templating engine. This means you can use other helpers, like `say()`.
   - `choose(["apple", "orange", say("meat")])` -> Randomly selects `apple`, `orange`, or whatever `meat` articulates as.
 
 You can specify weights using `{v: value, w: weight}` objects instead of strings, where `v` is the text to articulate and `w` is the weight value. Weights default to `1` if not provided.
@@ -130,31 +130,43 @@ You can specify weights using `{v: value, w: weight}` objects instead of strings
 
 Creates a template that results in a 50/50 choice between an empty string or the provided text. The same as using `choose(["", text])`.
 
+The provided text is passed through the templating engine.
+
 You cannot use a `|` character in the text. If you need this character, use `say("pipe")` and have the `"pipe"` key map to `"|"`.
 
 ### • `say(vocabKey: string)`
 
-Creates a template that articulates another vocab key.
+Creates a template that cross-references another vocab key.
 
 ### • `param(paramKey: string)`
 
-Creates a template that references the value of a parameter.
+Creates a template that references the value of a parameter. If it's a string, it will be part of the resulting text output.
+
+The value of the param is not passed through the templating engine.
 
 ### • `ifThen(paramKey: string, thenText: string)`
 
 Creates a template that uses the provided `thenText` if the param key exists and is not falsy.
 
+The provided text is passed through the templating engine.
+
 ### • `ifNot(paramKey: string, thenText: string)`
 
 Creates a template that uses the provided `thenText` if the param key doesn't exist or is falsy.
+
+The provided text is passed through the templating engine.
 
 ### • `ifElse(paramKey: string, thenText: string, elseText: string)`
 
 Creates a template with both `ifThen()` and `ifNot()` templates for the given param key.
 
+The provided text is passed through the templating engine.
+
 ### • `doFirst(paramTextPairs: {p: paramKey, t: text}[], defaultText: string = "")`
 
 Creates a template that uses `ifElse()` templates for each pair provided until true. If no param keys are truthy, the `defaultText` is used (defaults to empty string).
+
+The provided text is passed through the templating engine.
 
 ### Note on Nesting
 
