@@ -116,9 +116,11 @@ Creates a template for capitalization. Capitalizes the first letter of the conte
 
 ### • `choose(texts: (string|{v:value,w:weight})[])`
 
-Creates a template for random choice. This chooses one of the items at random. Takes a mixed array of strings or weighted objects in the format `{v: value, w: weight}`. You cannot use a `|` character in any of the texts. If you need this character, use `say("pipe")` and have the `"pipe"` key map to `"|"`.
+Creates a template for random choice. This chooses one of the items at random. Takes a mixed array of strings or weighted objects in the format `{v: value, w: weight}`. 
 
-Each item is articulated, meaning you can `say()` vocab keys.
+You cannot use a `|` character in any of the texts. If you need this character, use `say("pipe")` and have the `"pipe"` key map to `"|"`.
+
+Each item is passed through the templating engine, meaning you can `say()` vocab keys.
   - `choose(["apple", "orange", say("meat")])` -> Randomly selects `apple`, `orange`, or whatever `meat` articulates as.
 
 You can specify weights using `{v: value, w: weight}` objects instead of strings, where `v` is the text to articulate and `w` is the weight value. Weights default to `1` if not provided.
