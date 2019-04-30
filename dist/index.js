@@ -53,22 +53,11 @@ var Persona = /** @class */ (function () {
         if (core === void 0) { core = defaultCore; }
         this.vocab = vocab;
         this.core = core;
-        this.articulate = function (template, params) {
+        this.say = function (template, params) {
             if (params === void 0) { params = {}; }
-            var coreToUse = __assign({}, _this.core, { params: __assign({}, params) });
+            var coreToUse = __assign({}, _this.core, { params: params });
             var vocabToUse = _this.vocab;
-            var result = mustache_1.default.render(template, coreToUse, vocabToUse);
-            // See if they just provided the name of a partial with no curly braces.
-            // If so, wrap it in curly braces and attempt to render the partial.
-            if (result === template &&
-                result.indexOf("{{") < 0 &&
-                result.indexOf("}}") < 0) {
-                var partial = "{{>" + template + "}}";
-                var resultUsingPartial = mustache_1.default.render("{{>" + template + "}}", coreToUse, vocabToUse);
-                if (resultUsingPartial !== "" && resultUsingPartial !== partial) {
-                    result = resultUsingPartial;
-                }
-            }
+            var result = mustache_1.default.render("{{>" + template + "}}", coreToUse, vocabToUse);
             return result;
         };
     }
