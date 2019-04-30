@@ -128,7 +128,7 @@ You can specify weights using `{v: value, w: weight}` objects instead of strings
 
 ### • `maybe(text: string)`
 
-Creates a template that results in a 50/50 choice between an empty string or the provided text. 
+Creates a template that results in a 50/50 choice between an empty string or the provided text. The same as using `choose(["", text])`.
 
 You cannot use a `|` character in the text. If you need this character, use `say("pipe")` and have the `"pipe"` key map to `"|"`.
 
