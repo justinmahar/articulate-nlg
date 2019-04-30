@@ -106,19 +106,51 @@ See the [mustache.js](https://github.com/janl/mustache.js/) documentation for re
 
 The following helper functions are available in `VocabHelpers`:
 
-- `capitalize(text: string)` - Creates a template for capitalization. Capitalizes the first letter of the contents after articulating it.
-- `choose(texts: (string|{v:value,w:weight})[])` - Creates a template for random choice. This chooses one of the items at random. Takes a mixed array of strings or weighted objects in the format `{v: value, w: weight}`. You cannot use a `|` character in any of the texts. If you need this character, use `say("pipe")` and have the `"pipe"` key map to `"|"`.
-  - Each item is articulated, meaning you can `say()` vocab keys.
-    - `choose(["apple", "orange", say("meat")])` -> Randomly selects `apple`, `orange`, or whatever `meat` articulates as.
-  - You can specify weights using `{v: value, w: weight}` objects instead of strings, where `v` is the text to articulate and `w` is the weight value. Weights default to `1` if not provided.
-    - `choose([{v: "apple" w: 3}, "orange", "banana"])` -> `apple` has an 80% chance, `orange` and `banana` have a 20% chance (default weight of `1`).
-- `maybe(text: string)` - Creates a template that results in a 50/50 choice between an empty string or the provided text. You cannot use a `|` character in the text. If you need this character, use `say("pipe")` and have the `"pipe"` key map to `"|"`.
-- `say(vocabKey: string)` - Creates a template that articulates another vocab key.
-- `param(paramKey: string)` - Creates a template that references the value of a parameter.
-- `ifThen(paramKey: string, thenText: string)` - Creates a template that uses the provided `thenText` if the param key exists and is not falsy.
-- `ifNot(paramKey: string, thenText: string)` - Creates a template that uses the provided `thenText` if the param key doesn't exist or is falsy.
-- `ifElse(paramKey: string, thenText: string, elseText: string)` - Creates a template with both `ifThen()` and `ifNot()` templates for the given param key.
-- `doFirst(paramTextPairs: {p: paramKey, t: text}[], defaultText: string = "")` - Creates a template that uses `ifElse()` templates for each pair provided until true. If no param keys are truthy, the `defaultText` is used (defaults to empty string).
+### • `capitalize(text: string)`
+
+Creates a template for capitalization. Capitalizes the first letter of the contents after articulating it.
+
+### • `choose(texts: (string|{v:value,w:weight})[])`
+
+Creates a template for random choice. This chooses one of the items at random. Takes a mixed array of strings or weighted objects in the format `{v: value, w: weight}`. You cannot use a `|` character in any of the texts. If you need this character, use `say("pipe")` and have the `"pipe"` key map to `"|"`.
+
+Each item is articulated, meaning you can `say()` vocab keys.
+  - `choose(["apple", "orange", say("meat")])` -> Randomly selects `apple`, `orange`, or whatever `meat` articulates as.
+
+You can specify weights using `{v: value, w: weight}` objects instead of strings, where `v` is the text to articulate and `w` is the weight value. Weights default to `1` if not provided.
+  - `choose([{v: "apple" w: 3}, "orange", "banana"])` -> `apple` has an 80% chance, `orange` and `banana` have a 20% chance (default weight of `1`).
+
+### • `maybe(text: string)`
+
+Creates a template that results in a 50/50 choice between an empty string or the provided text. 
+
+You cannot use a `|` character in the text. If you need this character, use `say("pipe")` and have the `"pipe"` key map to `"|"`.
+
+### • `say(vocabKey: string)`
+
+Creates a template that articulates another vocab key.
+
+### • `param(paramKey: string)`
+
+Creates a template that references the value of a parameter.
+
+### • `ifThen(paramKey: string, thenText: string)`
+
+Creates a template that uses the provided `thenText` if the param key exists and is not falsy.
+
+### • `ifNot(paramKey: string, thenText: string)`
+
+Creates a template that uses the provided `thenText` if the param key doesn't exist or is falsy.
+
+### • `ifElse(paramKey: string, thenText: string, elseText: string)`
+
+Creates a template with both `ifThen()` and `ifNot()` templates for the given param key.
+
+### • `doFirst(paramTextPairs: {p: paramKey, t: text}[], defaultText: string = "")`
+
+Creates a template that uses `ifElse()` templates for each pair provided until true. If no param keys are truthy, the `defaultText` is used (defaults to empty string).
+
+### Note on Nesting
 
 You cannot nest the same function wrapper in itself. If, say, you need to nest `choose()` within `choose()`, you should create a separate vocab key with the function and reference it in the original one like so: `say("nameOfVocabKey")`. A safety check is built into these functions to prevent nesting and a warning will be printed to the console if you do nest them on accident.
 
