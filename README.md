@@ -71,22 +71,27 @@ max.say("welcomeHome");
 // This will generate text like following:
 // Sniff sniff! Welcome home, bringer of food! 🐾
 // Woof! Welcome home, bringer of food! 👅
-// Wag tail! Welcome home, bringer of food! 🐕‍
+// Wag tail! Welcome home, bringer of food! 💩
 // Etc.
 
 // This will articulate the "greet" concept.
 max.say("greet");
 // "woof", "bark", "sniff sniff", or "wag tail"
 
-// If you reference a concept that's not understood, you'll get an empty string back.
+// If you reference a concept that's not understood, you'll get
+// an empty string back.
 max.say("wubalubadubdub");
 // ""
 
-// Params can be used in the vocab, too. Here, the "master" concept uses a name if provided.
+// Params can be used in the vocab, too. Here, the "master" 
+// concept uses a name if provided.
 max.say("master", { name: "justin" });
 // "Justin"
+max.say("welcomeHome", { name: "justin" });
+// Sniff sniff! Welcome home, Justin! 🐩
 
-// And if not provided, can fall back on a default using the ifElse helper. See the vocab above.
+// And if not provided, can fall back on a default using the 
+// ifElse helper. See the vocab above.
 max.say("master");
 // "Bringer of food"
 ```
