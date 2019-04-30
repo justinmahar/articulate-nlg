@@ -14,6 +14,8 @@ This [TypeScript](https://www.typescriptlang.org/) project is [available in Java
 $ npm i articulate-nlg
 ```
 
+## Usage
+
 ES6 import:
 
 ```js
@@ -26,8 +28,6 @@ CommonJS import:
 const Persona = require("articulate-nlg").default;
 const VocabHelpers = require("articulate-nlg").VocabHelpers;
 ```
-
-## Usage
 
 In short:
 
