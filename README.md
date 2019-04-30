@@ -122,7 +122,7 @@ Each item is articulated, meaning you can `say()` vocab keys.
   - `choose(["apple", "orange", say("meat")])` -> Randomly selects `apple`, `orange`, or whatever `meat` articulates as.
 
 You can specify weights using `{v: value, w: weight}` objects instead of strings, where `v` is the text to articulate and `w` is the weight value. Weights default to `1` if not provided.
-  - `choose([{v: "apple" w: 3}, "orange", "banana"])` -> `apple` has an 80% chance, `orange` and `banana` have a 20% chance (default weight of `1`).
+  - `choose([{v: "apple" w: 3}, "orange", "banana"])` -> `apple` has a 60% chance, `orange` and `banana` each have a 20% chance (default weight of `1`).
 
 ### • `maybe(text: string)`
 
