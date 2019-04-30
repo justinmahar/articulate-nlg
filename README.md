@@ -49,9 +49,13 @@ See the example below:
 import Persona, { VocabHelpers } from "articulate-nlg";
 const choose = VocabHelpers.choose;
 const capitalize = VocabHelpers.capitalize;
+//const maybe = VocabHelpers.maybe;
 const say = VocabHelpers.say;
 const param = VocabHelpers.param;
+//const ifThen = VocabHelpers.ifThen;
+//const ifNot = VocabHelpers.ifNot;
 const ifElse = VocabHelpers.ifElse;
+//const doFirst = VocabHelpers.doFirst;
 
 // Here we have the greet, master, emoji, and welcomeHome concepts.
 // Each concept maps to the text that's to be generated.
