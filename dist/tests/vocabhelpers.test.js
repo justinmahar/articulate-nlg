@@ -101,3 +101,11 @@ test("it can create a doFirst template", function () {
     ], "dude");
     expect(template).toEqual("{{#params.nickname}}{{params.nickname}}{{/params.nickname}}{{^params.nickname}}{{#params.firstName}}{{params.firstName}}{{/params.firstName}}{{^params.firstName}}{{#params.lastName}}Mr. {{params.lastName}}{{/params.lastName}}{{^params.lastName}}dude{{/params.lastName}}{{/params.firstName}}{{/params.nickname}}");
 });
+test("it can create a doFirst template and fall back to empty string", function () {
+    var template = doFirst([
+        { p: "nickname", t: param("nickname") },
+        { p: "firstName", t: param("firstName") },
+        { p: "lastName", t: "Mr. " + param("lastName") }
+    ]);
+    expect(template).toEqual("{{#params.nickname}}{{params.nickname}}{{/params.nickname}}{{^params.nickname}}{{#params.firstName}}{{params.firstName}}{{/params.firstName}}{{^params.firstName}}{{#params.lastName}}Mr. {{params.lastName}}{{/params.lastName}}{{^params.lastName}}{{/params.lastName}}{{/params.firstName}}{{/params.nickname}}");
+});

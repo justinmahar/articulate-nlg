@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var index_1 = __importDefault(require("../index"));
-var max = null;
+var max;
 beforeEach(function () {
     var dogVocab = {
         greet: "{{#choose}}woof|bark|sniff sniff|wag tail{{/choose}}",
@@ -29,6 +29,14 @@ test('it will choose from possible options using weights when articulating', fun
     expect(["whine", "howl", "beg"]).toContain(value);
 });
 test('it will use param when provided', function () {
-    var value = max.say("master", { "name": "justin" });
+    var value = max.say("master", { name: "justin" });
     expect(value).toBe("Justin");
+});
+test('it will use defaults when no constructor params are provided', function () {
+    var value = new index_1.default().say("hello");
+    expect(value).toBe("");
+});
+test('it will use a default empty core when only constructor vocabs are provided', function () {
+    var value = new index_1.default({ "hello": "hi there" }).say("hello");
+    expect(value).toBe("hi there");
 });

@@ -35,10 +35,11 @@ export default class Persona {
   constructor(public vocab: Object = {}, public core: Object = defaultCore) {}
 
   say = (template: string, params = {}): string => {
-    let coreToUse: any = { ...this.core, params: params };
-    let vocabToUse: any = this.vocab;
-    let result = Mustache.render(`{{>${template}}}`, coreToUse, vocabToUse);
-    return result;
+    return Mustache.render(
+      `{{>${template}}}`,
+      { ...this.core, "params": params },
+      this.vocab
+    );
   };
 }
 

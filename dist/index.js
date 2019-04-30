@@ -55,10 +55,7 @@ var Persona = /** @class */ (function () {
         this.core = core;
         this.say = function (template, params) {
             if (params === void 0) { params = {}; }
-            var coreToUse = __assign({}, _this.core, { params: params });
-            var vocabToUse = _this.vocab;
-            var result = mustache_1.default.render("{{>" + template + "}}", coreToUse, vocabToUse);
-            return result;
+            return mustache_1.default.render("{{>" + template + "}}", __assign({}, _this.core, { "params": params }), _this.vocab);
         };
     }
     return Persona;
