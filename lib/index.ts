@@ -34,30 +34,10 @@ let defaultCore: Object = {
 export default class Persona {
   constructor(public vocab: Object = {}, public core: Object = defaultCore) {}
 
-  articulate = (template: string, params = {}): string => {
-    let coreToUse: any = { ...this.core, params: { ...params } };
+  say = (template: string, params = {}): string => {
+    let coreToUse: any = { ...this.core, params: params };
     let vocabToUse: any = this.vocab;
-
-    let result = Mustache.render(template, coreToUse, vocabToUse);
-
-    // See if they just provided the name of a partial with no curly braces.
-    // If so, wrap it in curly braces and attempt to render the partial.
-    if (
-      result === template &&
-      result.indexOf("{{") < 0 &&
-      result.indexOf("}}") < 0
-    ) {
-      let partial = `{{>${template}}}`;
-      let resultUsingPartial = Mustache.render(
-        `{{>${template}}}`,
-        coreToUse,
-        vocabToUse
-      );
-      if (resultUsingPartial !== "" && resultUsingPartial !== partial) {
-        result = resultUsingPartial;
-      }
-    }
-
+    let result = Mustache.render(`{{>${template}}}`, coreToUse, vocabToUse);
     return result;
   };
 }

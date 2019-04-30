@@ -16,45 +16,22 @@ beforeEach(()=> {
   max = new Persona(dogVocab);
 })
 
-test('it can articulate a concept', () => {
-  let value = max.articulate("inspect");
-  expect(value).toEqual("snifffff");
-  value = max.articulate("{{>inspect}}");
+test('it can say a concept', () => {
+  let value = max.say("inspect");
   expect(value).toEqual("snifffff");
 });
 
 test('it will choose from possible options equally when articulating', () => {
-  let value = max.articulate("greet");
-  expect(["woof", "bark", "sniff sniff", "wag tail"]).toContain(value);
-  value = max.articulate("{{>greet}}");
+  let value = max.say("greet");
   expect(["woof", "bark", "sniff sniff", "wag tail"]).toContain(value);
 });
 
 test('it will choose from possible options using weights when articulating', () => {
-  let value = max.articulate("annoy");
-  expect(["whine", "howl", "beg"]).toContain(value);
-  value = max.articulate("{{>annoy}}");
+  let value = max.say("annoy");
   expect(["whine", "howl", "beg"]).toContain(value);
 });
 
 test('it will use param when provided', () => {
-  let value = max.articulate("master", { "name": "justin" });
+  let value = max.say("master", { "name": "justin" });
   expect(value).toBe("Justin");
-  value = max.articulate("{{>master}}", { "name": "justin" });
-  expect(value).toBe("Justin");
-});
-
-test('it will capitalize strings', () => {
-  let value = max.articulate("{{#capitalize}}{{>inspect}}{{/capitalize}}");
-  expect(value).toBe("Snifffff");
-});
-
-test('it will return nothing if partial not found', () => {
-  let value = max.articulate("{{>blahhhh}}");
-  expect(value).toBe("");
-});
-
-test('it will return text input if string found in vocab', () => {
-  let value = max.articulate("blahhhh");
-  expect(value).toBe("blahhhh");
 });
