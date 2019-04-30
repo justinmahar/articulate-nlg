@@ -40,3 +40,7 @@ test('it will use a default empty core when only constructor vocabs are provided
     var value = new index_1.default({ "hello": "hi there" }).say("hello");
     expect(value).toBe("hi there");
 });
+test('it will use default vocab when only a core is provided', function () {
+    var value = new index_1.default(undefined, { "hi": "hello" }).say("hello");
+    expect(value).toBe("");
+});
