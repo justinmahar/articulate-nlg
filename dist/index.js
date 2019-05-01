@@ -27,7 +27,7 @@ var defaultCore = {
         return function (text, render) {
             var segments = text.split("|");
             var segmentsWithWeights = [];
-            var regex = /(.*)[=]([0-9]*[.][0-9]+)/;
+            var regex = /(.*)[=]([0-9]*[.]?[0-9]+)/;
             segments.forEach(function (segment) {
                 var match = segment.match(regex);
                 if (match !== null && match.length >= 2) {
