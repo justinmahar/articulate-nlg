@@ -18,7 +18,7 @@ let defaultCore: Object = {
         if (match !== null && match.length >= 2) {
           segmentsWithWeights.push({
             value: match[1],
-            weight: parseInt(match[2])
+            weight: parseFloat(match[2])
           });
         } else {
           segmentsWithWeights.push({ value: segment, weight: 1 });
