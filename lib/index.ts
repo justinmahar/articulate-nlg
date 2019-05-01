@@ -12,7 +12,7 @@ let defaultCore: Object = {
     return (text: string, render: Function): string => {
       let segments = text.split("|");
       let segmentsWithWeights: any = [];
-      let regex: RegExp = /(.*)[=]([0-9]*[.][0-9]+)/;
+      let regex: RegExp = /(.*)[=]([0-9]*[.]?[0-9]+)/;
       segments.forEach(segment => {
         let match: RegExpMatchArray | null = segment.match(regex);
         if (match !== null && match.length >= 2) {
