@@ -138,6 +138,10 @@ You cannot use a `|` character in the text. If you need this character, use `say
 
 Creates a template that cross-references another vocab key.
 
+### • `capSay(vocabKey: string)`
+
+Creates a template that cross-references another vocab key and capitalizes it. Equivalent to `capitalize(say(vocabKey))`.
+
 ### • `param(paramKey: string)`
 
 Creates a template that references the value of a parameter. If it's a string, it will be part of the resulting text output.
