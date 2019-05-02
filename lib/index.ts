@@ -110,7 +110,9 @@ export class VocabHelpers {
   };
 
   static capSay = (text: string): string => {
-    return VocabHelpers.capitalize(VocabHelpers.say(text));
+    let articulated:string = VocabHelpers.say(text);
+    let capitalized:string = VocabHelpers.capitalize(articulated);
+    return capitalized;
   };
 
   static param = (paramKey: string) => {
