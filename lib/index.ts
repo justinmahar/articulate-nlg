@@ -10,6 +10,10 @@ interface ParamValuePair {
   t: any;
 }
 
+interface Vocabulary {
+  [key: string]: Function
+}
+
 // https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript
 let hashCode = (text: string) => {
   var hash = 0,
@@ -37,7 +41,7 @@ let toWeightedVocabs = (texts: (string | WeightedVocab)[]): WeightedVocab[] => {
 
 export default class Persona {
   constructor(
-    public vocab: any = {},
+    public vocab: Vocabulary = {},
     private params: any = {},
     private cycledTextsGroups: any = {}
   ) {}
@@ -155,11 +159,11 @@ export default class Persona {
       }
     }
 
-    return defaultText;
+    return this.render(defaultText);
   };
 }
 
-/*
+
 class Justin extends Persona {
   createVocab = () => {
     let say = this.say;
@@ -182,8 +186,8 @@ class Justin extends Persona {
         maybe(say("hi")) +
         say("name") +
         doFirst([{ p: "name", t: say("name") }], "not found"),
-      hi: "hiiii",
-      num: 6,
+      hi: () => "hiiii",
+      num: () => 6,
       name: (): string => param("name")
     };
   };
@@ -196,4 +200,3 @@ new Array(count).fill(0).forEach(() => {
   let params = { name: "justin" };
   console.log(justin.say("greet", params));
 });
-*/

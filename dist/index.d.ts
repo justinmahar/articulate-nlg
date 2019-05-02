@@ -6,11 +6,14 @@ interface ParamValuePair {
     p: string;
     t: any;
 }
+interface Vocabulary {
+    [key: string]: Function;
+}
 export default class Persona {
-    vocab: any;
+    vocab: Vocabulary;
     private params;
     private cycledTextsGroups;
-    constructor(vocab?: any, params?: any, cycledTextsGroups?: any);
+    constructor(vocab?: Vocabulary, params?: any, cycledTextsGroups?: any);
     say: (vocabKey: string, params?: any) => string;
     capitalize: (text: string) => string;
     capSay: (vocabKey: string, params?: any) => string;
