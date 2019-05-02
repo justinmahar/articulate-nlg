@@ -17,6 +17,7 @@ export declare class VocabHelpers {
     static choose: (texts: (string | WeightedVocab)[]) => string;
     static maybe: (text: string) => string;
     static say: (vocabKey: string) => string;
+    static capSay: (text: string) => string;
     static param: (paramKey: string) => string;
     static ifThen: (paramKey: string, thenText: string) => string;
     static ifNot: (paramKey: string, thenText: string) => string;

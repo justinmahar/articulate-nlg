@@ -5,6 +5,7 @@ var choose = index_1.VocabHelpers.choose;
 var capitalize = index_1.VocabHelpers.capitalize;
 var maybe = index_1.VocabHelpers.maybe;
 var say = index_1.VocabHelpers.say;
+var capSay = index_1.VocabHelpers.capSay;
 var param = index_1.VocabHelpers.param;
 var ifThen = index_1.VocabHelpers.ifThen;
 var ifNot = index_1.VocabHelpers.ifNot;
@@ -76,6 +77,10 @@ test("it can create a maybe template", function () {
 test("it can create a say template which references a partial", function () {
     var template = say("greet");
     expect(template).toEqual("{{>greet}}");
+});
+test("it can create a capitalized say template which references a partial and then capitalizes it", function () {
+    var template = capSay("greet");
+    expect(template).toEqual("{{#capitalize}}{{>greet}}{{/capitalize}}");
 });
 test("it can create a param template which references a param", function () {
     var template = param("name");
