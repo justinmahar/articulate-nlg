@@ -37,7 +37,7 @@ export default class Persona {
   say = (template: string, params = {}): string => {
     return Mustache.render(
       `{{>${template}}}`,
-      { ...this.core, "params": params },
+      { ...this.core, params: params },
       this.vocab
     );
   };
@@ -107,6 +107,10 @@ export class VocabHelpers {
 
   static say = (vocabKey: string): string => {
     return `{{>${vocabKey}}}`;
+  };
+
+  static capSay = (text: string): string => {
+    return VocabHelpers.capitalize(VocabHelpers.say(text));
   };
 
   static param = (paramKey: string) => {
