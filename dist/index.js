@@ -1,17 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -160,45 +147,41 @@ var Persona = /** @class */ (function () {
     return Persona;
 }());
 exports.default = Persona;
-var Justin = /** @class */ (function (_super) {
-    __extends(Justin, _super);
-    function Justin() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.createVocab = function () {
-            var say = _this.say;
-            var capSay = _this.capSay;
-            var choose = _this.choose;
-            var maybe = _this.maybe;
-            var cycle = _this.cycle;
-            var param = _this.param;
-            var doFirst = _this.doFirst;
-            return {
-                greet: function () {
-                    return capSay("hi") +
-                        "-" +
-                        cycle("1", "2", "3", "4", "5") +
-                        "-" +
-                        cycle("2", "1", "3", "4", "5") +
-                        "-" +
-                        choose("hi", "hey", "hello", "what's up") +
-                        "-" +
-                        maybe(say("hi")) +
-                        say("name") +
-                        doFirst([{ p: "name", t: say("name") }], "not found");
-                },
-                hi: function () { return "hiiii"; },
-                num: function () { return 6; },
-                name: function () { return param("name"); }
-            };
-        };
-        _this.vocab = _this.createVocab();
-        return _this;
-    }
-    return Justin;
-}(Persona));
-var justin = new Justin();
-var count = 100;
-new Array(count).fill(0).forEach(function () {
-    var params = { name: "justin" };
-    console.log(justin.say("greet", params));
+/*
+class Justin extends Persona {
+  createVocab = () => {
+    let say = this.say;
+    let capSay = this.capSay;
+    let choose = this.choose;
+    let maybe = this.maybe;
+    let cycle = this.cycle;
+    let param = this.param;
+    let doFirst = this.doFirst;
+    return {
+      greet: (): string =>
+        capSay("hi") +
+        "-" +
+        cycle("1", "2", "3", "4", "5") +
+        "-" +
+        cycle("2", "1", "3", "4", "5") +
+        "-" +
+        choose("hi", "hey", "hello", "what's up") +
+        "-" +
+        maybe(say("hi")) +
+        say("name") +
+        doFirst([{ p: "name", t: say("name") }], "not found"),
+      hi: () => "hiiii",
+      num: () => 6,
+      name: (): string => param("name")
+    };
+  };
+  vocab = this.createVocab();
+}
+
+let justin = new Justin();
+let count = 100;
+new Array(count).fill(0).forEach(() => {
+  let params = { name: "justin" };
+  console.log(justin.say("greet", params));
 });
+*/ 

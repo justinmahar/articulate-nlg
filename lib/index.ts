@@ -163,7 +163,7 @@ export default class Persona {
   };
 }
 
-
+/*
 class Justin extends Persona {
   createVocab = () => {
     let say = this.say;
@@ -200,3 +200,4 @@ new Array(count).fill(0).forEach(() => {
   let params = { name: "justin" };
   console.log(justin.say("greet", params));
 });
+*/
