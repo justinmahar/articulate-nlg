@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var index_1 = __importDefault(require("../index"));
+var index_old_1 = __importDefault(require("../index_old"));
 var max;
 beforeEach(function () {
     var dogVocab = {
@@ -14,7 +14,7 @@ beforeEach(function () {
         emoji: "{{#choose}}👅|🐶|🐾|💩|🐩|🐕‍{{/choose}}",
         "welcome-home": "{{#capitalize}}{{>greet}}{{/capitalize}}! Welcome home, {{>master}}! {{>emoji}}"
     };
-    max = new index_1.default(dogVocab);
+    max = new index_old_1.default(dogVocab);
 });
 test('it can say a concept', function () {
     var value = max.say("inspect");
@@ -33,14 +33,14 @@ test('it will use param when provided', function () {
     expect(value).toBe("Justin");
 });
 test('it will use defaults when no constructor params are provided', function () {
-    var value = new index_1.default().say("hello");
+    var value = new index_old_1.default().say("hello");
     expect(value).toBe("");
 });
 test('it will use a default empty core when only constructor vocabs are provided', function () {
-    var value = new index_1.default({ "hello": "hi there" }).say("hello");
+    var value = new index_old_1.default({ "hello": "hi there" }).say("hello");
     expect(value).toBe("hi there");
 });
 test('it will use default vocab when only a core is provided', function () {
-    var value = new index_1.default(undefined, { "hi": "hello" }).say("hello");
+    var value = new index_old_1.default(undefined, { "hi": "hello" }).say("hello");
     expect(value).toBe("");
 });

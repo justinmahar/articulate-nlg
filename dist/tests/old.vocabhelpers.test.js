@@ -1,16 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var index_1 = require("../index");
-var choose = index_1.VocabHelpers.choose;
-var capitalize = index_1.VocabHelpers.capitalize;
-var maybe = index_1.VocabHelpers.maybe;
-var say = index_1.VocabHelpers.say;
-var capSay = index_1.VocabHelpers.capSay;
-var param = index_1.VocabHelpers.param;
-var ifThen = index_1.VocabHelpers.ifThen;
-var ifNot = index_1.VocabHelpers.ifNot;
-var ifElse = index_1.VocabHelpers.ifElse;
-var doFirst = index_1.VocabHelpers.doFirst;
+var index_old_1 = require("../index_old");
+var choose = index_old_1.VocabHelpers.choose;
+var capitalize = index_old_1.VocabHelpers.capitalize;
+var maybe = index_old_1.VocabHelpers.maybe;
+var say = index_old_1.VocabHelpers.say;
+var capSay = index_old_1.VocabHelpers.capSay;
+var param = index_old_1.VocabHelpers.param;
+var ifThen = index_old_1.VocabHelpers.ifThen;
+var ifNot = index_old_1.VocabHelpers.ifNot;
+var ifElse = index_old_1.VocabHelpers.ifElse;
+var doFirst = index_old_1.VocabHelpers.doFirst;
 test("it can create a choice template from an array of strings ", function () {
     var template = choose(["sushi", "pizza", "tacos", "{{>healthyFood}}"]);
     expect(template).toEqual("{{#choose}}sushi|pizza|tacos|{{>healthyFood}}{{/choose}}");

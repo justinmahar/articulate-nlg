@@ -1,168 +1,199 @@
-import Mustache from "mustache";
 import Chooser from "random-seed-weighted-chooser";
 
-let defaultCore: Object = {
-  capitalize: (): Function => {
-    return (text: string, render: Function): string => {
-      let renderedText = render(text);
-      return renderedText.charAt(0).toUpperCase() + renderedText.slice(1);
-    };
-  },
-  choose: (): Function => {
-    return (text: string, render: Function): string => {
-      let segments = text.split("|");
-      let segmentsWithWeights: any = [];
-      let regex: RegExp = /(.*)[=]([0-9]*[.]?[0-9]+)/;
-      segments.forEach(segment => {
-        let match: RegExpMatchArray | null = segment.match(regex);
-        if (match !== null && match.length >= 2) {
-          segmentsWithWeights.push({
-            value: match[1],
-            weight: parseFloat(match[2])
-          });
-        } else {
-          segmentsWithWeights.push({ value: segment, weight: 1 });
-        }
-      });
-      let chosen: any = Chooser.chooseWeightedObject(segmentsWithWeights);
-      let renderedText: string = render(chosen.value);
-      return renderedText;
-    };
-  }
-};
-
-export default class Persona {
-  constructor(public vocab: Object = {}, public core: Object = defaultCore) {}
-
-  say = (template: string, params = {}): string => {
-    return Mustache.render(
-      `{{>${template}}}`,
-      { ...this.core, params: params },
-      this.vocab
-    );
-  };
-}
-
 interface WeightedVocab {
-  v: string;
+  t: string;
   w: number;
 }
 
-interface ParamTextPair {
+interface ParamValuePair {
   p: string;
-  t: string;
+  t: any;
 }
 
-let preventNesting = (
-  stringToCheck: string,
-  tag: string,
-  returnIfValid: string,
-  returnIfInvalid: string
-): string => {
-  if (stringToCheck.indexOf(tag) >= 0) {
-    console.warn(
-      `Can't nest ${tag}. Make into another partial and reference it instead.`,
-      `Defaulting to ${returnIfInvalid}`,
-      "For:",
-      stringToCheck
-    );
-    return returnIfInvalid;
+// https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript
+let hashCode = (text: string) => {
+  var hash = 0,
+    i,
+    chr;
+  if (text.length === 0) return hash;
+  for (i = 0; i < text.length; i++) {
+    chr = text.charCodeAt(i);
+    hash = (hash << 5) - hash + chr;
+    hash |= 0; // Convert to 32bit integer
   }
-  return returnIfValid;
+  return hash;
 };
 
-export class VocabHelpers {
-  static capitalize = (text: string): string => {
-    return preventNesting(
-      text,
-      "{{#capitalize}}",
-      `{{#capitalize}}${text}{{/capitalize}}`,
-      text
-    );
-  };
-
-  static choose = (texts: (string | WeightedVocab)[]): string => {
-    let firstValue: string = "";
-    let parts = texts.map(val => {
+let toWeightedVocabs = (texts: (string | WeightedVocab)[]): WeightedVocab[] => {
+  return texts.map(
+    (val: string | WeightedVocab): WeightedVocab => {
       if (typeof val === "string") {
-        firstValue = !!firstValue ? firstValue : val;
-        return val;
-      } else {
-        firstValue = !!firstValue ? firstValue : val.v;
-        return val.v + "=" + val.w;
+        return { t: val, w: 1 };
       }
-    });
-    let joinedParts = parts.join("|");
-    return preventNesting(
-      joinedParts,
-      "{{#choose}}",
-      "{{#choose}}" + joinedParts + "{{/choose}}",
-      firstValue
+      return val;
+    }
+  );
+};
+
+export default class Persona {
+  constructor(
+    public vocab: any = {},
+    private params: any = {},
+    private cycledTextsGroups: any = {}
+  ) {}
+
+  say = (vocabKey: string, params: any = this.params): string => {
+    this.params = params;
+    let val = this.vocab[vocabKey];
+    return this.render(val);
+  };
+
+  capitalize = (text: string): string => {
+    return text.charAt(0).toUpperCase() + text.slice(1);
+  };
+
+  capSay = (vocabKey: string, params: any = this.params): string => {
+    return this.capitalize(this.say(vocabKey, params));
+  };
+
+  render = (val: any): string => {
+    if (typeof val === "function") {
+      // Call it and render the value, which could be anything.
+      return this.render(val());
+    } else if (typeof val === "string") {
+      return val;
+    } else if (!!val) {
+      return val + "";
+    } else {
+      return "";
+    }
+  };
+
+  choose = (...texts: (string | WeightedVocab)[]): string => {
+    let weightedVocabs: WeightedVocab[] = toWeightedVocabs(texts);
+    let choice: any = Chooser.chooseWeightedObject(weightedVocabs, "w");
+    return this.render(choice["t"]);
+  };
+
+  private getCycledTextsFor(hash: string): string[] {
+    let cycledTexts: string[] | undefined = this.cycledTextsGroups[hash];
+    if (!!cycledTexts) {
+      return cycledTexts;
+    } else {
+      this.cycledTextsGroups[hash] = [];
+      return this.cycledTextsGroups[hash];
+    }
+  }
+
+  cycle = (...texts: (string | WeightedVocab)[]): string => {
+    let weightedVocabs: WeightedVocab[] = toWeightedVocabs(texts);
+    // Create a hash that's used to group the items provided.
+    // This prevents global cycling and increases search performance.
+    let textsHash: string =
+      hashCode(weightedVocabs.map((val: WeightedVocab) => val.t).join("")) + "";
+    let cycledTexts: string[] = this.getCycledTextsFor(textsHash);
+    // console.log(textsHash, cycledTexts);
+    let filtered: WeightedVocab[] = weightedVocabs.filter(
+      (val: WeightedVocab) => {
+        return !cycledTexts.includes(val.t);
+      }
     );
+
+    // If they've all been used...
+    if (filtered.length === 0) {
+      // Choose from any of them
+      filtered = weightedVocabs;
+      // And remove all items from the cycled texts array
+      weightedVocabs.forEach((val: WeightedVocab) => {
+        var index = cycledTexts.indexOf(val.t);
+        if (index >= 0) {
+          cycledTexts.splice(index, 1);
+        }
+      });
+    }
+
+    let chosen = this.choose(...filtered);
+    cycledTexts.push(chosen);
+    return chosen;
   };
 
-  static maybe = (text: string): string => {
-    return VocabHelpers.choose([text, ""]);
+  maybe = (text: string): string => {
+    return this.choose("", text);
   };
 
-  static say = (vocabKey: string): string => {
-    return `{{>${vocabKey}}}`;
+  param = (paramKey: string): string => {
+    let val = this.params[paramKey];
+    return this.render(val);
   };
 
-  static capSay = (text: string): string => {
-    let articulated:string = VocabHelpers.say(text);
-    let capitalized:string = VocabHelpers.capitalize(articulated);
-    return capitalized;
+  ifThen = (paramKey: string, then: any): string => {
+    return this.ifElse(paramKey, then, "");
   };
 
-  static param = (paramKey: string) => {
-    return `{{params.${paramKey}}}`;
+  ifNot = (paramKey: string, then: any): string => {
+    return this.ifElse(paramKey, "", then);
   };
 
-  static ifThen = (paramKey: string, thenText: string) => {
-    return preventNesting(
-      thenText,
-      `{{#params.${paramKey}}}`,
-      `{{#params.${paramKey}}}${thenText}{{/params.${paramKey}}}`,
-      thenText
-    );
+  ifElse = (paramKey: string, then: any, otherwise: any): string => {
+    if (!!this.params[paramKey]) {
+      return this.render(then);
+    } else {
+      return this.render(otherwise);
+    }
   };
 
-  static ifNot = (paramKey: string, thenText: string) => {
-    return preventNesting(
-      thenText,
-      `{{^params.${paramKey}}}`,
-      `{{^params.${paramKey}}}${thenText}{{/params.${paramKey}}}`,
-      thenText
-    );
-  };
-
-  static ifElse = (
-    paramKey: string,
-    thenText: string,
-    elseText: string
-  ): string => {
-    return `${VocabHelpers.ifThen(paramKey, thenText)}${VocabHelpers.ifNot(
-      paramKey,
-      elseText
-    )}`;
-  };
-
-  static doFirst = (
-    paramTextPairs: ParamTextPair[],
+  doFirst = (
+    paramTextPairs: ParamValuePair[],
     defaultText: string = ""
-  ) => {
-    // Each if/else goes inside the previous.
-    // So I put my thang down, slice it and reverse it.
-    // The slice creates a new array since reverse() affects the original.
-    let template = paramTextPairs
-      .slice()
-      .reverse()
-      .reduce((acc, curr) => {
-        let paramKey = curr.p;
-        let value = curr.t;
-        return VocabHelpers.ifElse(paramKey, value, acc);
-      }, defaultText);
-    return template;
+  ): string => {
+    for (var i = 0; i < paramTextPairs.length; i++) {
+      let pair = paramTextPairs[i];
+      let paramKey = pair.p;
+      let value = pair.t;
+      if (!!this.params[paramKey]) {
+        return this.render(value);
+      }
+    }
+
+    return defaultText;
   };
 }
+
+/*
+class Justin extends Persona {
+  createVocab = () => {
+    let say = this.say;
+    let capSay = this.capSay;
+    let choose = this.choose;
+    let maybe = this.maybe;
+    let cycle = this.cycle;
+    let param = this.param;
+    let doFirst = this.doFirst;
+    return {
+      greet: (): string =>
+        capSay("hi") +
+        "-" +
+        cycle("1", "2", "3", "4", "5") +
+        "-" +
+        cycle("2", "1", "3", "4", "5") +
+        "-" +
+        choose("hi", "hey", "hello", "what's up") +
+        "-" +
+        maybe(say("hi")) +
+        say("name") +
+        doFirst([{ p: "name", t: say("name") }], "not found"),
+      hi: "hiiii",
+      num: 6,
+      name: (): string => param("name")
+    };
+  };
+  vocab = this.createVocab();
+}
+
+let justin = new Justin();
+let count = 100;
+new Array(count).fill(0).forEach(() => {
+  let params = { name: "justin" };
+  console.log(justin.say("greet", params));
+});
+*/

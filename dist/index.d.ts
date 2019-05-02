@@ -1,27 +1,28 @@
-export default class Persona {
-    vocab: Object;
-    core: Object;
-    constructor(vocab?: Object, core?: Object);
-    say: (template: string, params?: {}) => string;
-}
 interface WeightedVocab {
-    v: string;
+    t: string;
     w: number;
 }
-interface ParamTextPair {
+interface ParamValuePair {
     p: string;
-    t: string;
+    t: any;
 }
-export declare class VocabHelpers {
-    static capitalize: (text: string) => string;
-    static choose: (texts: (string | WeightedVocab)[]) => string;
-    static maybe: (text: string) => string;
-    static say: (vocabKey: string) => string;
-    static capSay: (text: string) => string;
-    static param: (paramKey: string) => string;
-    static ifThen: (paramKey: string, thenText: string) => string;
-    static ifNot: (paramKey: string, thenText: string) => string;
-    static ifElse: (paramKey: string, thenText: string, elseText: string) => string;
-    static doFirst: (paramTextPairs: ParamTextPair[], defaultText?: string) => string;
+export default class Persona {
+    vocab: any;
+    private params;
+    private cycledTextsGroups;
+    constructor(vocab?: any, params?: any, cycledTextsGroups?: any);
+    say: (vocabKey: string, params?: any) => string;
+    capitalize: (text: string) => string;
+    capSay: (vocabKey: string, params?: any) => string;
+    render: (val: any) => string;
+    choose: (...texts: (string | WeightedVocab)[]) => string;
+    private getCycledTextsFor;
+    cycle: (...texts: (string | WeightedVocab)[]) => string;
+    maybe: (text: string) => string;
+    param: (paramKey: string) => string;
+    ifThen: (paramKey: string, then: any) => string;
+    ifNot: (paramKey: string, then: any) => string;
+    ifElse: (paramKey: string, then: any, otherwise: any) => string;
+    doFirst: (paramTextPairs: ParamValuePair[], defaultText?: string) => string;
 }
 export {};

@@ -1,4 +1,4 @@
-import Persona from "../index";
+import Persona from "../index_old";
 
 let max:Persona;
 

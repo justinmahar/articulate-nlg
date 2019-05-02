@@ -1,4 +1,4 @@
-import { VocabHelpers } from "../index";
+import { VocabHelpers } from "../index_old";
 
 const choose = VocabHelpers.choose;
 const capitalize = VocabHelpers.capitalize;
