@@ -4,6 +4,7 @@ const choose = VocabHelpers.choose;
 const capitalize = VocabHelpers.capitalize;
 const maybe = VocabHelpers.maybe;
 const say = VocabHelpers.say;
+const capSay = VocabHelpers.capSay;
 const param = VocabHelpers.param;
 const ifThen = VocabHelpers.ifThen;
 const ifNot = VocabHelpers.ifNot;
@@ -94,6 +95,11 @@ test("it can create a maybe template", () => {
 test("it can create a say template which references a partial", () => {
   let template = say("greet");
   expect(template).toEqual("{{>greet}}");
+});
+
+test("it can create a capitalized say template which references a partial and then capitalizes it", () => {
+  let template = capSay("greet");
+  expect(template).toEqual("{{#capitalize}}{{>greet}}{{/capitalize}}");
 });
 
 test("it can create a param template which references a param", () => {
