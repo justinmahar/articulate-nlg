@@ -1,36 +1,34 @@
 import Chooser from "random-seed-weighted-chooser";
 
-interface WeightedVocab {
+export interface WeightedText {
   t: string;
   w: number;
 }
 
-interface ParamValuePair {
+export interface ParamTextPair {
   p: string;
-  t: any;
+  t: string;
 }
 
-interface Vocabulary {
-  [key: string]: Function
+export interface Vocabulary {
+  [key: string]: Function;
 }
 
-// https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript
-let hashCode = (text: string) => {
-  var hash = 0,
-    i,
-    chr;
-  if (text.length === 0) return hash;
-  for (i = 0; i < text.length; i++) {
-    chr = text.charCodeAt(i);
-    hash = (hash << 5) - hash + chr;
-    hash |= 0; // Convert to 32bit integer
-  }
-  return hash;
-};
+export interface PersonaParams {
+  [key: string]: any;
+}
 
-let toWeightedVocabs = (texts: (string | WeightedVocab)[]): WeightedVocab[] => {
+export interface CycledTexts {
+  [key: string]: string[];
+}
+
+export interface CycleGroup {
+  group: string;
+}
+
+let toWeightedTexts = (texts: (string | WeightedText)[]): WeightedText[] => {
   return texts.map(
-    (val: string | WeightedVocab): WeightedVocab => {
+    (val: string | WeightedText): WeightedText => {
       if (typeof val === "string") {
         return { t: val, w: 1 };
       }
@@ -40,27 +38,52 @@ let toWeightedVocabs = (texts: (string | WeightedVocab)[]): WeightedVocab[] => {
 };
 
 export default class Persona {
-  constructor(
-    public vocab: Vocabulary = {},
-    private params: any = {},
-    private cycledTextsGroups: any = {}
-  ) {}
+  public vocab: Vocabulary;
+  private params: PersonaParams;
+  private cycledTextsGroups: CycledTexts;
 
-  say = (vocabKey: string, params: any = this.params): string => {
+  constructor() {
+    this.vocab = {};
+    this.params = {};
+    this.cycledTextsGroups = {};
+  }
+
+  articulate = (vocabKey: string, params: any = {}): string => {
+    return this.say(vocabKey, params);
+  };
+
+  protected say = (vocabKey: string, params: any = this.params): string => {
     this.params = params;
     let val = this.vocab[vocabKey];
+    if (typeof val === "undefined") {
+      console.warn(
+        'Vocab key "' + vocabKey + '" not found. Using empty string.'
+      );
+    }
     return this.render(val);
   };
 
-  capitalize = (text: string): string => {
+  protected capitalize = (text: string): string => {
     return text.charAt(0).toUpperCase() + text.slice(1);
   };
 
-  capSay = (vocabKey: string, params: any = this.params): string => {
+  protected sb = (text: string): string => {
+    return " " + text;
+  };
+
+  protected sa = (text: string): string => {
+    return text + " ";
+  };
+
+  protected sba = (text: string): string => {
+    return " " + text + " ";
+  };
+
+  protected capSay = (vocabKey: string, params: any = this.params): string => {
     return this.capitalize(this.say(vocabKey, params));
   };
 
-  render = (val: any): string => {
+  protected render = (val: any): string => {
     if (typeof val === "function") {
       // Call it and render the value, which could be anything.
       return this.render(val());
@@ -73,72 +96,78 @@ export default class Persona {
     }
   };
 
-  choose = (...texts: (string | WeightedVocab)[]): string => {
-    let weightedVocabs: WeightedVocab[] = toWeightedVocabs(texts);
-    let choice: any = Chooser.chooseWeightedObject(weightedVocabs, "w");
+  protected choose = (...texts: (string | WeightedText)[]): string => {
+    let weightedTexts: WeightedText[] = toWeightedTexts(texts);
+    let choice: any = Chooser.chooseWeightedObject(weightedTexts, "w");
     return this.render(choice["t"]);
   };
 
-  private getCycledTextsFor(hash: string): string[] {
-    let cycledTexts: string[] | undefined = this.cycledTextsGroups[hash];
+  protected chance = (text: string, chance: number): string => {
+    chance = Math.min(1, Math.max(0, chance));
+    let noopChance: number = Math.min(1, Math.max(0, 1 - chance));
+    let textWeighted: WeightedText = { t: text, w: chance };
+    let noopWeighted: WeightedText = { t: "", w: noopChance };
+    return this.choose(noopWeighted, textWeighted);
+  };
+
+  private getCycledTextsFor(groupName: string): string[] {
+    let cycledTexts: string[] | undefined = this.cycledTextsGroups[groupName];
     if (!!cycledTexts) {
       return cycledTexts;
     } else {
-      this.cycledTextsGroups[hash] = [];
-      return this.cycledTextsGroups[hash];
+      this.cycledTextsGroups[groupName] = [];
+      return this.cycledTextsGroups[groupName];
     }
   }
 
-  cycle = (...texts: (string | WeightedVocab)[]): string => {
-    let weightedVocabs: WeightedVocab[] = toWeightedVocabs(texts);
-    // Create a hash that's used to group the items provided.
-    // This prevents global cycling and increases search performance.
-    let textsHash: string =
-      hashCode(weightedVocabs.map((val: WeightedVocab) => val.t).join("")) + "";
-    let cycledTexts: string[] = this.getCycledTextsFor(textsHash);
-    // console.log(textsHash, cycledTexts);
-    let filtered: WeightedVocab[] = weightedVocabs.filter(
-      (val: WeightedVocab) => {
-        return !cycledTexts.includes(val.t);
-      }
-    );
+  protected cycle = (
+    group: CycleGroup,
+    ...texts: (string | WeightedText)[]
+  ): string => {
+    let weightedTexts: WeightedText[] = toWeightedTexts(texts);
+    let cycledTexts: string[] = this.getCycledTextsFor(group.group);
+    let filtered: WeightedText[] = weightedTexts.filter((val: WeightedText) => {
+      return !cycledTexts.includes(val.t);
+    });
 
     // If they've all been used...
     if (filtered.length === 0) {
       // Choose from any of them
-      filtered = weightedVocabs;
+      filtered = weightedTexts;
       // And remove all items from the cycled texts array
-      weightedVocabs.forEach((val: WeightedVocab) => {
+      weightedTexts.forEach((val: WeightedText) => {
         var index = cycledTexts.indexOf(val.t);
         if (index >= 0) {
           cycledTexts.splice(index, 1);
         }
       });
     }
+    //console.log(group.group, "Choosing from:", filtered, "Used up:", cycledTexts);
 
     let chosen = this.choose(...filtered);
     cycledTexts.push(chosen);
+    //console.log(group.group, "Choice:", chosen, "Used up after choice:", cycledTexts);
     return chosen;
   };
 
-  maybe = (text: string): string => {
+  protected maybe = (text: string): string => {
     return this.choose("", text);
   };
 
-  param = (paramKey: string): string => {
+  protected param = (paramKey: string): string => {
     let val = this.params[paramKey];
     return this.render(val);
   };
 
-  ifThen = (paramKey: string, then: any): string => {
+  protected ifThen = (paramKey: string, then: any): string => {
     return this.ifElse(paramKey, then, "");
   };
 
-  ifNot = (paramKey: string, then: any): string => {
+  protected ifNot = (paramKey: string, then: any): string => {
     return this.ifElse(paramKey, "", then);
   };
 
-  ifElse = (paramKey: string, then: any, otherwise: any): string => {
+  protected ifElse = (paramKey: string, then: any, otherwise: any): string => {
     if (!!this.params[paramKey]) {
       return this.render(then);
     } else {
@@ -146,8 +175,8 @@ export default class Persona {
     }
   };
 
-  doFirst = (
-    paramTextPairs: ParamValuePair[],
+  protected doFirst = (
+    paramTextPairs: ParamTextPair[],
     defaultText: string = ""
   ): string => {
     for (var i = 0; i < paramTextPairs.length; i++) {
