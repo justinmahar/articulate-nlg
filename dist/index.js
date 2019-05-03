@@ -4,19 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var random_seed_weighted_chooser_1 = __importDefault(require("random-seed-weighted-chooser"));
-// https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript
-var hashCode = function (text) {
-    var hash = 0, i, chr;
-    if (text.length === 0)
-        return hash;
-    for (i = 0; i < text.length; i++) {
-        chr = text.charCodeAt(i);
-        hash = (hash << 5) - hash + chr;
-        hash |= 0; // Convert to 32bit integer
-    }
-    return hash;
-};
-var toWeightedVocabs = function (texts) {
+var toWeightedTexts = function (texts) {
     return texts.map(function (val) {
         if (typeof val === "string") {
             return { t: val, w: 1 };
@@ -25,22 +13,32 @@ var toWeightedVocabs = function (texts) {
     });
 };
 var Persona = /** @class */ (function () {
-    function Persona(vocab, params, cycledTextsGroups) {
+    function Persona() {
         var _this = this;
-        if (vocab === void 0) { vocab = {}; }
-        if (params === void 0) { params = {}; }
-        if (cycledTextsGroups === void 0) { cycledTextsGroups = {}; }
-        this.vocab = vocab;
-        this.params = params;
-        this.cycledTextsGroups = cycledTextsGroups;
+        this.articulate = function (vocabKey, params) {
+            if (params === void 0) { params = {}; }
+            return _this.say(vocabKey, params);
+        };
         this.say = function (vocabKey, params) {
             if (params === void 0) { params = _this.params; }
             _this.params = params;
             var val = _this.vocab[vocabKey];
+            if (typeof val === "undefined") {
+                console.warn('Vocab key "' + vocabKey + '" not found. Using empty string.');
+            }
             return _this.render(val);
         };
         this.capitalize = function (text) {
             return text.charAt(0).toUpperCase() + text.slice(1);
+        };
+        this.sb = function (text) {
+            return " " + text;
+        };
+        this.sa = function (text) {
+            return text + " ";
+        };
+        this.sba = function (text) {
+            return " " + text + " ";
         };
         this.capSay = function (vocabKey, params) {
             if (params === void 0) { params = _this.params; }
@@ -66,38 +64,43 @@ var Persona = /** @class */ (function () {
             for (var _i = 0; _i < arguments.length; _i++) {
                 texts[_i] = arguments[_i];
             }
-            var weightedVocabs = toWeightedVocabs(texts);
-            var choice = random_seed_weighted_chooser_1.default.chooseWeightedObject(weightedVocabs, "w");
+            var weightedTexts = toWeightedTexts(texts);
+            var choice = random_seed_weighted_chooser_1.default.chooseWeightedObject(weightedTexts, "w");
             return _this.render(choice["t"]);
         };
-        this.cycle = function () {
+        this.chance = function (text, chance) {
+            chance = Math.min(1, Math.max(0, chance));
+            var noopChance = Math.min(1, Math.max(0, 1 - chance));
+            var textWeighted = { t: text, w: chance };
+            var noopWeighted = { t: "", w: noopChance };
+            return _this.choose(noopWeighted, textWeighted);
+        };
+        this.cycle = function (group) {
             var texts = [];
-            for (var _i = 0; _i < arguments.length; _i++) {
-                texts[_i] = arguments[_i];
+            for (var _i = 1; _i < arguments.length; _i++) {
+                texts[_i - 1] = arguments[_i];
             }
-            var weightedVocabs = toWeightedVocabs(texts);
-            // Create a hash that's used to group the items provided.
-            // This prevents global cycling and increases search performance.
-            var textsHash = hashCode(weightedVocabs.map(function (val) { return val.t; }).join("")) + "";
-            var cycledTexts = _this.getCycledTextsFor(textsHash);
-            // console.log(textsHash, cycledTexts);
-            var filtered = weightedVocabs.filter(function (val) {
+            var weightedTexts = toWeightedTexts(texts);
+            var cycledTexts = _this.getCycledTextsFor(group.group);
+            var filtered = weightedTexts.filter(function (val) {
                 return !cycledTexts.includes(val.t);
             });
             // If they've all been used...
             if (filtered.length === 0) {
                 // Choose from any of them
-                filtered = weightedVocabs;
+                filtered = weightedTexts;
                 // And remove all items from the cycled texts array
-                weightedVocabs.forEach(function (val) {
+                weightedTexts.forEach(function (val) {
                     var index = cycledTexts.indexOf(val.t);
                     if (index >= 0) {
                         cycledTexts.splice(index, 1);
                     }
                 });
             }
+            //console.log(group.group, "Choosing from:", filtered, "Used up:", cycledTexts);
             var chosen = _this.choose.apply(_this, filtered);
             cycledTexts.push(chosen);
+            //console.log(group.group, "Choice:", chosen, "Used up after choice:", cycledTexts);
             return chosen;
         };
         this.maybe = function (text) {
@@ -133,15 +136,18 @@ var Persona = /** @class */ (function () {
             }
             return _this.render(defaultText);
         };
+        this.vocab = {};
+        this.params = {};
+        this.cycledTextsGroups = {};
     }
-    Persona.prototype.getCycledTextsFor = function (hash) {
-        var cycledTexts = this.cycledTextsGroups[hash];
+    Persona.prototype.getCycledTextsFor = function (groupName) {
+        var cycledTexts = this.cycledTextsGroups[groupName];
         if (!!cycledTexts) {
             return cycledTexts;
         }
         else {
-            this.cycledTextsGroups[hash] = [];
-            return this.cycledTextsGroups[hash];
+            this.cycledTextsGroups[groupName] = [];
+            return this.cycledTextsGroups[groupName];
         }
     };
     return Persona;
@@ -184,4 +190,4 @@ new Array(count).fill(0).forEach(() => {
   let params = { name: "justin" };
   console.log(justin.say("greet", params));
 });
-*/ 
+*/
