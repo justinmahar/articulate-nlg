@@ -32,7 +32,7 @@ In short:
 
 - Define a "Persona" that has a vocabulary which defines how to generate coherent text.
 - Vocabularies use key strings that represent concepts, and function values that return the text to be generated.
-- Vocab concepts can be cross-referenced, makes for interesting results.
+- Vocab concepts can be cross-referenced, making for interesting results.
 
 One you construct a `Persona`, call `articulate("conceptName")` on the persona to generate text for that concept!
 
@@ -42,7 +42,7 @@ See the example below:
 import Persona from "articulate-nlg";
 
 class Dog extends Persona {
-  createVocab = (): Vocabulary
+  createVocab = () => {
     // Persona helper functions, for convenience.
     const say = this.say;
     const capitalize = this.capitalize;
@@ -78,7 +78,7 @@ class Dog extends Persona {
 // Create "max", a new Dog persona.
 let max = new Dog();
 
-max.articulate("welcomeHome");
+console.log(max.articulate("welcomeHome"));
 // This will generate text like following:
 // Sniff sniff! Welcome home, bringer of food! 🐾
 // Woof! Welcome home, bringer of food! 👅
@@ -86,25 +86,25 @@ max.articulate("welcomeHome");
 // Etc.
 
 // This will articulate the "greet" concept.
-max.articulate("greet");
+console.log(max.articulate("greet"));
 // "woof", "bark", "sniff sniff", or "wag tail"
 
 // If you reference a concept that's not understood, you'll get
-// an empty string back.
-max.articulate("meow");
+// an empty string back and a warning will be printed.
+console.log(max.articulate("meow"));
 // ""
 
 // Params can be used in the vocab, too. Here, the "master"
 // concept uses a name if provided.
-max.articulate("master", { name: "justin" });
+console.log(max.articulate("master", { name: "justin" }));
 // "Justin"
-max.articulate("welcomeHome", { name: "justin" });
+console.log(max.articulate("welcomeHome", { name: "justin" }));
 // Sniff sniff! Welcome home, Justin! 🐩
 
 // And if not provided, can fall back on a default using the
-// ifElse helper. See the vocab above.
-max.articulate("master");
-// "Bringer of food"
+// ifElse helper. See the function value for master above.
+console.log(max.articulate("master"));
+// "bringer of food"
 ```
 
 ## Vocab Helper Functions
@@ -141,7 +141,7 @@ Chooses one of the the provided texts at random. Weights can be specified in the
 
 ### `chance = (text: string, chance: number): string`
 
-Return the provided text given the chance provided, from `0` to `1`, or empty string otherwise. 
+Return the provided text given the chance provided, from `0` to `1`, or empty string otherwise.
 
 For instance, a chance of `0.8` would mean an 80% chance the provided text was returned, and a 20% chance of empty string.
 
@@ -159,7 +159,7 @@ Returns the text provided 50% of the time, and empty string 50% of the time.
 
 ### `param = (paramKey: string): string`
 
-Returns text for the value of the param key provided. The param value can be a string, function, number, etc. 
+Returns text for the value of the param key provided. The param value can be a string, function, number, etc.
 
 Param functions must return a string. If the param value is not a string or function, it is concatenated with `""` and returned as a string.
 

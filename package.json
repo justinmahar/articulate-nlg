@@ -9,7 +9,8 @@
     "build": "rm -rf ./dist && tsc",
     "watch": "tsc --watch",
     "test": "jest",
-    "report-coverage": "codecov"
+    "report-coverage": "codecov",
+    "example": "node ./dist/example.js"
   },
   "repository": {
     "type": "git",
