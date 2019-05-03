@@ -115,37 +115,37 @@ The following helper functions are available in the `Persona` class. Use these t
 
 Articulates the concept with the vocab key provided. This function will generate the text for that vocab key.
 
-### `capitalize = (text: string): string`
+### `capitalize (text: string): string`
 
 Capitalizes the first letter of the provided text.
 
-### `sb = (text: string): string`
+### `sb (text: string): string`
 
 Returns the provided text with a space before it.
 
-### `sa = (text: string): string`
+### `sa (text: string): string`
 
 Returns the provided text with a space after it.
 
-### `sba = (text: string): string`
+### `sba (text: string): string`
 
 Returns the provided text with a space before and after it.
 
-### `capSay = (vocabKey: string): string`
+### `capSay (vocabKey: string): string`
 
 Convenience function that calls `capitalize(say(vocabKey))` to both articulate a concept and then capitalize the resulting text.
 
-### `choose = (...texts: (string | {t: text, w: weight})[]): string`
+### `choose (...texts: (string | {t: text, w: weight})[]): string`
 
 Chooses one of the the provided texts at random. Weights can be specified in the format `{t: text, w: weight}`. Weights default to `1` if not specified.
 
-### `chance = (text: string, chance: number): string`
+### `chance (text: string, chance: number): string`
 
 Return the provided text given the chance provided, from `0` to `1`, or empty string otherwise.
 
 For instance, a chance of `0.8` would mean an 80% chance the provided text was returned, and a 20% chance of empty string.
 
-### `cycle = (group: {group: name}, ...texts: (string | {t: text, w: weight})[]): string`
+### `cycle (group: {group: name}, ...texts: (string | {t: text, w: weight})[]): string`
 
 Uses `choose()` to randomly select one of the provided texts, but ensures that the selected item is not repeated until all remaining items have been chosen.
 
@@ -153,29 +153,29 @@ The first argument is an object containing a group name for the items you'd like
 
 Use this function to keep a degree of randomness while ensuring the text doesn't repeat too often.
 
-### `maybe = (text: string): string`
+### `maybe (text: string): string`
 
 Returns the text provided 50% of the time, and empty string 50% of the time.
 
-### `param = (paramKey: string): string`
+### `param (paramKey: string): string`
 
 Returns text for the value of the param key provided. The param value can be a string, function, number, etc.
 
 Param functions must return a string. If the param value is not a string or function, it is concatenated with `""` and returned as a string.
 
-### `ifThen = (paramKey: string, then: any): string`
+### `ifThen (paramKey: string, then: any): string`
 
 Returns the provided `then` text if the value of the param key is truthy, and returns empty string otherwise.
 
-### `ifNot = (paramKey: string, then: any): string`
+### `ifNot (paramKey: string, then: any): string`
 
 Returns the provided `then` text if the value of the param key is falsy, and returns empty string otherwise.
 
-### `ifElse = (paramKey: string, then: any, otherwise: any): string`
+### `ifElse (paramKey: string, then: any, otherwise: any): string`
 
 Returns the provided `then` text if the value of the param key is truthy, and returns the `otherwise` string otherwise.
 
-### `doFirst = (paramTextPairs: {p: paramKey, t: text}[], defaultText: string = ""): string`
+### `doFirst (paramTextPairs: {p: paramKey, t: text}[], defaultText: string = ""): string`
 
 Returns the text for the first param value that is truthy, or the default text if none are. `defaultText` is optional and defaults to empty string.
 
