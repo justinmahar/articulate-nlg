@@ -19,59 +19,66 @@ $ npm i articulate-nlg
 ES6 import:
 
 ```js
-import Persona, { VocabHelpers } from "articulate-nlg";
+import Persona from "articulate-nlg";
 ```
 
 CommonJS import:
 
 ```js
 const Persona = require("articulate-nlg").default;
-const VocabHelpers = require("articulate-nlg").VocabHelpers;
 ```
 
 In short:
 
-- Define "personas" that have vocabularies which can randomly generate coherent text.
-- Vocabularies use key strings that represent concepts, and values that represent the text to be generated.
-- Concepts can be cross-referenced, making for interesting and sometimes unexpected results.
+- Define a "Persona" that has a vocabulary which defines how to generate coherent text.
+- Vocabularies use key strings that represent concepts, and function values that return the text to be generated.
+- Vocab concepts can be cross-referenced, makes for interesting results.
 
-A persona requires a vocabulary, which defines the text that can be generated. Vocabularies for a persona are defined as key value string pairs in a JS object.
-
-The underlying templating engine is [mustache.js](https://github.com/janl/mustache.js/), and all key values are actually Mustache partials. However, this library provides helper functions so you most likely won't need to write any mustache.js syntax! You can still use it if you'd like, though, but do so at your own peril.
-
-Vocab concepts can be cross-referenced. Just make sure you avoid circular references, which will cause an infinite loop.
-
-One you construct a `Persona`, call `say("conceptName")` on the persona to generate text for that concept!
+One you construct a `Persona`, call `articulate("conceptName")` on the persona to generate text for that concept!
 
 See the example below:
 
 ```js
-import Persona, { VocabHelpers } from "articulate-nlg";
-const choose = VocabHelpers.choose;
-const capitalize = VocabHelpers.capitalize;
-//const maybe = VocabHelpers.maybe;
-const say = VocabHelpers.say;
-const param = VocabHelpers.param;
-//const ifThen = VocabHelpers.ifThen;
-//const ifNot = VocabHelpers.ifNot;
-const ifElse = VocabHelpers.ifElse;
-//const doFirst = VocabHelpers.doFirst;
+import Persona from "articulate-nlg";
 
-// Here we have the greet, master, emoji, and welcomeHome concepts.
-// Each concept maps to the text that's to be generated.
-// Helper functions generate the templating syntax for you automatically.
-let dogVocab = {
-  greet: choose(["woof", "bark", "sniff sniff", "wag tail"]),
-  master: ifElse("name", capitalize(param("name")), "bringer of food"),
-  emoji: choose("👅", "🐶", "🐾", "💩", "🐩", "🐕‍"]),
-  // This concept cross-references greet, master, and emoji using say().
-  welcomeHome: capitalize(say("greet")) + "! Welcome home, " + 
-               say("master") + "! " + say("emoji")
-};
+class Dog extends Persona {
+  createVocab = (): Vocabulary
+    // Persona helper functions, for convenience.
+    const say = this.say;
+    const capitalize = this.capitalize;
+    const capSay = this.capSay;
+    const choose = this.choose;
+    const chance = this.chance;
+    const cycle = this.cycle;
+    const param = this.param;
+    const ifElse = this.ifElse;
 
-let max = new Persona(dogVocab);
+    // Return an object containing strings mapped to functions,
+    // which return the text.
+    return {
+      greet: () => choose("woof", "bark", "sniff sniff", "wag tail"),
+      master: () =>
+        ifElse("name", capitalize(param("name")), "bringer of food"),
+      emoji: () =>
+        cycle({ group: "emoji" }, "👅", "🐶", "🐾", "💩", "🐩", "🐕‍"),
+      // This concept cross-references greet, master, and emoji using say().
+      welcomeHome: () =>
+        capSay("greet") +
+        "! Welcome home, " +
+        say("master") +
+        "! " +
+        say("emoji")
+    };
+  };
 
-max.say("welcomeHome");
+  // Create and set the vocab for Dog.
+  vocab = this.createVocab();
+}
+
+// Create "max", a new Dog persona.
+let max = new Dog();
+
+max.articulate("welcomeHome");
 // This will generate text like following:
 // Sniff sniff! Welcome home, bringer of food! 🐾
 // Woof! Welcome home, bringer of food! 👅
@@ -79,102 +86,98 @@ max.say("welcomeHome");
 // Etc.
 
 // This will articulate the "greet" concept.
-max.say("greet");
+max.articulate("greet");
 // "woof", "bark", "sniff sniff", or "wag tail"
 
 // If you reference a concept that's not understood, you'll get
 // an empty string back.
-max.say("wubalubadubdub");
+max.articulate("meow");
 // ""
 
-// Params can be used in the vocab, too. Here, the "master" 
+// Params can be used in the vocab, too. Here, the "master"
 // concept uses a name if provided.
-max.say("master", { name: "justin" });
+max.articulate("master", { name: "justin" });
 // "Justin"
-max.say("welcomeHome", { name: "justin" });
+max.articulate("welcomeHome", { name: "justin" });
 // Sniff sniff! Welcome home, Justin! 🐩
 
-// And if not provided, can fall back on a default using the 
+// And if not provided, can fall back on a default using the
 // ifElse helper. See the vocab above.
-max.say("master");
+max.articulate("master");
 // "Bringer of food"
 ```
 
 ## Vocab Helper Functions
 
-The vocab helper functions abstract away the templating syntax for the underlying templating engine. These can (and should!) be used instead of mustache.js syntax whenever possible.
+The following helper functions are available in the `Persona` class. Use these to aid in generating interesting results when defining a vocabulary.
 
-See the [mustache.js](https://github.com/janl/mustache.js/) documentation for reference on the syntax if you *must* (heh heh). If there's something really fancy you want to do that this library doesn't have a helper for, go for it.
+- `say (vocabKey: string): string`
 
-**Where possible, it is recommended that you use helper functions over mustache.js syntax to define your persona.**
+Articulates the concept with the vocab key provided. This function will generate the text for that vocab key.
 
-The following helper functions are available in `VocabHelpers`:
+- `capitalize = (text: string): string`
 
-### • `capitalize(text: string)`
+Capitalizes the first letter of the provided text.
 
-Creates a template for capitalization. Capitalizes the first letter of the text after passing it though the templating engine.
+- `sb = (text: string): string`
 
-### • `choose(texts: (string|{v:value,w:weight})[])`
+Returns the provided text with a space before it.
 
-Creates a template for random choice. This chooses one of the items at random. Takes a mixed array of strings or weighted objects in the format `{v: value, w: weight}`. 
+- `sa = (text: string): string`
 
-You cannot use a `|` character in any of the texts. If you need this character, use `say("pipe")` and have the `"pipe"` key map to `"|"`.
+Returns the provided text with a space after it.
 
-Each text item is passed through the templating engine. This means you can use other helpers, like `say()`.
-  - `choose(["apple", "orange", say("meat")])` -> Randomly selects `apple`, `orange`, or whatever `meat` articulates as.
+- `sba = (text: string): string`
 
-You can specify weights using `{v: value, w: weight}` objects instead of strings, where `v` is the text to articulate and `w` is the weight value. Weights default to `1` if not provided.
-  - `choose([{v: "apple" w: 3}, "orange", "banana"])` -> `apple` has a 60% chance, `orange` and `banana` each have a 20% chance (default weight of `1`).
+Returns the provided text with a space before and after it.
 
-### • `maybe(text: string)`
+- `capSay = (vocabKey: string): string`
 
-Creates a template that results in a 50/50 choice between an empty string or the provided text. The same as using `choose(["", text])`.
+Calls `capitalize(say(vocabKey))` to both articulate a concept and then capitalize the resulting text.
 
-The provided text is passed through the templating engine.
+- `choose = (...texts: (string | {t: text, w: weight})[]): string`
 
-You cannot use a `|` character in the text. If you need this character, use `say("pipe")` and have the `"pipe"` key map to `"|"`.
+Chooses one of the the provided texts at random. Weights can be specified in the format `{t: text, w: weight}`. Weights default to `1` if not specified.
 
-### • `say(vocabKey: string)`
+- `chance = (text: string, chance: number): string`
 
-Creates a template that cross-references another vocab key.
+Return the provided text given the chance provided, from `0` to `1`, or empty string otherwise. 
 
-### • `capSay(vocabKey: string)`
+For instance, a chance of `0.8` would mean an 80% chance the provided text was returned, and a 20% chance of empty string.
 
-Creates a template that cross-references another vocab key and capitalizes it. Equivalent to `capitalize(say(vocabKey))`.
+- `cycle = (group: {group: name}, ...texts: (string | {t: text, w: weight})[]): string`
 
-### • `param(paramKey: string)`
+Uses `choose()` to randomly select one of the provided texts, but ensures that the selected item is not repeated until all remaining items have been chosen.
 
-Creates a template that references the value of a parameter. If it's a string, it will be part of the resulting text output.
+The first argument is an object containing a group name for the items you'd like to cycle: `{group: name}`
 
-The value of the param is not passed through the templating engine.
+Use this function to keep a degree of randomness while ensuring the text doesn't repeat too often.
 
-### • `ifThen(paramKey: string, thenText: string)`
+- `maybe = (text: string): string`
 
-Creates a template that uses the provided `thenText` if the param key exists and is not falsy.
+Returns the text provided 50% of the time, and empty string 50% of the time.
 
-The provided text is passed through the templating engine.
+- `param = (paramKey: string): string`
 
-### • `ifNot(paramKey: string, thenText: string)`
+Returns text for the value of the param key provided. The param value can be a string, function, number, etc. 
 
-Creates a template that uses the provided `thenText` if the param key doesn't exist or is falsy.
+Functions must return a string. If the value not a string of function, it is concatenated with `""` and returned as a string.
 
-The provided text is passed through the templating engine.
+- `ifThen = (paramKey: string, then: any): string`
 
-### • `ifElse(paramKey: string, thenText: string, elseText: string)`
+Returns the provided `then` text if the value of the param key is truthy, and returns empty string otherwise.
 
-Creates a template with both `ifThen()` and `ifNot()` templates for the given param key.
+- `ifNot = (paramKey: string, then: any): string`
 
-The provided text is passed through the templating engine.
+Returns the provided `then` text if the value of the param key is falsy, and returns empty string otherwise.
 
-### • `doFirst(paramTextPairs: {p: paramKey, t: text}[], defaultText: string = "")`
+- `ifElse = (paramKey: string, then: any, otherwise: any): string`
 
-Creates a template that uses `ifElse()` templates for each pair provided until true. If no param keys are truthy, the `defaultText` is used (defaults to empty string).
+Returns the provided `then` text if the value of the param key is truthy, and returns the `otherwise` string otherwise.
 
-The provided text is passed through the templating engine.
+- `doFirst = (paramTextPairs: {p: paramKey, t: text}[], defaultText: string = ""): string`
 
-### Note on Nesting
-
-You cannot nest the same function wrapper in itself. If, say, you need to nest `choose()` within `choose()`, you should create a separate vocab key with the function and reference it in the original one like so: `say("nameOfVocabKey")`. A safety check is built into these functions to prevent nesting and a warning will be printed to the console if you do nest them on accident.
+Returns the text for the first param value that is truthy, or the default text if none are. `defaultText` is optional and defaults to empty string.
 
 ## TypeScript Support
 
