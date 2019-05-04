@@ -102,6 +102,10 @@ export default class Persona {
     return this.render(choice["t"]);
   };
 
+  protected weighted = (text: string, weight: number = 1): WeightedText => {
+    return { t: text, w: weight };
+  };
+
   protected chance = (text: string, chance: number): string => {
     chance = Math.min(1, Math.max(0, chance));
     let noopChance: number = Math.min(1, Math.max(0, 1 - chance));
@@ -150,8 +154,8 @@ export default class Persona {
     return chosen;
   };
 
-  protected maybe = (text: string): string => {
-    return this.choose("", text);
+  protected maybe = (...texts: string[]): string => {
+    return this.choose("", this.choose(...texts));
   };
 
   protected param = (paramKey: string): string => {

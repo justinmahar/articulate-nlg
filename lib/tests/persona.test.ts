@@ -9,6 +9,7 @@ class Dog extends Persona {
     const sba = this.sba;
     const capSay = this.capSay;
     const choose = this.choose;
+    const weighted = this.weighted;
     const chance = this.chance;
     const cycle = this.cycle;
     const maybe = this.maybe;
@@ -26,9 +27,16 @@ class Dog extends Persona {
       capSayGreet: () => capSay("greet"),
       capSayNameWithParams: () => capSay("paramName", { name: "Justin" }),
       greet: () => choose("woof", "bark", "ruff"),
+      greetWeighted: () =>
+        choose(
+          weighted("woof", 100000),
+          weighted("bark", 0.00001),
+          weighted("ruff", 0.00001)
+        ),
       chanceHowl: () => chance(say("howl"), 0.8),
       cycleGreet: () => cycle({ group: "greet" }, "woof", "bark", "ruff"),
       maybeGreet: () => maybe(say("greet")),
+      maybeDigMultiple: () => maybe("scratch", "dig", "burrow"),
       paramName: () => param("name"),
       ifThenAngryHowl: () => ifThen("angry", say("howl")),
       ifNotAngrySniff: () => ifNot("angry", "sniff"),
@@ -77,6 +85,10 @@ test("it can add a space before and after text in one step", () => {
 
 test("it can choose an item randomly", () => {
   expect(["woof", "bark", "ruff"]).toContain(max.articulate("greet"));
+});
+
+test("it can choose an item randomly with some being weighted differently", () => {
+  expect(["woof"]).toContain(max.articulate("greetWeighted"));
 });
 
 test("it can say and capitalize text in one step", () => {
@@ -134,6 +146,14 @@ test('it can "maybe" output text, giving it a 50/50 chance empty string or the t
   Array.from({ length: 10 }).forEach(() => {
     expect(["woof", "bark", "ruff", ""]).toContain(
       max.articulate("maybeGreet")
+    );
+  });
+});
+
+test('it can "maybe" output text, giving it a 50/50 chance empty string or one of the texts provided', () => {
+  Array.from({ length: 10 }).forEach(() => {
+    expect(["scratch", "dig", "burrow", ""]).toContain(
+      max.articulate("maybeDigMultiple")
     );
   });
 });

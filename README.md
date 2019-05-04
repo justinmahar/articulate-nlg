@@ -137,7 +137,13 @@ Convenience function that calls `capitalize(say(vocabKey))` to both articulate a
 
 ### `choose (...texts: (string | {t: text, w: weight})[]): string`
 
-Chooses one of the the provided texts at random. Weights can be specified in the format `{t: text, w: weight}`. Weights default to `1` if not specified.
+Chooses one of the the provided texts at random. Weights can be specified in the format `{t: text, w: weight}`, or by using the `weighted()` function. Weights default to `1` if not specified.
+
+### weighted (text: string, weight: number = 1): {t: text, w: weight}
+
+Convenience function that returns an object with the text and weight, for use with the `choose()` and `cycle()` functions. The returned object will be in the format `{t: text, w: weight}`.
+
+Weights default to `1` if not specified.
 
 ### `chance (text: string, chance: number): string`
 
@@ -147,7 +153,7 @@ For instance, a chance of `0.8` would mean an 80% chance the provided text was r
 
 ### `cycle (group: {group: name}, ...texts: (string | {t: text, w: weight})[]): string`
 
-Uses `choose()` to randomly select one of the provided texts, but ensures that the selected item is not repeated until all remaining items have been chosen.
+Uses `choose()` to randomly select one of the provided texts, but ensures that the selected item is not repeated until all remaining items have been chosen. Items can be weighted.
 
 The first argument is an object containing a group name for the items you'd like to cycle: `{group: name}`
 

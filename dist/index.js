@@ -68,6 +68,10 @@ var Persona = /** @class */ (function () {
             var choice = random_seed_weighted_chooser_1.default.chooseWeightedObject(weightedTexts, "w");
             return _this.render(choice["t"]);
         };
+        this.weighted = function (text, weight) {
+            if (weight === void 0) { weight = 1; }
+            return { t: text, w: weight };
+        };
         this.chance = function (text, chance) {
             chance = Math.min(1, Math.max(0, chance));
             var noopChance = Math.min(1, Math.max(0, 1 - chance));
@@ -103,8 +107,12 @@ var Persona = /** @class */ (function () {
             //console.log(group.group, "Choice:", chosen, "Used up after choice:", cycledTexts);
             return chosen;
         };
-        this.maybe = function (text) {
-            return _this.choose("", text);
+        this.maybe = function () {
+            var texts = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                texts[_i] = arguments[_i];
+            }
+            return _this.choose("", _this.choose.apply(_this, texts));
         };
         this.param = function (paramKey) {
             var val = _this.params[paramKey];

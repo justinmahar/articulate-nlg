@@ -32,10 +32,11 @@ export default class Persona {
     protected capSay: (vocabKey: string, params?: any) => string;
     protected render: (val: any) => string;
     protected choose: (...texts: (string | WeightedText)[]) => string;
+    protected weighted: (text: string, weight?: number) => WeightedText;
     protected chance: (text: string, chance: number) => string;
     private getCycledTextsFor;
     protected cycle: (group: CycleGroup, ...texts: (string | WeightedText)[]) => string;
-    protected maybe: (text: string) => string;
+    protected maybe: (...texts: string[]) => string;
     protected param: (paramKey: string) => string;
     protected ifThen: (paramKey: string, then: any) => string;
     protected ifNot: (paramKey: string, then: any) => string;

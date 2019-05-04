@@ -29,6 +29,7 @@ var Dog = /** @class */ (function (_super) {
             var sba = _this.sba;
             var capSay = _this.capSay;
             var choose = _this.choose;
+            var weighted = _this.weighted;
             var chance = _this.chance;
             var cycle = _this.cycle;
             var maybe = _this.maybe;
@@ -46,9 +47,13 @@ var Dog = /** @class */ (function (_super) {
                 capSayGreet: function () { return capSay("greet"); },
                 capSayNameWithParams: function () { return capSay("paramName", { name: "Justin" }); },
                 greet: function () { return choose("woof", "bark", "ruff"); },
+                greetWeighted: function () {
+                    return choose(weighted("woof", 100000), weighted("bark", 0.00001), weighted("ruff", 0.00001));
+                },
                 chanceHowl: function () { return chance(say("howl"), 0.8); },
                 cycleGreet: function () { return cycle({ group: "greet" }, "woof", "bark", "ruff"); },
                 maybeGreet: function () { return maybe(say("greet")); },
+                maybeDigMultiple: function () { return maybe("scratch", "dig", "burrow"); },
                 paramName: function () { return param("name"); },
                 ifThenAngryHowl: function () { return ifThen("angry", say("howl")); },
                 ifNotAngrySniff: function () { return ifNot("angry", "sniff"); },
@@ -91,6 +96,9 @@ test("it can add a space before and after text in one step", function () {
 });
 test("it can choose an item randomly", function () {
     expect(["woof", "bark", "ruff"]).toContain(max.articulate("greet"));
+});
+test("it can choose an item randomly with some being weighted differently", function () {
+    expect(["woof"]).toContain(max.articulate("greetWeighted"));
 });
 test("it can say and capitalize text in one step", function () {
     Array.from({ length: 10 }).forEach(function () {
@@ -143,6 +151,11 @@ test("it can randomly cycle through text, preventing repeats until all options a
 test('it can "maybe" output text, giving it a 50/50 chance empty string or the text provided', function () {
     Array.from({ length: 10 }).forEach(function () {
         expect(["woof", "bark", "ruff", ""]).toContain(max.articulate("maybeGreet"));
+    });
+});
+test('it can "maybe" output text, giving it a 50/50 chance empty string or one of the texts provided', function () {
+    Array.from({ length: 10 }).forEach(function () {
+        expect(["scratch", "dig", "burrow", ""]).toContain(max.articulate("maybeDigMultiple"));
     });
 });
 test("it can use the text of a provided parameter as a string", function () {
