@@ -66,7 +66,13 @@ var Persona = /** @class */ (function () {
             }
             var weightedTexts = toWeightedTexts(texts);
             var choice = random_seed_weighted_chooser_1.default.chooseWeightedObject(weightedTexts, "w");
-            return _this.render(choice["t"]);
+            if (!!choice && typeof choice["t"] !== "undefined") {
+                return _this.render(choice["t"]);
+            }
+            else {
+                console.warn("Choice returned a bad value for:", texts);
+                return "";
+            }
         };
         this.weighted = function (text, weight) {
             if (weight === void 0) { weight = 1; }

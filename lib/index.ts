@@ -99,7 +99,12 @@ export default class Persona {
   protected choose = (...texts: (string | WeightedText)[]): string => {
     let weightedTexts: WeightedText[] = toWeightedTexts(texts);
     let choice: any = Chooser.chooseWeightedObject(weightedTexts, "w");
-    return this.render(choice["t"]);
+    if (!!choice && typeof choice["t"] !== "undefined") {
+      return this.render(choice["t"]);
+    } else {
+      console.warn("Choice returned a bad value for:", texts);
+      return "";
+    }
   };
 
   protected weighted = (text: string, weight: number = 1): WeightedText => {

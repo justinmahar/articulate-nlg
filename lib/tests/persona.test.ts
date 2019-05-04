@@ -33,7 +33,10 @@ class Dog extends Persona {
           weighted("bark", 0.00001),
           weighted("ruff", 0.00001)
         ),
+      greetWeightedDefault: () =>
+        choose(weighted("woof"), weighted("bark"), weighted("ruff")),
       chanceHowl: () => chance(say("howl"), 0.8),
+      chooseNull: () => choose(weighted("never", 0)),
       cycleGreet: () => cycle({ group: "greet" }, "woof", "bark", "ruff"),
       maybeGreet: () => maybe(say("greet")),
       maybeDigMultiple: () => maybe("scratch", "dig", "burrow"),
@@ -87,8 +90,18 @@ test("it can choose an item randomly", () => {
   expect(["woof", "bark", "ruff"]).toContain(max.articulate("greet"));
 });
 
+test("it can choose an item randomly with weighted defaults", () => {
+  expect(["woof", "bark", "ruff"]).toContain(
+    max.articulate("greetWeightedDefault")
+  );
+});
+
 test("it can choose an item randomly with some being weighted differently", () => {
   expect(["woof"]).toContain(max.articulate("greetWeighted"));
+});
+
+test("it can handle null when choosing an item randomly", () => {
+  expect("").toEqual(max.articulate("chooseNull"));
 });
 
 test("it can say and capitalize text in one step", () => {

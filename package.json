@@ -47,6 +47,6 @@
     "typescript": "^3.4.1"
   },
   "dependencies": {
-    "random-seed-weighted-chooser": "^1.0.13"
+    "random-seed-weighted-chooser": "^1.0.14"
   }
 }
