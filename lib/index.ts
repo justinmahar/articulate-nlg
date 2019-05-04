@@ -136,7 +136,7 @@ export default class Persona {
     let weightedTexts: WeightedText[] = toWeightedTexts(texts);
     let cycledTexts: string[] = this.getCycledTextsFor(group.group);
     let filtered: WeightedText[] = weightedTexts.filter((val: WeightedText) => {
-      return !cycledTexts.includes(val.t);
+      return val.w !== 0 && !cycledTexts.includes(val.t);
     });
 
     // If they've all been used...

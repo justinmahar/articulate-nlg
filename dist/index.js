@@ -93,7 +93,7 @@ var Persona = /** @class */ (function () {
             var weightedTexts = toWeightedTexts(texts);
             var cycledTexts = _this.getCycledTextsFor(group.group);
             var filtered = weightedTexts.filter(function (val) {
-                return !cycledTexts.includes(val.t);
+                return val.w !== 0 && !cycledTexts.includes(val.t);
             });
             // If they've all been used...
             if (filtered.length === 0) {
