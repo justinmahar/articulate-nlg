@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var random_seed_weighted_chooser_1 = __importDefault(require("random-seed-weighted-chooser"));
 var toWeightedTexts = function (texts) {
     return texts.map(function (val) {
-        if (typeof val === "string") {
+        if (typeof val === "string" || typeof val === "function") {
             return { t: val, w: 1 };
         }
         return val;
@@ -93,7 +93,7 @@ var Persona = /** @class */ (function () {
             var weightedTexts = toWeightedTexts(texts);
             var cycledTexts = _this.getCycledTextsFor(group.group);
             var filtered = weightedTexts.filter(function (val) {
-                return val.w !== 0 && !cycledTexts.includes(val.t);
+                return val.w !== 0 && !cycledTexts.includes(_this.render(val.t));
             });
             // If they've all been used...
             if (filtered.length === 0) {
@@ -101,7 +101,7 @@ var Persona = /** @class */ (function () {
                 filtered = weightedTexts;
                 // And remove all items from the cycled texts array
                 weightedTexts.forEach(function (val) {
-                    var index = cycledTexts.indexOf(val.t);
+                    var index = cycledTexts.indexOf(_this.render(val.t));
                     if (index >= 0) {
                         cycledTexts.splice(index, 1);
                     }
@@ -167,41 +167,3 @@ var Persona = /** @class */ (function () {
     return Persona;
 }());
 exports.default = Persona;
-/*
-class Justin extends Persona {
-  createVocab = () => {
-    let say = this.say;
-    let capSay = this.capSay;
-    let choose = this.choose;
-    let maybe = this.maybe;
-    let cycle = this.cycle;
-    let param = this.param;
-    let doFirst = this.doFirst;
-    return {
-      greet: (): string =>
-        capSay("hi") +
-        "-" +
-        cycle("1", "2", "3", "4", "5") +
-        "-" +
-        cycle("2", "1", "3", "4", "5") +
-        "-" +
-        choose("hi", "hey", "hello", "what's up") +
-        "-" +
-        maybe(say("hi")) +
-        say("name") +
-        doFirst([{ p: "name", t: say("name") }], "not found"),
-      hi: () => "hiiii",
-      num: () => 6,
-      name: (): string => param("name")
-    };
-  };
-  vocab = this.createVocab();
-}
-
-let justin = new Justin();
-let count = 100;
-new Array(count).fill(0).forEach(() => {
-  let params = { name: "justin" };
-  console.log(justin.say("greet", params));
-});
-*/

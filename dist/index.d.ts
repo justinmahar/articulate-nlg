@@ -1,10 +1,10 @@
 export interface WeightedText {
-    t: string;
+    t: string | (() => string);
     w: number;
 }
 export interface ParamTextPair {
     p: string;
-    t: string;
+    t: string | (() => string);
 }
 export interface Vocabulary {
     [key: string]: Function;
@@ -31,12 +31,12 @@ export default class Persona {
     protected sba: (text: string) => string;
     protected capSay: (vocabKey: string, params?: any) => string;
     protected render: (val: any) => string;
-    protected choose: (...texts: (string | WeightedText)[]) => string;
-    protected weighted: (text: string, weight?: number) => WeightedText;
+    protected choose: (...texts: (string | WeightedText | (() => string))[]) => string;
+    protected weighted: (text: string | (() => string), weight?: number) => WeightedText;
     protected chance: (text: string, chance: number) => string;
     private getCycledTextsFor;
-    protected cycle: (group: CycleGroup, ...texts: (string | WeightedText)[]) => string;
-    protected maybe: (...texts: string[]) => string;
+    protected cycle: (group: CycleGroup, ...texts: (string | WeightedText | (() => string))[]) => string;
+    protected maybe: (...texts: (string | WeightedText | (() => string))[]) => string;
     protected param: (paramKey: string) => string;
     protected ifThen: (paramKey: string, then: any) => string;
     protected ifNot: (paramKey: string, then: any) => string;
