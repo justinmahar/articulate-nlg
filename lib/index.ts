@@ -1,13 +1,13 @@
 import Chooser from "random-seed-weighted-chooser";
 
 export interface WeightedText {
-  t: string;
+  t: string | (() => string);
   w: number;
 }
 
 export interface ParamTextPair {
   p: string;
-  t: string;
+  t: string | (() => string);
 }
 
 export interface Vocabulary {
@@ -26,10 +26,12 @@ export interface CycleGroup {
   group: string;
 }
 
-let toWeightedTexts = (texts: (string | WeightedText)[]): WeightedText[] => {
+let toWeightedTexts = (
+  texts: (string | WeightedText | (() => string))[]
+): WeightedText[] => {
   return texts.map(
-    (val: string | WeightedText): WeightedText => {
-      if (typeof val === "string") {
+    (val: string | WeightedText | (() => string)): WeightedText => {
+      if (typeof val === "string" || typeof val === "function") {
         return { t: val, w: 1 };
       }
       return val;
@@ -96,7 +98,9 @@ export default class Persona {
     }
   };
 
-  protected choose = (...texts: (string | WeightedText)[]): string => {
+  protected choose = (
+    ...texts: (string | WeightedText | (() => string))[]
+  ): string => {
     let weightedTexts: WeightedText[] = toWeightedTexts(texts);
     let choice: any = Chooser.chooseWeightedObject(weightedTexts, "w");
     if (!!choice && typeof choice["t"] !== "undefined") {
@@ -107,7 +111,10 @@ export default class Persona {
     }
   };
 
-  protected weighted = (text: string, weight: number = 1): WeightedText => {
+  protected weighted = (
+    text: string | (() => string),
+    weight: number = 1
+  ): WeightedText => {
     return { t: text, w: weight };
   };
 
@@ -131,12 +138,12 @@ export default class Persona {
 
   protected cycle = (
     group: CycleGroup,
-    ...texts: (string | WeightedText)[]
+    ...texts: (string | (() => string) | WeightedText)[]
   ): string => {
     let weightedTexts: WeightedText[] = toWeightedTexts(texts);
     let cycledTexts: string[] = this.getCycledTextsFor(group.group);
     let filtered: WeightedText[] = weightedTexts.filter((val: WeightedText) => {
-      return val.w !== 0 && !cycledTexts.includes(val.t);
+      return val.w !== 0 && !cycledTexts.includes(this.render(val.t));
     });
 
     // If they've all been used...
@@ -145,7 +152,7 @@ export default class Persona {
       filtered = weightedTexts;
       // And remove all items from the cycled texts array
       weightedTexts.forEach((val: WeightedText) => {
-        var index = cycledTexts.indexOf(val.t);
+        var index = cycledTexts.indexOf(this.render(val.t));
         if (index >= 0) {
           cycledTexts.splice(index, 1);
         }
@@ -159,7 +166,9 @@ export default class Persona {
     return chosen;
   };
 
-  protected maybe = (...texts: string[]): string => {
+  protected maybe = (
+    ...texts: (string | WeightedText | (() => string))[]
+  ): string => {
     return this.choose("", this.choose(...texts));
   };
 
@@ -200,42 +209,3 @@ export default class Persona {
     return this.render(defaultText);
   };
 }
-
-/*
-class Justin extends Persona {
-  createVocab = () => {
-    let say = this.say;
-    let capSay = this.capSay;
-    let choose = this.choose;
-    let maybe = this.maybe;
-    let cycle = this.cycle;
-    let param = this.param;
-    let doFirst = this.doFirst;
-    return {
-      greet: (): string =>
-        capSay("hi") +
-        "-" +
-        cycle("1", "2", "3", "4", "5") +
-        "-" +
-        cycle("2", "1", "3", "4", "5") +
-        "-" +
-        choose("hi", "hey", "hello", "what's up") +
-        "-" +
-        maybe(say("hi")) +
-        say("name") +
-        doFirst([{ p: "name", t: say("name") }], "not found"),
-      hi: () => "hiiii",
-      num: () => 6,
-      name: (): string => param("name")
-    };
-  };
-  vocab = this.createVocab();
-}
-
-let justin = new Justin();
-let count = 100;
-new Array(count).fill(0).forEach(() => {
-  let params = { name: "justin" };
-  console.log(justin.say("greet", params));
-});
-*/
