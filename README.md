@@ -139,7 +139,7 @@ Convenience function that calls `capitalize(say(vocabKey))` to both articulate a
 
 Chooses one of the the provided texts at random. Weights can be specified in the format `{t: text, w: weight}`, or by using the `weighted()` function. Weights default to `1` if not specified.
 
-### weighted (text: string, weight: number = 1): {t: text, w: weight}
+### `weighted (text: string, weight: number = 1): {t: text, w: weight}`
 
 Convenience function that returns an object with the text and weight, for use with the `choose()` and `cycle()` functions. The returned object will be in the format `{t: text, w: weight}`.
 
