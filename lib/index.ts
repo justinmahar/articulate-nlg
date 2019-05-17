@@ -1,13 +1,13 @@
 import Chooser from "random-seed-weighted-chooser";
 
 export interface WeightedText {
-  t: string | (() => string);
+  t: Text;
   w: number;
 }
 
 export interface ParamTextPair {
   p: string;
-  t: string | (() => string);
+  t: Text;
 }
 
 export interface Vocabulary {
@@ -26,11 +26,13 @@ export interface CycleGroup {
   group: string;
 }
 
-let toWeightedTexts = (
-  texts: (string | WeightedText | (() => string))[]
-): WeightedText[] => {
+export type StringFunction = () => string;
+
+export type Text = string | StringFunction;
+
+let toWeightedTexts = (texts: (Text | WeightedText)[]): WeightedText[] => {
   return texts.map(
-    (val: string | WeightedText | (() => string)): WeightedText => {
+    (val: Text | WeightedText): WeightedText => {
       if (typeof val === "string" || typeof val === "function") {
         return { t: val, w: 1 };
       }
@@ -50,7 +52,7 @@ export default class Persona {
     this.cycledTextsGroups = {};
   }
 
-  articulate = (vocabKey: string, params: any = {}): string => {
+  public articulate = (vocabKey: string, params: any = {}): string => {
     return this.say(vocabKey, params);
   };
 
@@ -65,20 +67,21 @@ export default class Persona {
     return this.render(val);
   };
 
-  protected capitalize = (text: string): string => {
-    return text.charAt(0).toUpperCase() + text.slice(1);
+  protected capitalize = (text: Text): string => {
+    let renderedText = this.render(text);
+    return renderedText.charAt(0).toUpperCase() + renderedText.slice(1);
   };
 
-  protected sb = (text: string): string => {
-    return " " + text;
+  protected sb = (text: Text): string => {
+    return " " + this.render(text);
   };
 
-  protected sa = (text: string): string => {
-    return text + " ";
+  protected sa = (text: Text): string => {
+    return this.render(text) + " ";
   };
 
-  protected sba = (text: string): string => {
-    return " " + text + " ";
+  protected sba = (text: Text): string => {
+    return " " + this.render(text) + " ";
   };
 
   protected capSay = (vocabKey: string, params: any = this.params): string => {
@@ -92,33 +95,33 @@ export default class Persona {
     } else if (typeof val === "string") {
       return val;
     } else if (!!val) {
-      return val + "";
+      if (!!val.t && !!val.w) {
+        // It's a weighted text.
+        return this.render(val.t);
+      } else {
+        return val + "";
+      }
     } else {
       return "";
     }
   };
 
-  protected choose = (
-    ...texts: (string | WeightedText | (() => string))[]
-  ): string => {
+  protected choose = (...texts: (Text | WeightedText)[]): string => {
     let weightedTexts: WeightedText[] = toWeightedTexts(texts);
     let choice: any = Chooser.chooseWeightedObject(weightedTexts, "w");
-    if (!!choice && typeof choice["t"] !== "undefined") {
-      return this.render(choice["t"]);
+    if (!!choice && typeof choice.t !== "undefined") {
+      return this.render(choice.t);
     } else {
       console.warn("Choice returned a bad value for:", texts);
       return "";
     }
   };
 
-  protected weighted = (
-    text: string | (() => string),
-    weight: number = 1
-  ): WeightedText => {
+  protected weighted = (text: Text, weight: number = 1): WeightedText => {
     return { t: text, w: weight };
   };
 
-  protected chance = (text: string, chance: number): string => {
+  protected chance = (text: Text, chance: number): string => {
     chance = Math.min(1, Math.max(0, chance));
     let noopChance: number = Math.min(1, Math.max(0, 1 - chance));
     let textWeighted: WeightedText = { t: text, w: chance };
@@ -138,7 +141,7 @@ export default class Persona {
 
   protected cycle = (
     group: CycleGroup,
-    ...texts: (string | (() => string) | WeightedText)[]
+    ...texts: (Text | WeightedText)[]
   ): string => {
     let weightedTexts: WeightedText[] = toWeightedTexts(texts);
     let cycledTexts: string[] = this.getCycledTextsFor(group.group);
@@ -158,17 +161,13 @@ export default class Persona {
         }
       });
     }
-    //console.log(group.group, "Choosing from:", filtered, "Used up:", cycledTexts);
 
     let chosen = this.choose(...filtered);
     cycledTexts.push(chosen);
-    //console.log(group.group, "Choice:", chosen, "Used up after choice:", cycledTexts);
     return chosen;
   };
 
-  protected maybe = (
-    ...texts: (string | WeightedText | (() => string))[]
-  ): string => {
+  protected maybe = (...texts: (Text | WeightedText)[]): string => {
     return this.choose("", this.choose(...texts));
   };
 
@@ -177,15 +176,15 @@ export default class Persona {
     return this.render(val);
   };
 
-  protected ifThen = (paramKey: string, then: any): string => {
+  protected ifThen = (paramKey: string, then: Text): string => {
     return this.ifElse(paramKey, then, "");
   };
 
-  protected ifNot = (paramKey: string, then: any): string => {
+  protected ifNot = (paramKey: string, then: Text): string => {
     return this.ifElse(paramKey, "", then);
   };
 
-  protected ifElse = (paramKey: string, then: any, otherwise: any): string => {
+  protected ifElse = (paramKey: string, then: Text, otherwise: any): string => {
     if (!!this.params[paramKey]) {
       return this.render(then);
     } else {
@@ -195,7 +194,7 @@ export default class Persona {
 
   protected doFirst = (
     paramTextPairs: ParamTextPair[],
-    defaultText: string = ""
+    defaultText: Text = ""
   ): string => {
     for (var i = 0; i < paramTextPairs.length; i++) {
       let pair = paramTextPairs[i];

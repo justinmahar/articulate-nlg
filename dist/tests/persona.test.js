@@ -61,7 +61,9 @@ var Dog = /** @class */ (function (_super) {
                 paramName: function () { return param("name"); },
                 ifThenAngryHowl: function () { return ifThen("angry", say("howl")); },
                 ifNotAngrySniff: function () { return ifNot("angry", "sniff"); },
-                ifElseAngryHowlWagTail: function () { return ifElse("angry", say("howl"), "wag tail"); },
+                ifElseAngryHowlWagTail: function () {
+                    return ifElse("angry", function () { return say("howl"); }, function () { return "wag tail"; });
+                },
                 doFirstAngryHowlHappyWagTail: function () {
                     return doFirst([
                         { p: "angry", t: say("howl") },
@@ -69,9 +71,14 @@ var Dog = /** @class */ (function (_super) {
                     ]);
                 },
                 doFirstAngryHowlHappyWagTailElseWhine: function () {
-                    return doFirst([{ p: "angry", t: say("howl") }, { p: "happy", t: "wag tail" }], "whine");
+                    return doFirst([
+                        { p: "angry", t: function () { return say("howl"); } },
+                        { p: "happy", t: function () { return "wag tail"; } }
+                    ], "whine");
                 },
-                paramNumber: function () { return param("number"); }
+                paramNumber: function () { return param("number"); },
+                weightedWoof: function () { return weighted("woof", 100); },
+                greetDeferred: function () { return choose(function () { return "woof"; }, function () { return "bark"; }, function () { return "ruff"; }); }
             };
         };
         _this.vocab = _this.createVocab();
@@ -254,4 +261,12 @@ test("it will render non-string, non-function params as strings", function () {
 test("it will accept and use params when calling capSay", function () {
     var result = max.articulate("capSayNameWithParams", { name: "justin" });
     expect(result).toEqual("Justin");
+});
+test("it can handle rendering weighted text", function () {
+    var result = max.articulate("weightedWoof");
+    expect(result).toEqual("woof");
+});
+test("it can handle deferred rendering for choose", function () {
+    var result = max.articulate("greetDeferred");
+    expect(["woof", "bark", "ruff"]).toContain(result);
 });

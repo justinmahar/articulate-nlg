@@ -115,19 +115,19 @@ The following helper functions are available in the `Persona` class. Use these t
 
 Articulates the concept with the vocab key provided. This function will generate the text for that vocab key.
 
-### `capitalize (text: string): string`
+### `capitalize (text: string | () => string | {t: string | () => string, w: weight}): string`
 
 Capitalizes the first letter of the provided text.
 
-### `sb (text: string): string`
+### `sb (text: string | () => string | {t: string | () => string, w: weight}): string`
 
 Returns the provided text with a space before it.
 
-### `sa (text: string): string`
+### `sa (text: string | () => string | {t: string | () => string, w: weight}): string`
 
 Returns the provided text with a space after it.
 
-### `sba (text: string): string`
+### `sba (text: string | () => string | {t: string | () => string, w: weight}): string`
 
 Returns the provided text with a space before and after it.
 
@@ -135,33 +135,53 @@ Returns the provided text with a space before and after it.
 
 Convenience function that calls `capitalize(say(vocabKey))` to both articulate a concept and then capitalize the resulting text.
 
-### `choose (...texts: (string | {t: text, w: weight})[]): string`
+### `choose (...texts: (string | () => string | {t: string | () => string, w: weight})[]): string`
 
-Chooses one of the the provided texts at random. Weights can be specified in the format `{t: text, w: weight}`, or by using the `weighted()` function. Weights default to `1` if not specified.
+Chooses one of the the provided texts or functions at random. Weights can be specified in the format `{t: text or function, w: weight}`, or by using the `weighted()` function (recommended). Weights default to `1` if not specified.
 
-### `weighted (text: string, weight: number = 1): {t: text, w: weight}`
+Along with `say()`, this function is at the heart of this NLG library.
 
-Convenience function that returns an object with the text and weight, for use with the `choose()` and `cycle()` functions. The returned object will be in the format `{t: text, w: weight}`.
+#### A note on functions:
+
+If you pass a function, the function will be called and returned as a string. Using functions can significantly speed up articulation as text resolution will be deferred until the moment the text is needed.
+
+Using functions is overkill for lower-level concepts. I recommend using functions for higher-level concepts (which nest lots of calls to `choose()`), and that you use function shorthand, like so:
+
+```js
+  myConcept: choose(
+      () => choose(...),
+      () => choose(...),
+      ...
+    )
+```
+
+### `weighted (text: string | () => string, weight: number = 1): {t: text, w: weight}`
+
+Convenience function that returns an object with the text (or function) and weight, for use with the `choose()` and `cycle()` functions. The returned object will be in the format `{t: text or function, w: weight}`. If you pass a function, it must return a string.
 
 Weights default to `1` if not specified.
 
-### `chance (text: string, chance: number): string`
+### `chance (text: string | () => string, chance: number): string`
 
 Return the provided text given the chance provided, from `0` to `1`, or empty string otherwise.
 
 For instance, a chance of `0.8` would mean an 80% chance the provided text was returned, and a 20% chance of empty string.
 
-### `cycle (group: {group: name}, ...texts: (string | {t: text, w: weight})[]): string`
+If the value provided is a function, that function will be called and its string return value would be returned if chosen.
 
-Uses `choose()` to randomly select one of the provided texts, but ensures that the selected item is not repeated until all remaining items have been chosen. Items can be weighted.
+### `cycle (group: {group: name}, ...texts: (text: string | () => string | {t: string | () => string, w: weight})[]): string`
+
+Uses `choose()` to randomly select one of the provided texts, but ensures that the selected item is not repeated until all remaining items have been chosen. Items can be weighted, and can be functions that return strings.
 
 The first argument is an object containing a group name for the items you'd like to cycle: `{group: name}`
 
 Use this function to keep a degree of randomness while ensuring the text doesn't repeat too often.
 
-### `maybe (text: string): string`
+### `maybe (text: string | () => string | {t: string | () => string, w: weight}): string`
 
 Returns the text provided 50% of the time, and empty string 50% of the time.
+
+You can pass multiple texts. In that case, there's a 50% chance of empty string, or one of your texts being chosen using `choose()`. Texts can either be a string, weighted, or a function that returns a string.
 
 ### `param (paramKey: string): string`
 
@@ -169,23 +189,37 @@ Returns text for the value of the param key provided. The param value can be a s
 
 Param functions must return a string. If the param value is not a string or function, it is concatenated with `""` and returned as a string.
 
-### `ifThen (paramKey: string, then: any): string`
+### `ifThen (paramKey: string, then: (text: string | () => string)): string`
 
 Returns the provided `then` text if the value of the param key is truthy, and returns empty string otherwise.
 
-### `ifNot (paramKey: string, then: any): string`
+### `ifNot (paramKey: string, then: (text: string | () => string)): string`
 
 Returns the provided `then` text if the value of the param key is falsy, and returns empty string otherwise.
 
-### `ifElse (paramKey: string, then: any, otherwise: any): string`
+### `ifElse (paramKey: string, then: (text: string | () => string), otherwise: (text: string | () => string)): string`
 
 Returns the provided `then` text if the value of the param key is truthy, and returns the `otherwise` string otherwise.
 
-### `doFirst (paramTextPairs: {p: paramKey, t: text}[], defaultText: string = ""): string`
+### `doFirst (paramTextPairs: {p: paramKey, t: string | () => string}[], defaultText: (string | () => string) = ""): string`
 
 Returns the text for the first param value that is truthy, or the default text if none are. `defaultText` is optional and defaults to empty string.
 
 Use this to avoid deeply nested `ifElse()` calls.
+
+Text values can be either strings or functions that return strings.
+
+### `render (val: any): string`
+
+Renders the provided value as a string.
+
+- If it's a string, it'll be returned.
+- If it's a function, it'll be called and its value will be recursively rendered and returned.
+- If it's weighted text, its text property `t` will be recursively rendered and returned.
+- If it's none of the above but truthy, it'll be concatenated with empty string and returned.
+- If it's falsy, empty string will be returned.
+
+This function is called on all texts for the other helper functions and is included mainly for reference. You likely won't need to call it directly.
 
 ## TypeScript Support
 

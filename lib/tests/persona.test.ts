@@ -43,7 +43,8 @@ class Dog extends Persona {
       paramName: () => param("name"),
       ifThenAngryHowl: () => ifThen("angry", say("howl")),
       ifNotAngrySniff: () => ifNot("angry", "sniff"),
-      ifElseAngryHowlWagTail: () => ifElse("angry", say("howl"), "wag tail"),
+      ifElseAngryHowlWagTail: () =>
+        ifElse("angry", () => say("howl"), () => "wag tail"),
       doFirstAngryHowlHappyWagTail: () =>
         doFirst([
           { p: "angry", t: say("howl") },
@@ -51,10 +52,15 @@ class Dog extends Persona {
         ]),
       doFirstAngryHowlHappyWagTailElseWhine: () =>
         doFirst(
-          [{ p: "angry", t: say("howl") }, { p: "happy", t: "wag tail" }],
+          [
+            { p: "angry", t: () => say("howl") },
+            { p: "happy", t: () => "wag tail" }
+          ],
           "whine"
         ),
-      paramNumber: () => param("number")
+      paramNumber: () => param("number"),
+      weightedWoof: () => weighted("woof", 100),
+      greetDeferred: () => choose(() => "woof", () => "bark", () => "ruff")
     };
   };
 
@@ -267,4 +273,14 @@ test("it will render non-string, non-function params as strings", () => {
 test("it will accept and use params when calling capSay", () => {
   let result = max.articulate("capSayNameWithParams", { name: "justin" });
   expect(result).toEqual("Justin");
+});
+
+test("it can handle rendering weighted text", () => {
+  let result = max.articulate("weightedWoof");
+  expect(result).toEqual("woof");
+});
+
+test("it can handle deferred rendering for choose", () => {
+  let result = max.articulate("greetDeferred");
+  expect(["woof", "bark", "ruff"]).toContain(result);
 });

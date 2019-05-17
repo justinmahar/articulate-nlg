@@ -29,16 +29,17 @@ var Persona = /** @class */ (function () {
             return _this.render(val);
         };
         this.capitalize = function (text) {
-            return text.charAt(0).toUpperCase() + text.slice(1);
+            var renderedText = _this.render(text);
+            return renderedText.charAt(0).toUpperCase() + renderedText.slice(1);
         };
         this.sb = function (text) {
-            return " " + text;
+            return " " + _this.render(text);
         };
         this.sa = function (text) {
-            return text + " ";
+            return _this.render(text) + " ";
         };
         this.sba = function (text) {
-            return " " + text + " ";
+            return " " + _this.render(text) + " ";
         };
         this.capSay = function (vocabKey, params) {
             if (params === void 0) { params = _this.params; }
@@ -53,7 +54,13 @@ var Persona = /** @class */ (function () {
                 return val;
             }
             else if (!!val) {
-                return val + "";
+                if (!!val.t && !!val.w) {
+                    // It's a weighted text.
+                    return _this.render(val.t);
+                }
+                else {
+                    return val + "";
+                }
             }
             else {
                 return "";
@@ -66,8 +73,8 @@ var Persona = /** @class */ (function () {
             }
             var weightedTexts = toWeightedTexts(texts);
             var choice = random_seed_weighted_chooser_1.default.chooseWeightedObject(weightedTexts, "w");
-            if (!!choice && typeof choice["t"] !== "undefined") {
-                return _this.render(choice["t"]);
+            if (!!choice && typeof choice.t !== "undefined") {
+                return _this.render(choice.t);
             }
             else {
                 console.warn("Choice returned a bad value for:", texts);
@@ -107,10 +114,8 @@ var Persona = /** @class */ (function () {
                     }
                 });
             }
-            //console.log(group.group, "Choosing from:", filtered, "Used up:", cycledTexts);
             var chosen = _this.choose.apply(_this, filtered);
             cycledTexts.push(chosen);
-            //console.log(group.group, "Choice:", chosen, "Used up after choice:", cycledTexts);
             return chosen;
         };
         this.maybe = function () {
