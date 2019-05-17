@@ -145,7 +145,19 @@ Along with `say()`, this function is at the heart of this NLG library.
 
 If you pass a function, the function will be called and returned as a string. Using functions can significantly speed up articulation as text resolution will be deferred until the moment the text is needed.
 
-Using functions is overkill for lower-level concepts. I recommend using functions for higher-level concepts (which nest lots of calls to `choose()`), and that you use function shorthand, like so:
+Using functions is overkill for lower-level concepts. I recommend using functions for higher-level concepts (which nest lots of calls to `choose()`), and that you use function shorthand.
+
+For example, this concept is slower because each `choose()` call is resolved before making the actual choice:
+
+```js
+  myConcept: choose(
+      choose(...),
+      choose(...),
+      ...
+    )
+```
+
+And this concept is faster because the functions defer the individual `choose()` calls until after the choice is made:
 
 ```js
   myConcept: choose(
