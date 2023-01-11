@@ -1,4 +1,4 @@
-import Persona from "./index";
+import Persona from './index';
 
 class Dog extends Persona {
   createVocab = () => {
@@ -15,18 +15,11 @@ class Dog extends Persona {
     // Return an object containing strings mapped to functions,
     // which return the text.
     return {
-      greet: () => choose("woof", "bark", "sniff sniff", "wag tail"),
-      master: () =>
-        ifElse("name", capitalize(param("name")), "bringer of food"),
-      emoji: () =>
-        cycle({ group: "emoji" }, "👅", "🐶", "🐾", "💩", "🐩", "🐕‍"),
+      greet: () => choose('woof', 'bark', 'sniff sniff', 'wag tail'),
+      master: () => ifElse('name', capitalize(param('name')), 'bringer of food'),
+      emoji: () => cycle({ group: 'emoji' }, '👅', '🐶', '🐾', '💩', '🐩', '🐕‍'),
       // This concept cross-references greet, master, and emoji using say().
-      welcomeHome: () =>
-        capSay("greet") +
-        "! Welcome home, " +
-        say("master") +
-        "! " +
-        say("emoji")
+      welcomeHome: () => capSay('greet') + '! Welcome home, ' + say('master') + '! ' + say('emoji'),
     };
   };
 
@@ -35,9 +28,9 @@ class Dog extends Persona {
 }
 
 // Create "max", a new Dog persona.
-let max = new Dog();
+const max = new Dog();
 
-console.log(max.articulate("welcomeHome"));
+console.log(max.articulate('welcomeHome'));
 // This will generate text like following:
 // Sniff sniff! Welcome home, bringer of food! 🐾
 // Woof! Welcome home, bringer of food! 👅
@@ -45,22 +38,22 @@ console.log(max.articulate("welcomeHome"));
 // Etc.
 
 // This will articulate the "greet" concept.
-console.log(max.articulate("greet"));
+console.log(max.articulate('greet'));
 // "woof", "bark", "sniff sniff", or "wag tail"
 
 // If you reference a concept that's not understood, you'll get
 // an empty string back and a warning will be printed.
-console.log(max.articulate("meow"));
+console.log(max.articulate('meow'));
 // ""
 
 // Params can be used in the vocab, too. Here, the "master"
 // concept uses a name if provided.
-console.log(max.articulate("master", { name: "justin" }));
+console.log(max.articulate('master', { name: 'justin' }));
 // "Justin"
-console.log(max.articulate("welcomeHome", { name: "justin" }));
+console.log(max.articulate('welcomeHome', { name: 'justin' }));
 // Sniff sniff! Welcome home, Justin! 🐩
 
 // And if not provided, can fall back on a default using the
 // ifElse helper. See the vocab above.
-console.log(max.articulate("master"));
+console.log(max.articulate('master'));
 // "bringer of food"

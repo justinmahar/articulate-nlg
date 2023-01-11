@@ -1,31 +1,97 @@
-[![Build Status](https://travis-ci.org/justinmahar/articulate-nlg.svg?branch=master)](https://travis-ci.org/justinmahar/articulate-nlg) [![codecov](https://codecov.io/gh/justinmahar/articulate-nlg/branch/master/graph/badge.svg)](https://codecov.io/gh/justinmahar/articulate-nlg)
+<h2 align="center">
+  💬 Articulate NLG
+</h2>
+<h3 align="center">
+  A natural language generator (NLG) that articulates concepts as words, phrases, and sentences.
+</h3>
+<p align="center">
+  <a href="https://badge.fury.io/js/articulate-nlg" target="_blank" rel="noopener noreferrer"><img src="https://badge.fury.io/js/articulate-nlg.svg" alt="npm Version" /></a>&nbsp;
+  <a href="https://github.com/justinmahar/articulate-nlg/" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/GitHub-Source-success" alt="View project on GitHub" /></a>&nbsp;
+  <a href="https://github.com/justinmahar/articulate-nlg/actions?query=workflow%3ADeploy" target="_blank" rel="noopener noreferrer"><img src="https://github.com/justinmahar/articulate-nlg/workflows/Deploy/badge.svg" alt="Deploy Status" /></a>&nbsp;
+  <a href="https://github.com/sponsors/justinmahar" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86" alt="Sponsor"/></a>
+</p>
 
-# Articulate NLG
+## Documentation
 
-A natural language generator (NLG) that articulates concepts as words, phrases, and sentences.
+Read the **[official documentation](https://justinmahar.github.io/articulate-nlg/)**.
 
-This [TypeScript](https://www.typescriptlang.org/) project is [available in JavaScript via npm](https://www.npmjs.com/package/articulate-nlg) as an ES6 or CommonJS import.
+## Overview
+
+This section will contain an overview so people can have a high-level understanding of the project.
+
+### Features include:
+
+- **💬 Generate speech using defined personas**
+  - Personas can articulate concepts as words, phrases, and sentences
+- **👍 Simple yet flexible API**
+  - Use the helpers below to build personas quickly and easily
+
+[lock:donate]::🚫---------------------------------------
+
+## Donate 
+
+I hope this project makes your life a little easier! If it does and you'd like to show your appreciation, consider supporting the project with a coffee or sponsorship. 
+
+Your support helps keep the project going and will earn you some serious virtual high fives. Maybe even a virtual fist bump if you're feeling extra cool.
+
+<a href="https://github.com/sponsors/justinmahar">
+  <img src="https://justinmahar.github.io/react-kindling/support/sponsor.png" alt="Sponsor via GitHub" height="35" />
+</a> <a href="https://paypal.me/thejustinmahar/5">
+  <img src="https://justinmahar.github.io/react-kindling/support/coffee-1.png" alt="Buy me a coffee" height="35" />
+</a> <a href="https://paypal.me/thejustinmahar/15">
+  <img src="https://justinmahar.github.io/react-kindling/support/coffee-3.png" alt="Buy me 3 coffees" height="35" />
+</a> <a href="https://paypal.me/thejustinmahar/25">
+  <img src="https://justinmahar.github.io/react-kindling/support/coffee-5.png" alt="Buy me 5 coffees" height="35" />
+</a>
+
+[/lock:donate]::---------------------------------------🚫
+
+## Table of Contents 
+
+- [Documentation](#documentation)
+- [Overview](#overview)
+  - [Features include:](#features-include)
+- [Donate](#donate)
+- [Table of Contents](#table-of-contents)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Vocab Helper Functions](#vocab-helper-functions)
+  - [`say (vocabKey: string): string`](#say-vocabkey-string-string)
+  - [`capitalize (text: string | () => string | {t: string | () => string, w: weight}): string`](#capitalize-text-string----string--t-string----string-w-weight-string)
+  - [`sb (text: string | () => string | {t: string | () => string, w: weight}): string`](#sb-text-string----string--t-string----string-w-weight-string)
+  - [`sa (text: string | () => string | {t: string | () => string, w: weight}): string`](#sa-text-string----string--t-string----string-w-weight-string)
+  - [`sba (text: string | () => string | {t: string | () => string, w: weight}): string`](#sba-text-string----string--t-string----string-w-weight-string)
+  - [`capSay (vocabKey: string): string`](#capsay-vocabkey-string-string)
+  - [`choose (...texts: (string | () => string | {t: string | () => string, w: weight})[]): string`](#choose-texts-string----string--t-string----string-w-weight-string)
+    - [A note on functions:](#a-note-on-functions)
+  - [`weighted (text: string | () => string, weight: number = 1): {t: text, w: weight}`](#weighted-text-string----string-weight-number--1-t-text-w-weight)
+  - [`chance (text: string | () => string, chance: number): string`](#chance-text-string----string-chance-number-string)
+  - [`cycle (group: {group: name}, ...texts: (text: string | () => string | {t: string | () => string, w: weight})[]): string`](#cycle-group-group-name-texts-text-string----string--t-string----string-w-weight-string)
+  - [`maybe (text: string | () => string | {t: string | () => string, w: weight}): string`](#maybe-text-string----string--t-string----string-w-weight-string)
+  - [`param (paramKey: string): string`](#param-paramkey-string-string)
+  - [`ifThen (paramKey: string, then: (text: string | () => string)): string`](#ifthen-paramkey-string-then-text-string----string-string)
+  - [`ifNot (paramKey: string, then: (text: string | () => string)): string`](#ifnot-paramkey-string-then-text-string----string-string)
+  - [`ifElse (paramKey: string, then: (text: string | () => string), otherwise: (text: string | () => string)): string`](#ifelse-paramkey-string-then-text-string----string-otherwise-text-string----string-string)
+  - [`doFirst (paramTextPairs: {p: paramKey, t: string | () => string}[], defaultText: (string | () => string) = ""): string`](#dofirst-paramtextpairs-p-paramkey-t-string----string-defaulttext-string----string---string)
+  - [`render (val: any): string`](#render-val-any-string)
+- [TypeScript](#typescript)
+- [Icon Attribution](#icon-attribution)
+- [Contributing](#contributing)
+- [⭐ Found It Helpful? Star It!](#-found-it-helpful-star-it)
+- [License](#license)
 
 ## Installation
 
-[Via npm](https://www.npmjs.com/package/articulate-nlg) (requires [Node.js](https://nodejs.org/)):
-
-```bash
-$ npm i articulate-nlg
+```
+npm i articulate-nlg
 ```
 
-## Usage
+## Quick Start
 
-ES6 import:
+This section will contain a copy/paste example so people can get started quickly.
 
-```js
+```jsx
 import Persona from "articulate-nlg";
-```
-
-CommonJS import:
-
-```js
-const Persona = require("articulate-nlg").default;
 ```
 
 In short:
@@ -233,14 +299,38 @@ Renders the provided value as a string.
 
 This function is called on all texts for the other helper functions and is included mainly for reference. You likely won't need to call it directly.
 
-## TypeScript Support
+[lock:typescript]::🚫---------------------------------------
 
-This is a TypeScript project. Type definitions are available in: `dist/index.d.ts`.
+## TypeScript
 
-## ISC License
+Type definitions have been included for [TypeScript](https://www.typescriptlang.org/) support.
 
-Copyright 2019 Justin Mahar
+[/lock:typescript]::---------------------------------------🚫
 
-Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted, provided that the above copyright notice and this permission notice appear in all copies.
+[lock:icon]::🚫---------------------------------------
 
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+## Icon Attribution
+
+Favicon by [Twemoji](https://github.com/twitter/twemoji).
+
+[/lock:icon]::---------------------------------------🚫
+
+[lock:contributing]::🚫---------------------------------------
+
+## Contributing
+
+Open source software is awesome and so are you. 😎
+
+Feel free to submit a pull request for bugs or additions, and make sure to update tests as appropriate. If you find a mistake in the docs, send a PR! Even the smallest changes help.
+
+For major changes, open an issue first to discuss what you'd like to change.
+
+[/lock:contributing]::---------------------------------------🚫
+
+## ⭐ Found It Helpful? [Star It!](https://github.com/justinmahar/articulate-nlg/stargazers)
+
+If you found this project helpful, let the community know by giving it a [star](https://github.com/justinmahar/articulate-nlg/stargazers): [👉⭐](https://github.com/justinmahar/articulate-nlg/stargazers)
+
+## License
+
+See [LICENSE.md](https://justinmahar.github.io/articulate-nlg/?path=/story/license--page).

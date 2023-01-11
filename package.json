@@ -1,20 +1,32 @@
 {
   "name": "articulate-nlg",
   "version": "2.0.11",
+  "coreVersion": "2.4.7",
+  "author": "Justin Mahar <contact@justinmahar.com>",
   "description": "A natural language generator (NLG) that articulates concepts as words, phrases, and sentences.",
+  "homepage": "https://justinmahar.github.io/articulate-nlg/",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "deploy": "npm run build && npm publish && git push",
     "build": "rm -rf ./dist && tsc",
-    "watch": "tsc --watch",
     "test": "jest",
-    "report-coverage": "codecov",
+    "start": "npm run storybook",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook",
+    "preship": "npm run build && git add dist && git diff-index --quiet HEAD || git commit -m \"Build, version, and publish.\" && npm version patch -m \"Build, version, and publish.\"",
+    "ship": "npm publish --access public",
+    "postship": "git push",
+    "update": "rm -rf .lockblocks && git clone -q git@github.com:justinmahar/react-kindling.git ./.lockblocks && lockblocks ./.lockblocks . --verbose && rm -rf .lockblocks && echo '' && echo ' → Be sure to run `npm i` to install new dependencies.' && echo ''",
+    "postupdate": "node postupdate.js",
     "example": "node ./dist/example.js"
   },
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/justinmahar/articulate-nlg.git"
+  },
+  "bugs": {
+    "url": "https://github.com/justinmahar/articulate-nlg/issues"
   },
   "keywords": [
     "articulate",
@@ -31,22 +43,38 @@
     "concept",
     "articulation"
   ],
-  "author": "Justin Mahar <thejustinmahar@gmail.com>",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/justinmahar/articulate-nlg/issues"
-  },
-  "homepage": "https://github.com/justinmahar/articulate-nlg#readme",
-  "devDependencies": {
-    "@types/jest": "^24.0.11",
-    "@types/mustache": "^0.8.32",
-    "@types/node": "^11.13.7",
-    "codecov": "^3.3.0",
-    "jest": "^24.7.1",
-    "ts-jest": "^24.0.2",
-    "typescript": "^3.4.1"
-  },
   "dependencies": {
     "random-seed-weighted-chooser": "^1.0.14"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.12",
+    "@mdx-js/react": "^1.6.22",
+    "@storybook/addon-actions": "^6.5.15",
+    "@storybook/addon-essentials": "^6.5.15",
+    "@storybook/addon-links": "^6.5.15",
+    "@storybook/builder-webpack5": "^6.5.15",
+    "@storybook/manager-webpack5": "^6.5.15",
+    "@storybook/react": "^6.5.15",
+    "@types/jest": "^27.0.3",
+    "@typescript-eslint/eslint-plugin": "^5.48.1",
+    "@typescript-eslint/parser": "^5.48.1",
+    "babel-loader": "^9.1.2",
+    "eslint": "^8.31.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.31.11",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-storybook": "^0.6.10",
+    "jest": "^27.4.5",
+    "lockblocks": "^1.1.1",
+    "prettier": "^2.8.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-html-props": "^1.0.32",
+    "react-markdown": "^8.0.3",
+    "ts-jest": "^27.1.2",
+    "replace-in-file": "^6.3.2",
+    "typescript": "^4.9.4",
+    "webpack": "^5.75.0"
   }
 }

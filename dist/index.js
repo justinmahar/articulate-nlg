@@ -3,164 +3,146 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var random_seed_weighted_chooser_1 = __importDefault(require("random-seed-weighted-chooser"));
-var toWeightedTexts = function (texts) {
-    return texts.map(function (val) {
-        if (typeof val === "string" || typeof val === "function") {
+const random_seed_weighted_chooser_1 = __importDefault(require("random-seed-weighted-chooser"));
+const toWeightedTexts = (texts) => {
+    return texts.map((val) => {
+        if (typeof val === 'string' || typeof val === 'function') {
             return { t: val, w: 1 };
         }
         return val;
     });
 };
-var Persona = /** @class */ (function () {
-    function Persona() {
-        var _this = this;
-        this.articulate = function (vocabKey, params) {
-            if (params === void 0) { params = {}; }
-            return _this.say(vocabKey, params);
+class Persona {
+    constructor() {
+        this.articulate = (vocabKey, params = {}) => {
+            return this.say(vocabKey, params);
         };
-        this.say = function (vocabKey, params) {
-            if (params === void 0) { params = _this.params; }
-            _this.params = params;
-            var val = _this.vocab[vocabKey];
-            if (typeof val === "undefined") {
+        this.say = (vocabKey, params = this.params) => {
+            this.params = params;
+            const val = this.vocab[vocabKey];
+            if (typeof val === 'undefined') {
                 console.warn('Vocab key "' + vocabKey + '" not found. Using empty string.');
             }
-            return _this.render(val);
+            return this.render(val);
         };
-        this.capitalize = function (text) {
-            var renderedText = _this.render(text);
+        this.capitalize = (text) => {
+            const renderedText = this.render(text);
             return renderedText.charAt(0).toUpperCase() + renderedText.slice(1);
         };
-        this.sb = function (text) {
-            return " " + _this.render(text);
+        this.sb = (text) => {
+            return ' ' + this.render(text);
         };
-        this.sa = function (text) {
-            return _this.render(text) + " ";
+        this.sa = (text) => {
+            return this.render(text) + ' ';
         };
-        this.sba = function (text) {
-            return " " + _this.render(text) + " ";
+        this.sba = (text) => {
+            return ' ' + this.render(text) + ' ';
         };
-        this.capSay = function (vocabKey, params) {
-            if (params === void 0) { params = _this.params; }
-            return _this.capitalize(_this.say(vocabKey, params));
+        this.capSay = (vocabKey, params = this.params) => {
+            return this.capitalize(this.say(vocabKey, params));
         };
-        this.render = function (val) {
-            if (typeof val === "function") {
+        this.render = (val) => {
+            if (typeof val === 'function') {
                 // Call it and render the value, which could be anything.
-                return _this.render(val());
+                return this.render(val());
             }
-            else if (typeof val === "string") {
+            else if (typeof val === 'string') {
                 return val;
             }
             else if (!!val) {
                 if (!!val.t && !!val.w) {
                     // It's a weighted text.
-                    return _this.render(val.t);
+                    return this.render(val.t);
                 }
                 else {
-                    return val + "";
+                    return val + '';
                 }
             }
             else {
-                return "";
+                return '';
             }
         };
-        this.choose = function () {
-            var texts = [];
-            for (var _i = 0; _i < arguments.length; _i++) {
-                texts[_i] = arguments[_i];
-            }
-            var weightedTexts = toWeightedTexts(texts);
-            var choice = random_seed_weighted_chooser_1.default.chooseWeightedObject(weightedTexts, "w");
-            if (!!choice && typeof choice.t !== "undefined") {
-                return _this.render(choice.t);
+        this.choose = (...texts) => {
+            const weightedTexts = toWeightedTexts(texts);
+            const choice = random_seed_weighted_chooser_1.default.chooseWeightedObject(weightedTexts, 'w');
+            if (!!choice && typeof choice.t !== 'undefined') {
+                return this.render(choice.t);
             }
             else {
-                console.warn("Choice returned a bad value for:", texts);
-                return "";
+                console.warn('Choice returned a bad value for:', texts);
+                return '';
             }
         };
-        this.weighted = function (text, weight) {
-            if (weight === void 0) { weight = 1; }
+        this.weighted = (text, weight = 1) => {
             return { t: text, w: weight };
         };
-        this.chance = function (text, chance) {
+        this.chance = (text, chance) => {
             chance = Math.min(1, Math.max(0, chance));
-            var noopChance = Math.min(1, Math.max(0, 1 - chance));
-            var textWeighted = { t: text, w: chance };
-            var noopWeighted = { t: "", w: noopChance };
-            return _this.choose(noopWeighted, textWeighted);
+            const noopChance = Math.min(1, Math.max(0, 1 - chance));
+            const textWeighted = { t: text, w: chance };
+            const noopWeighted = { t: '', w: noopChance };
+            return this.choose(noopWeighted, textWeighted);
         };
-        this.cycle = function (group) {
-            var texts = [];
-            for (var _i = 1; _i < arguments.length; _i++) {
-                texts[_i - 1] = arguments[_i];
-            }
-            var weightedTexts = toWeightedTexts(texts);
-            var cycledTexts = _this.getCycledTextsFor(group.group);
-            var filtered = weightedTexts.filter(function (val) {
-                return val.w !== 0 && !cycledTexts.includes(_this.render(val.t));
+        this.cycle = (group, ...texts) => {
+            const weightedTexts = toWeightedTexts(texts);
+            const cycledTexts = this.getCycledTextsFor(group.group);
+            let filtered = weightedTexts.filter((val) => {
+                return val.w !== 0 && !cycledTexts.includes(this.render(val.t));
             });
             // If they've all been used...
             if (filtered.length === 0) {
                 // Choose from any of them
                 filtered = weightedTexts;
                 // And remove all items from the cycled texts array
-                weightedTexts.forEach(function (val) {
-                    var index = cycledTexts.indexOf(_this.render(val.t));
+                weightedTexts.forEach((val) => {
+                    const index = cycledTexts.indexOf(this.render(val.t));
                     if (index >= 0) {
                         cycledTexts.splice(index, 1);
                     }
                 });
             }
-            var chosen = _this.choose.apply(_this, filtered);
+            const chosen = this.choose(...filtered);
             cycledTexts.push(chosen);
             return chosen;
         };
-        this.maybe = function () {
-            var texts = [];
-            for (var _i = 0; _i < arguments.length; _i++) {
-                texts[_i] = arguments[_i];
-            }
-            return _this.choose("", _this.choose.apply(_this, texts));
+        this.maybe = (...texts) => {
+            return this.choose('', this.choose(...texts));
         };
-        this.param = function (paramKey) {
-            var val = _this.params[paramKey];
-            return _this.render(val);
+        this.param = (paramKey) => {
+            const val = this.params[paramKey];
+            return this.render(val);
         };
-        this.ifThen = function (paramKey, then) {
-            return _this.ifElse(paramKey, then, "");
+        this.ifThen = (paramKey, then) => {
+            return this.ifElse(paramKey, then, '');
         };
-        this.ifNot = function (paramKey, then) {
-            return _this.ifElse(paramKey, "", then);
+        this.ifNot = (paramKey, then) => {
+            return this.ifElse(paramKey, '', then);
         };
-        this.ifElse = function (paramKey, then, otherwise) {
-            if (!!_this.params[paramKey]) {
-                return _this.render(then);
+        this.ifElse = (paramKey, then, otherwise) => {
+            if (!!this.params[paramKey]) {
+                return this.render(then);
             }
             else {
-                return _this.render(otherwise);
+                return this.render(otherwise);
             }
         };
-        this.doFirst = function (paramTextPairs, defaultText) {
-            if (defaultText === void 0) { defaultText = ""; }
-            for (var i = 0; i < paramTextPairs.length; i++) {
-                var pair = paramTextPairs[i];
-                var paramKey = pair.p;
-                var value = pair.t;
-                if (!!_this.params[paramKey]) {
-                    return _this.render(value);
+        this.doFirst = (paramTextPairs, defaultText = '') => {
+            for (let i = 0; i < paramTextPairs.length; i++) {
+                const pair = paramTextPairs[i];
+                const paramKey = pair.p;
+                const value = pair.t;
+                if (!!this.params[paramKey]) {
+                    return this.render(value);
                 }
             }
-            return _this.render(defaultText);
+            return this.render(defaultText);
         };
         this.vocab = {};
         this.params = {};
         this.cycledTextsGroups = {};
     }
-    Persona.prototype.getCycledTextsFor = function (groupName) {
-        var cycledTexts = this.cycledTextsGroups[groupName];
+    getCycledTextsFor(groupName) {
+        const cycledTexts = this.cycledTextsGroups[groupName];
         if (!!cycledTexts) {
             return cycledTexts;
         }
@@ -168,7 +150,6 @@ var Persona = /** @class */ (function () {
             this.cycledTextsGroups[groupName] = [];
             return this.cycledTextsGroups[groupName];
         }
-    };
-    return Persona;
-}());
+    }
+}
 exports.default = Persona;

@@ -18,8 +18,8 @@ export interface CycledTexts {
 export interface CycleGroup {
     group: string;
 }
-export declare type StringFunction = () => string;
-export declare type Text = string | StringFunction;
+export type StringFunction = () => string;
+export type Text = string | StringFunction;
 export default class Persona {
     vocab: Vocabulary;
     private params;
@@ -33,12 +33,12 @@ export default class Persona {
     protected sba: (text: Text) => string;
     protected capSay: (vocabKey: string, params?: any) => string;
     protected render: (val: any) => string;
-    protected choose: (...texts: (string | WeightedText | StringFunction)[]) => string;
+    protected choose: (...texts: (Text | WeightedText)[]) => string;
     protected weighted: (text: Text, weight?: number) => WeightedText;
     protected chance: (text: Text, chance: number) => string;
     private getCycledTextsFor;
-    protected cycle: (group: CycleGroup, ...texts: (string | WeightedText | StringFunction)[]) => string;
-    protected maybe: (...texts: (string | WeightedText | StringFunction)[]) => string;
+    protected cycle: (group: CycleGroup, ...texts: (Text | WeightedText)[]) => string;
+    protected maybe: (...texts: (Text | WeightedText)[]) => string;
     protected param: (paramKey: string) => string;
     protected ifThen: (paramKey: string, then: Text) => string;
     protected ifNot: (paramKey: string, then: Text) => string;
