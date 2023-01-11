@@ -1,7 +1,7 @@
 {
   "name": "articulate-nlg",
   "version": "2.1.2",
-  "coreVersion": "2.4.7",
+  "coreVersion": "2.4.8",
   "author": "Justin Mahar <contact@justinmahar.com>",
   "description": "A natural language generator (NLG) that articulates concepts as words, phrases, and sentences.",
   "homepage": "https://justinmahar.github.io/articulate-nlg/",
@@ -17,7 +17,7 @@
     "ship": "npm publish --access public",
     "postship": "git push",
     "update": "rm -rf .lockblocks && git clone -q git@github.com:justinmahar/react-kindling.git ./.lockblocks && lockblocks ./.lockblocks . --verbose && rm -rf .lockblocks && echo '' && echo ' → Be sure to run `npm i` to install new dependencies.' && echo ''",
-    "postupdate": "node postupdate.js",
+    "postupdate": "node remove-peer-deps.js",
     "example": "node ./dist/example.js"
   },
   "license": "MIT",
@@ -73,7 +73,7 @@
     "react-html-props": "^1.0.32",
     "react-markdown": "^8.0.3",
     "ts-jest": "^27.1.2",
-    "replace-in-file": "^6.3.2",
+    "replace-in-file": "^6.3.5",
     "typescript": "^4.9.4",
     "webpack": "^5.75.0"
   }
