@@ -41,7 +41,12 @@
     "processing",
     "speech generation",
     "concept",
-    "articulation"
+    "articulation",
+    "chatbot",
+    "chat",
+    "bot",
+    "game",
+    "npc"
   ],
   "dependencies": {
     "random-seed-weighted-chooser": "^1.1.1"
