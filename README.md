@@ -17,7 +17,7 @@ Read the **[official documentation](https://justinmahar.github.io/articulate-nlg
 
 ## Overview
 
-This section will contain an overview so people can have a high-level understanding of the project.
+This package allows you to define personas that have a vocabulary which define how to generate varying, coherent text.
 
 ### Features include:
 
@@ -25,6 +25,8 @@ This section will contain an overview so people can have a high-level understand
   - Personas can articulate concepts as words, phrases, and sentences
 - **👍 Simple yet flexible API**
   - Use the helpers below to build personas quickly and easily
+- **🤖 Great for chatbots, game NPCs, and more!**
+  - Create personas for a variety of purposes.
 
 [lock:donate]::🚫---------------------------------------
 
@@ -56,24 +58,24 @@ Your support helps keep the project going and will earn you some serious virtual
 - [Installation](#installation)
 - [Quick Start](#quick-start)
 - [Vocab Helper Functions](#vocab-helper-functions)
-  - [`say (vocabKey: string): string`](#say-vocabkey-string-string)
-  - [`capitalize (text: string | () => string | {t: string | () => string, w: weight}): string`](#capitalize-text-string----string--t-string----string-w-weight-string)
-  - [`sb (text: string | () => string | {t: string | () => string, w: weight}): string`](#sb-text-string----string--t-string----string-w-weight-string)
-  - [`sa (text: string | () => string | {t: string | () => string, w: weight}): string`](#sa-text-string----string--t-string----string-w-weight-string)
-  - [`sba (text: string | () => string | {t: string | () => string, w: weight}): string`](#sba-text-string----string--t-string----string-w-weight-string)
-  - [`capSay (vocabKey: string): string`](#capsay-vocabkey-string-string)
-  - [`choose (...texts: (string | () => string | {t: string | () => string, w: weight})[]): string`](#choose-texts-string----string--t-string----string-w-weight-string)
+  - [`say`](#say)
+  - [`capitalize`](#capitalize)
+  - [`sb`](#sb)
+  - [`sa`](#sa)
+  - [`sba`](#sba)
+  - [`capSay`](#capsay)
+  - [`choose`](#choose)
     - [A note on functions:](#a-note-on-functions)
-  - [`weighted (text: string | () => string, weight: number = 1): {t: text, w: weight}`](#weighted-text-string----string-weight-number--1-t-text-w-weight)
-  - [`chance (text: string | () => string, chance: number): string`](#chance-text-string----string-chance-number-string)
-  - [`cycle (group: {group: name}, ...texts: (text: string | () => string | {t: string | () => string, w: weight})[]): string`](#cycle-group-group-name-texts-text-string----string--t-string----string-w-weight-string)
-  - [`maybe (text: string | () => string | {t: string | () => string, w: weight}): string`](#maybe-text-string----string--t-string----string-w-weight-string)
-  - [`param (paramKey: string): string`](#param-paramkey-string-string)
-  - [`ifThen (paramKey: string, then: (text: string | () => string)): string`](#ifthen-paramkey-string-then-text-string----string-string)
-  - [`ifNot (paramKey: string, then: (text: string | () => string)): string`](#ifnot-paramkey-string-then-text-string----string-string)
-  - [`ifElse (paramKey: string, then: (text: string | () => string), otherwise: (text: string | () => string)): string`](#ifelse-paramkey-string-then-text-string----string-otherwise-text-string----string-string)
-  - [`doFirst (paramTextPairs: {p: paramKey, t: string | () => string}[], defaultText: (string | () => string) = ""): string`](#dofirst-paramtextpairs-p-paramkey-t-string----string-defaulttext-string----string---string)
-  - [`render (val: any): string`](#render-val-any-string)
+  - [`weighted`](#weighted)
+  - [`chance`](#chance)
+  - [`cycle`](#cycle)
+  - [`maybe`](#maybe)
+  - [`param`](#param)
+  - [`ifThen`](#ifthen)
+  - [`ifNot`](#ifnot)
+  - [`ifElse`](#ifelse)
+  - [`doFirst`](#dofirst)
+  - [`render`](#render)
 - [TypeScript](#typescript)
 - [Icon Attribution](#icon-attribution)
 - [Contributing](#contributing)
@@ -87,8 +89,6 @@ npm i articulate-nlg
 ```
 
 ## Quick Start
-
-This section will contain a copy/paste example so people can get started quickly.
 
 ```jsx
 import Persona from "articulate-nlg";
@@ -177,31 +177,45 @@ console.log(max.articulate("master"));
 
 The following helper functions are available in the `Persona` class. Use these to aid in generating interesting results when defining a vocabulary.
 
-### `say (vocabKey: string): string`
+### `say`
+
+`say (vocabKey: string): string`
 
 Articulates the concept with the vocab key provided. This function will generate the text for that vocab key.
 
-### `capitalize (text: string | () => string | {t: string | () => string, w: weight}): string`
+### `capitalize`
+
+`capitalize (text: string | () => string | {t: string | () => string, w: weight}): string`
 
 Capitalizes the first letter of the provided text.
 
-### `sb (text: string | () => string | {t: string | () => string, w: weight}): string`
+### `sb`
+
+`sb (text: string | () => string | {t: string | () => string, w: weight}): string`
 
 Returns the provided text with a space before it.
 
-### `sa (text: string | () => string | {t: string | () => string, w: weight}): string`
+### `sa`
+
+`sa (text: string | () => string | {t: string | () => string, w: weight}): string`
 
 Returns the provided text with a space after it.
 
-### `sba (text: string | () => string | {t: string | () => string, w: weight}): string`
+### `sba`
+
+`sba (text: string | () => string | {t: string | () => string, w: weight}): string`
 
 Returns the provided text with a space before and after it.
 
-### `capSay (vocabKey: string): string`
+### `capSay`
+
+`capSay (vocabKey: string): string`
 
 Convenience function that calls `capitalize(say(vocabKey))` to both articulate a concept and then capitalize the resulting text.
 
-### `choose (...texts: (string | () => string | {t: string | () => string, w: weight})[]): string`
+### `choose`
+
+`choose (...texts: (string | () => string | {t: string | () => string, w: weight})[]): string`
 
 Chooses one of the the provided texts or functions at random. Weights can be specified in the format `{t: text or function, w: weight}`, or by using the `weighted()` function (recommended). Weights default to `1` if not specified.
 
@@ -233,13 +247,17 @@ And this concept is faster because the functions defer the individual `choose()`
     )
 ```
 
-### `weighted (text: string | () => string, weight: number = 1): {t: text, w: weight}`
+### `weighted`
+
+`weighted (text: string | () => string, weight: number = 1): {t: text, w: weight}`
 
 Convenience function that returns an object with the text (or function) and weight, for use with the `choose()` and `cycle()` functions. The returned object will be in the format `{t: text or function, w: weight}`. If you pass a function, it must return a string.
 
 Weights default to `1` if not specified.
 
-### `chance (text: string | () => string, chance: number): string`
+### `chance`
+
+`chance (text: string | () => string, chance: number): string`
 
 Return the provided text given the chance provided, from `0` to `1`, or empty string otherwise.
 
@@ -247,7 +265,9 @@ For instance, a chance of `0.8` would mean an 80% chance the provided text was r
 
 If the value provided is a function, that function will be called and its string return value would be returned if chosen.
 
-### `cycle (group: {group: name}, ...texts: (text: string | () => string | {t: string | () => string, w: weight})[]): string`
+### `cycle`
+
+`cycle (group: {group: name}, ...texts: (text: string | () => string | {t: string | () => string, w: weight})[]): string`
 
 Uses `choose()` to randomly select one of the provided texts, but ensures that the selected item is not repeated until all remaining items have been chosen. Items can be weighted, and can be functions that return strings.
 
@@ -255,31 +275,43 @@ The first argument is an object containing a group name for the items you'd like
 
 Use this function to keep a degree of randomness while ensuring the text doesn't repeat too often.
 
-### `maybe (text: string | () => string | {t: string | () => string, w: weight}): string`
+### `maybe`
+
+`maybe (text: string | () => string | {t: string | () => string, w: weight}): string`
 
 Returns the text provided 50% of the time, and empty string 50% of the time.
 
 You can pass multiple texts. In that case, there's a 50% chance of empty string, or one of your texts being chosen using `choose()`. Texts can either be a string, weighted, or a function that returns a string.
 
-### `param (paramKey: string): string`
+### `param`
+
+`param (paramKey: string): string`
 
 Returns text for the value of the param key provided. The param value can be a string, function, number, etc.
 
 Param functions must return a string. If the param value is not a string or function, it is concatenated with `""` and returned as a string.
 
-### `ifThen (paramKey: string, then: (text: string | () => string)): string`
+### `ifThen`
+
+`ifThen (paramKey: string, then: (text: string | () => string)): string`
 
 Returns the provided `then` text if the value of the param key is truthy, and returns empty string otherwise.
 
-### `ifNot (paramKey: string, then: (text: string | () => string)): string`
+### `ifNot`
+
+`ifNot (paramKey: string, then: (text: string | () => string)): string`
 
 Returns the provided `then` text if the value of the param key is falsy, and returns empty string otherwise.
 
-### `ifElse (paramKey: string, then: (text: string | () => string), otherwise: (text: string | () => string)): string`
+### `ifElse`
+
+`ifElse (paramKey: string, then: (text: string | () => string), otherwise: (text: string | () => string)): string`
 
 Returns the provided `then` text if the value of the param key is truthy, and returns the `otherwise` string otherwise.
 
-### `doFirst (paramTextPairs: {p: paramKey, t: string | () => string}[], defaultText: (string | () => string) = ""): string`
+### `doFirst`
+
+`doFirst (paramTextPairs: {p: paramKey, t: string | () => string}[], defaultText: (string | () => string) = ""): string`
 
 Returns the text for the first param value that is truthy, or the default text if none are. `defaultText` is optional and defaults to empty string.
 
@@ -287,7 +319,9 @@ Use this to avoid deeply nested `ifElse()` calls.
 
 Text values can be either strings or functions that return strings.
 
-### `render (val: any): string`
+### `render`
+
+`render (val: any): string`
 
 Renders the provided value as a string.
 
