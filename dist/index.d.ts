@@ -20,7 +20,7 @@ export interface CycleGroup {
 }
 export type StringFunction = () => string;
 export type Text = string | StringFunction;
-export default class Persona {
+export declare class Persona {
     vocab: Vocabulary;
     private params;
     private cycledTextsGroups;

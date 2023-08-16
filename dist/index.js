@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Persona = void 0;
 const random_seed_weighted_chooser_1 = __importDefault(require("random-seed-weighted-chooser"));
 const toWeightedTexts = (texts) => {
     return texts.map((val) => {
@@ -152,4 +153,4 @@ class Persona {
         }
     }
 }
-exports.default = Persona;
+exports.Persona = Persona;
