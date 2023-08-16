@@ -39,7 +39,7 @@ const toWeightedTexts = (texts: (Text | WeightedText)[]): WeightedText[] => {
   });
 };
 
-export default class Persona {
+export class Persona {
   public vocab: Vocabulary;
   private params: PersonaParams;
   private cycledTextsGroups: CycledTexts;

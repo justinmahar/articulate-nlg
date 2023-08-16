@@ -1,4 +1,4 @@
-import Persona from './index';
+import { Persona } from './index';
 
 class Dog extends Persona {
   createVocab = () => {

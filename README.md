@@ -91,7 +91,7 @@ npm i articulate-nlg
 ## Quick Start
 
 ```jsx
-import Persona from "articulate-nlg";
+import { Persona } from "articulate-nlg";
 ```
 
 In short:
@@ -105,7 +105,7 @@ One you construct a `Persona`, call `articulate("conceptName")` on the persona t
 See the example below:
 
 ```js
-import Persona from "articulate-nlg";
+import { Persona } from "articulate-nlg";
 
 class Dog extends Persona {
   createVocab = () => {
