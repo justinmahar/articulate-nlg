@@ -1,7 +1,7 @@
 {
   "name": "articulate-nlg",
   "version": "3.0.4",
-  "coreVersion": "3.0.3",
+  "coreVersion": "3.0.7",
   "author": "Justin Mahar <contact@justinmahar.com>",
   "description": "A natural language generator (NLG) that articulates concepts as words, phrases, and sentences.",
   "homepage": "https://justinmahar.github.io/articulate-nlg/",
